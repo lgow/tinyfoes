@@ -1,0 +1,14 @@
+modLoader="javafml" #mandatory
+loaderVersion="[43,)" #mandatory
+issueTrackerURL= "https://github.com/lgow/endofherobrine/issues/new" #optional
+logoFile="logoFile.png" #optional
+license="GNU General Public License v3.0"
+
+[[mods]]
+displayName="The End of Herobrine"
+version="1.0.5"
+modId="endofherobrine"
+credits='''Uncrossed Arms Villagers - TheBartman'''
+authors="lgow" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/endofherobrine" #homepage
+description='''''' #mandatory

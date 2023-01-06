@@ -1,0 +1,203 @@
+{
+  "parent": "endofherobrine:story/battle",
+  "display": {
+    "icon": {
+      "item": "minecraft:netherite_sword"
+    },
+    "title": {
+      "translate": "advancements.exorcist.title"
+    },
+    "description": {
+      "translate": "advancements.exorcist.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "endofherobrine:chicken": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:chicken"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:cow": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:cow"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:husk": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:husk"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:pig": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:pig"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:pigman": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:pigman"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:rabbit": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:rabbit"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:sheep": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:sheep"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:silverfish": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:silverfish"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:skeleton": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:skeleton"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:stray": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:stray"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:villager": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:villager"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "endofherobrine:zombie": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [{
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:zombie"
+            },
+            "entity": "this"
+          }]
+      }
+    },"endofherobrine:zombie_villager": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [{
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "endofherobrine:zombie_villager"},
+            "entity": "this"
+          }]
+      }
+    }
+  },
+  "requirements": [
+    ["endofherobrine:chicken"], ["endofherobrine:cow"], ["endofherobrine:husk"],
+    ["endofherobrine:pig"], ["endofherobrine:pigman"], ["endofherobrine:rabbit"],
+    ["endofherobrine:sheep"], ["endofherobrine:silverfish"], ["endofherobrine:skeleton"],
+    ["endofherobrine:stray"], ["endofherobrine:villager"], ["endofherobrine:zombie"],
+    ["endofherobrine:zombie_villager"]
+  ]
+}

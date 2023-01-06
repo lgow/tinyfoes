@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "endofherobrine:block/netherrack_totem"
+    },
+    "lit=true": {
+      "model": "endofherobrine:block/netherrack_totem_lit"
+    }
+  }
+}

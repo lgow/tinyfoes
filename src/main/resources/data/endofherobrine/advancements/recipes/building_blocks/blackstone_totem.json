@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "endofherobrine:blackstone_totem"
+    ]
+  },
+  "criteria": {
+    "tough_fighter": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "endofherobrine:lurker"
+        }
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "endofherobrine:blackstone_totem"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tough_fighter",
+      "has_the_recipe"
+    ]
+  ]
+}

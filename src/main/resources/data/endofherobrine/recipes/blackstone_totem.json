@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bhb",
+    "bbb"
+  ],
+  "key": {
+    "h": {
+      "item": "endofherobrine:cursed_head"
+    },
+    "b": {
+      "item": "minecraft:blackstone"
+    }
+  },
+  "result": {
+    "item": "endofherobrine:blackstone_totem"
+  }
+}

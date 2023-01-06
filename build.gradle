@@ -1,0 +1,106 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+version = "${minecraft}-${endofherobrine}"
+group = 'com.lgow.endofherobrine'
+archivesBaseName = 'endofherobrine'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+
+minecraft {
+    mappings channel: 'parchment', version: "${parchment}-${minecraft}"
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            mods {
+                endofherobrine {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            mods {
+                endofherobrine {
+                    source sourceSets.main
+                }
+            }
+        }
+
+
+        data {
+            workingDirectory project.file('run')
+            args '--mod', 'archivesBaseName', '--all',
+                    '--output', file('src/generated/resources/'),
+                    '--existing', file('src/main/resources/')
+
+            mods {
+                endofherobrine {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft}-${forge}"
+//    compileOnly(fg.deobf("mezz.jei:jei-${minecraft}-common-api:${jei}"))
+//    compileOnly(fg.deobf("mezz.jei:jei-${minecraft}-forge-api:${jei}"))
+//    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft}-forge:${jei}"))
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "The End of Herobrine",
+                "Specification-Vendor": "Lgow",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.jar.archiveVersion,
+                "Implementation-Vendor" :"Lgow",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "TweakOrder" : 0
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}

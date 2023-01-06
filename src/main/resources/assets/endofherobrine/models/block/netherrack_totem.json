@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/netherrack",
+    "side": "endofherobrine:block/netherrack_totem",
+    "particle": "minecraft:block/netherrack"
+  }
+}

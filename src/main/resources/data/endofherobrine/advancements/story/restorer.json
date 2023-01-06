@@ -1,0 +1,23 @@
+{
+  "parent": "endofherobrine:story/nightmare",
+  "display": {
+    "icon": {
+      "item": "minecraft:writable_book"
+    },
+    "title": {
+      "translate": "advancements.restorer.title"
+    },
+    "description": {
+      "translate": "advancements.restorer.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

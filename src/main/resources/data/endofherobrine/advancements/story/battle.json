@@ -1,0 +1,26 @@
+{
+  "parent": "endofherobrine:story/root",
+  "display": {
+    "icon": { "item": "endofherobrine:netherrack_totem"},
+    "title": { "translate": "advancements.battle.title"},
+    "description": { "translate": "advancements.battle.description"},
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [{
+          "type": "endofherobrine:herobrine",
+          "condition": "minecraft:entity_properties",
+          "predicate": {
+            "nbt": "{IsEnraged:0b}"
+          }
+        }]
+      }
+    }
+  }
+}

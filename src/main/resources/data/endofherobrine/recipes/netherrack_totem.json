@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "nnn",
+    "nhn",
+    "nnn"
+  ],
+  "key": {
+    "h": {
+      "item": "endofherobrine:cursed_head"
+    },
+    "n": {
+      "item": "minecraft:netherrack"
+    }
+  },
+  "result": {
+    "item": "endofherobrine:netherrack_totem"
+  }
+}

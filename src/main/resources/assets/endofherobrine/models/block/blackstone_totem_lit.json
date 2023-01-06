@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/blackstone_top",
+    "side": "endofherobrine:block/blackstone_totem_lit",
+    "particle": "minecraft:block/blackstone"
+  }
+}

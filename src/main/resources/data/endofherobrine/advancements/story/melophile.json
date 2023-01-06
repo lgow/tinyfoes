@@ -1,0 +1,31 @@
+{
+  "parent": "endofherobrine:story/nightmare",
+  "display": {
+    "icon": { "item": "minecraft:jukebox"},
+    "title": { "translate": "advancements.melophile.title"},
+    "description": { "translate": "advancements.melophile.description"},
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "endofherobrine:music_disc_seen_herobrine"
+            ]
+          },
+          {
+            "items": [
+              "endofherobrine:music_disc_its_herobrine"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
