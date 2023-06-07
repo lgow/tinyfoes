@@ -180,7 +180,7 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 					}
 				}
 				else {
-					if ((!interactionresult.consumesAction() || this.isBaby()) && this.isOwnedBy(pPlayer)) {
+					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
 						this.setOrderedToSit(!this.isOrderedToSit());
 						this.jumping = false;
 						this.navigation.stop();

@@ -29,6 +29,7 @@ public class BabyfierBlob extends ThrowableProjectile {
 			this.level.broadcastEntityEvent(this, (byte)3);
 			this.discard();
 		}
+		super.onHit(pResult);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class BabyfierBlob extends ThrowableProjectile {
 
 	@Override
 	protected float getGravity() {
-		return super.getGravity();
+		return 0.01F;
 	}
 
 	@Override

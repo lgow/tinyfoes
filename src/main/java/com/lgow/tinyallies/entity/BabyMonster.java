@@ -53,13 +53,24 @@ public interface BabyMonster {
 		entity.goalSelector.addGoal(6, new BabyMonsterPanicGoal(entity, 1.5D));
 		entity.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(entity, 0.8D));
 		entity.goalSelector.addGoal(8, new LookAtPlayerGoal(entity, Player.class, 8.0F));
-		entity.goalSelector.addGoal(10, new RandomLookAroundGoal(entity));
+		entity.goalSelector.addGoal(9, new RandomLookAroundGoal(entity));
 		entity.targetSelector.addGoal(1, new DefendParentTargetGoal(entity));
 		entity.targetSelector.addGoal(2, new HurtByTargetGoal(entity));
 		entity.targetSelector.addGoal(3, new HelpAttackTargetGoal(entity));
 		entity.targetSelector.addGoal(4, new WildBabyTargeGoal<>(entity, Player.class, false));
-		//		entity.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(entity, AbstractSkeleton.class, false));
-		//		entity.targetSelector.addGoal(8, new ResetUniversalAngerTargetGoal<>(entity, true));
+
+//		entity.goalSelector.addGoal(1, new FloatGoal(entity));
+//		entity.goalSelector.addGoal(1, new BabyMonsterPanicGoal(entity, 1.5D));
+////		entity.goalSelector.addGoal(2, new BabySitsWhenOrderedToGoal(entity));
+//		entity.goalSelector.addGoal(6, new FollowPlayerGoal(entity, 1.0D, 10.0F, 2.0F, false));
+//		entity.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(entity, 1.0D));
+		entity.goalSelector.addGoal(10, new LookAtPlayerGoal(entity, Player.class, 8.0F));
+		entity.goalSelector.addGoal(10, new RandomLookAroundGoal(entity));
+//		entity.targetSelector.addGoal(1, new DefendParentTargetGoal(entity));
+//		entity.targetSelector.addGoal(2, new HelpAttackTargetGoal(entity));
+		entity.targetSelector.addGoal(3, (new HurtByTargetGoal(entity)).setAlertOthers());
+//		entity.targetSelector.addGoal(4, new WildBabyTargeGoal<>(entity, Player.class, false));
+
 	}
 
 	default void addTamedSaveData(CompoundTag pCompound, boolean orderedToSit) {

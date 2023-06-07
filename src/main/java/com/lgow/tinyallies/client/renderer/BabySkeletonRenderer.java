@@ -18,7 +18,7 @@ public class BabySkeletonRenderer extends HumanoidMobRenderer<BabySkeleton, Skel
 	}
 
 	public BabySkeletonRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation p_174383_, ModelLayerLocation pInnerModelLayer, ModelLayerLocation pOuterModelLayer){
-		super(pContext, new BabySkeletonModel(pContext.bakeLayer(p_174383_)), 0.5F);
+		super(pContext, new BabySkeletonModel(pContext.bakeLayer(p_174383_)), 0.25F);
 		this.layers.clear();
 		this.addLayer(new BabyArmorLayer<>(this, new BabySkeletonModel(pContext.bakeLayer(pInnerModelLayer)), new BabySkeletonModel(pContext.bakeLayer(pOuterModelLayer)), pContext.getModelManager(), 0.34F));
 		this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), 1.0F, 1.0F, 1.0F, pContext.getItemInHandRenderer()));

@@ -87,7 +87,7 @@ public class BabySpiderModel <T extends BabySpider> extends AgeableListModel<T> 
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		if (this.young) {
+
 			pPoseStack.pushPose();
 			float f = 0.75F;
 			pPoseStack.scale(f, f, f);
@@ -106,7 +106,7 @@ public class BabySpiderModel <T extends BabySpider> extends AgeableListModel<T> 
 				modelPart.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 			});
 			pPoseStack.popPose();
-		}
+
 	}
 
 	public void setupAnim(BabySpider pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {

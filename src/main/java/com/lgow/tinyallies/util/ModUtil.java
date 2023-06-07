@@ -28,14 +28,16 @@ public class ModUtil {
 			Mob baby = entityIn.convertTo(animalList.get(entityIn.getType()), true);
 			baby.setHealth(entityIn.getHealth());
 			if (baby instanceof BabyCreeper creeper) {
-				creeper.setPowered(((Creeper)entityIn).isPowered());
-				creeper.setSwellDir(((Creeper)entityIn).getSwellDir());
-			} else if (baby instanceof BabyEnderman enderman){
-				enderman.setCarriedBlock(((EnderMan)entityIn).getCarriedBlock());
-				enderman.setTarget(entityIn.getTarget());
-
+				creeper.setPowered(((Creeper) entityIn).isPowered());
+				creeper.setSwellDir(((Creeper) entityIn).getSwellDir());
 			}
-		}else {
+			else if (baby instanceof BabyEnderman enderman) {
+				enderman.setCarriedBlock(((EnderMan) entityIn).getCarriedBlock());
+				enderman.setTarget(entityIn.getTarget());
+			}
+			entityIn.setBaby(true);
+		}
+		else {
 			entityIn.setBaby(true);
 		}
 	}

@@ -18,7 +18,7 @@ public class BabySpiderRender<T extends BabySpider> extends MobRenderer<T, BabyS
 	}
 
 	public BabySpiderRender(EntityRendererProvider.Context pContext, ModelLayerLocation pLayer) {
-		super(pContext, new BabySpiderModel<>(pContext.bakeLayer(pLayer)), 0.8F);
+		super(pContext, new BabySpiderModel<>(pContext.bakeLayer(pLayer)), 0.4F);
 		this.addLayer(new GlowingEyesLayer<>(this, SPIDER_EYES_LOCATION));
 	}
 

@@ -52,7 +52,7 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 
 	private LookForParentGoal followParentGoal;
 
-	public BabySkeleton(EntityType<? extends Skeleton> pEntityType, Level pLevel) {
+	public BabySkeleton(EntityType<? extends BabySkeleton> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 		this.reassessTameGoals();
 	}
@@ -61,7 +61,7 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
 		this.goalSelector.addGoal(1, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.0D));
+		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.5D));
 		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
 		this.defaultBabyGoals(this);
 	}
@@ -79,11 +79,6 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 			this.goalSelector.addGoal(4, this.avoidPlayersGoal);
 			this.goalSelector.addGoal(3, this.followParentGoal);
 		}
-	}
-
-	@Override
-	public boolean isBaby() {
-		return true;
 	}
 
 	@Override
@@ -173,7 +168,7 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 					}
 				}
 				else {
-					if ((!interactionresult.consumesAction() || this.isBaby()) && this.isOwnedBy(pPlayer)) {
+					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
 						this.setOrderedToSit(!this.isOrderedToSit());
 						this.jumping = false;
 						this.navigation.stop();
@@ -306,17 +301,12 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 		super.tick();
 	}
 
-	@Override
-	protected boolean isSunBurnTick() {
-		return this.getItemBySlot(EquipmentSlot.HEAD).isEmpty() && super.isSunBurnTick();
-	}
-
-	@javax.annotation.Nullable
+	@Nullable
 	public UUID getParentUUID() {
 		return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
 	}
 
-	public void setParentUUID(@javax.annotation.Nullable UUID pUuid) {
+	public void setParentUUID(@Nullable UUID pUuid) {
 		this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(pUuid));
 	}
 
@@ -385,7 +375,7 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 		if (this.dead) {
 			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
 					&& this.getOwner() instanceof ServerPlayer) {
-				if (this.getCombatTracker().getKiller() != this.getOwner()) {
+				if (this.getCombatTracker().getKiller() != this.getOwner() && this.getTarget() != null) {
 					this.getOwner().sendSystemMessage(
 							Component.translatable("death_msg." + this.getRandom().nextInt(5), this.getName(),
 									this.getOwner().getName()));

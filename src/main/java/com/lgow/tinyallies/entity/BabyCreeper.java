@@ -103,11 +103,6 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 	}
 
 	@Override
-	public boolean isBaby() {
-		return true;
-	}
-
-	@Override
 	public boolean isInvulnerableTo(DamageSource pSource) {
 		return (pSource.getEntity() instanceof BabyMonster baby && baby.getOwner() == this.getOwner())
 				|| super.isInvulnerableTo(pSource);
@@ -289,7 +284,7 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 					return InteractionResult.SUCCESS;
 				}
 				else {
-					if ((!interactionresult.consumesAction() || this.isBaby()) && this.isOwnedBy(pPlayer)) {
+					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
 						this.setOrderedToSit(!this.isOrderedToSit());
 						this.jumping = false;
 						this.navigation.stop();
@@ -415,7 +410,7 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 			this.setMonsterParent(null);
 			this.reassessTameGoals();
 		}
-		if (this.isInSittingPose()) {
+		if (this.isOrderedToSit()) {
 			this.setPose(Pose.SITTING);
 		}
 		else {
@@ -505,7 +500,7 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 		if (this.dead) {
 			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
 					&& this.getOwner() instanceof ServerPlayer) {
-				if (this.getCombatTracker().getKiller() != this.getOwner()) {
+				if (this.getCombatTracker().getKiller() != this.getOwner() && this.getTarget() != null) {
 					this.getOwner().sendSystemMessage(
 							Component.translatable("death_msg." + this.getRandom().nextInt(5), this.getName(),
 									this.getOwner().getName()));

@@ -14,7 +14,7 @@ public class BabyCreeperRender extends MobRenderer<BabyCreeper, BabyCreeperModel
 	private static final ResourceLocation CREEPER_LOCATION = new ResourceLocation("textures/entity/creeper/creeper.png");
 
 	public BabyCreeperRender(EntityRendererProvider.Context p_173958_) {
-		super(p_173958_, new BabyCreeperModel(p_173958_.bakeLayer(ModelLayers.CREEPER)), 0.5F);
+		super(p_173958_, new BabyCreeperModel(p_173958_.bakeLayer(ModelLayers.CREEPER)), 0.25F);
 		this.addLayer(new BabyCreeperPowerLayer(this, p_173958_.getModelSet()));
 	}
 

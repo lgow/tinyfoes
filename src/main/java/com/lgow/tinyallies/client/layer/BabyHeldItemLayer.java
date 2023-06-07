@@ -29,11 +29,9 @@ public class BabyHeldItemLayer <T extends LivingEntity, M extends EntityModel<T>
 		ItemStack itemstack1 = flag ? pLivingEntity.getMainHandItem() : pLivingEntity.getOffhandItem();
 		if (!itemstack.isEmpty() || !itemstack1.isEmpty()) {
 			pMatrixStack.pushPose();
-			if (this.getParentModel().young) {
-				float offsetY = pLivingEntity instanceof BabyMonster baby && baby.isInSittingPose() ? 0.32F : 0;
-				float offsetX = itemstack1.getItem() instanceof BowItem ? 0.03F : 0.11F;
-				pMatrixStack.translate(offsetX, 0.75F + offsetY , 0);
-			}
+			float offsetY = pLivingEntity instanceof BabyMonster baby && baby.isInSittingPose() ? 0.32F : 0;
+			float offsetX = itemstack1.getItem() instanceof BowItem ? 0.03F : 0.11F;
+			pMatrixStack.translate(offsetX, 0.75F + offsetY, 0);
 			this.renderArmWithItem(pLivingEntity, itemstack1, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
 					HumanoidArm.RIGHT, pMatrixStack, pBuffer, pPackedLight);
 			this.renderArmWithItem(pLivingEntity, itemstack, ItemDisplayContext.THIRD_PERSON_LEFT_HAND,

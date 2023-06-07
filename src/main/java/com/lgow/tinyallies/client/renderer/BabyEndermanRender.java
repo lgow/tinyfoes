@@ -20,7 +20,7 @@ public class BabyEndermanRender extends MobRenderer<BabyEnderman, BabyEndermanMo
 	private final RandomSource random = RandomSource.create();
 
 	public BabyEndermanRender(EntityRendererProvider.Context p_173992_) {
-		super(p_173992_, new BabyEndermanModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.5F);
+		super(p_173992_, new BabyEndermanModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.25F);
 		this.addLayer(new GlowingEyesLayer<>(this, ENDERMAN_EYES_LOCATION));
 		this.addLayer(new BabyCarriedBlockLayer(this, p_173992_.getBlockRenderDispatcher()));
 	}

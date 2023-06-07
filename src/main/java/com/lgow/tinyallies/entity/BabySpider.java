@@ -79,11 +79,6 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 		}
 	}
 
-	@Override
-	public boolean isBaby() {
-		return true;
-	}
-
 	public EntityDimensions getDimensions(Pose pPose) {
 		return POSES.getOrDefault(pPose, STANDING);
 	}
@@ -161,7 +156,7 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 					return InteractionResult.SUCCESS;
 				}
 				else {
-					if ((!interactionresult.consumesAction() || this.isBaby()) && this.isOwnedBy(pPlayer)) {
+					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
 						this.setOrderedToSit(!this.isOrderedToSit());
 						this.jumping = false;
 						this.getNavigation().moveTo(this,0);
@@ -357,7 +352,7 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 		if (this.dead) {
 			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
 					&& this.getOwner() instanceof ServerPlayer) {
-				if (this.getCombatTracker().getKiller() != this.getOwner()) {
+				if (this.getCombatTracker().getKiller() != this.getOwner() && this.getTarget() != null) {
 					this.getOwner().sendSystemMessage(
 							Component.translatable("death_msg." + this.getRandom().nextInt(5), this.getName(),
 									this.getOwner().getName()));
