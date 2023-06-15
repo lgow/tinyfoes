@@ -37,7 +37,6 @@ minecraft {
             }
         }
 
-
         data {
             workingDirectory project.file('run')
             args '--mod', 'archivesBaseName', '--all',
@@ -53,16 +52,7 @@ minecraft {
     }
 }
 
-repositories {
-    maven {
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-}
+repositories {}
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft}-${forge}"
@@ -78,7 +68,7 @@ jar {
                 "Specification-Vendor": "Lgow",
                 "Specification-Version": "1",
                 "Implementation-Title": project.name,
-                "Implementation-Version": project.jar.archiveVersion,
+                "Implementation-Version": project.version,
                 "Implementation-Vendor" :"Lgow",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "TweakOrder" : 0
@@ -102,5 +92,5 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8' 
 }

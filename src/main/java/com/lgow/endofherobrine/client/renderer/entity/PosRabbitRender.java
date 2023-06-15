@@ -12,25 +12,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosRabbitRender extends RabbitRenderer {
+	public PosRabbitRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new RabbitEyesLayer<>(this));
+	}
 
-    private static final ResourceLocation TOAST_LOCATION = new ResourceLocation(Main.MOD_ID, "textures/entity/rabbit/toast.png");
-
-    public PosRabbitRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new RabbitEyesLayer<>(this));
-    }
-
-    public ResourceLocation getTextureLocation(Rabbit pEntity) {
-        String s = ChatFormatting.stripFormatting(pEntity.getName().getString());
-        String rabbitType;
-        if ("Toast".equals(s)) {
-            rabbitType = "toast";
-        } else if (pEntity.getVariant()== Rabbit.Variant.EVIL){
-            rabbitType = "caerbannog";
-        } else{
-            rabbitType = pEntity.getVariant().getSerializedName();
-        }
-        return new ResourceLocation(Main.MOD_ID ,"textures/entity/rabbit/"+ rabbitType +".png");
-
-    }
+	public ResourceLocation getTextureLocation(Rabbit pEntity) {
+		String rabbitType;
+		if (ChatFormatting.stripFormatting(pEntity.getName().getString()).equals("Toast")) { rabbitType = "toast"; }
+		else if (pEntity.getVariant() == Rabbit.Variant.EVIL) { rabbitType = "caerbannog"; }
+		else { rabbitType = pEntity.getVariant().getSerializedName(); }
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/rabbit/" + rabbitType + ".png");
+	}
 }

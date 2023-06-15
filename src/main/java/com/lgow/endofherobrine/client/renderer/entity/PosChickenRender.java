@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosChickenRender extends ChickenRenderer {
+	public PosChickenRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "chicken_eyes.png"));
+	}
 
-    public PosChickenRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"chicken_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Chicken pEntity) {
-        return new ResourceLocation(Main.MOD_ID ,"textures/entity/chicken.png");
-    }
+	@Override
+	public ResourceLocation getTextureLocation(Chicken pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/chicken.png");
+	}
 }

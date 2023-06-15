@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosCowRender extends CowRenderer {
+	public PosCowRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "cow_eyes.png"));
+	}
 
-    public PosCowRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"cow_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Cow pEntity) {
-        return new ResourceLocation(Main.MOD_ID ,"textures/entity/cow/cow.png");
-    }
+	@Override
+	public ResourceLocation getTextureLocation(Cow pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/cow/cow.png");
+	}
 }

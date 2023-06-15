@@ -1,8 +1,9 @@
 {
     "pack": {
-        "description": "The End of Herobrine resource pack",
-        "pack_format": 9,
-        "forge:resource_pack_format": 9,
-        "forge:data_pack_format": 10
+        "description": {
+            "text": "The End of Herobrine resources"
+        },
+        "forge:server_data_pack_format": 12,
+        "pack_format": 13
     }
 }

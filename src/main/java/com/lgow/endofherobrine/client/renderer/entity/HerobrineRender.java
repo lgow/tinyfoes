@@ -14,20 +14,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class HerobrineRender extends LivingEntityRenderer<AbstractHerobrine, PlayerModel<AbstractHerobrine>> {
+	public HerobrineRender(EntityRendererProvider.Context context) {
+		super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0);
+		this.addLayer(new WhiteEyesLayer<>(this, "biped_eyes.png", true));
+	}
 
-    public HerobrineRender(EntityRendererProvider.Context context) {
-        super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false),0);
-        this.addLayer(new WhiteEyesLayer<>(this, "biped_eyes.png", true));
-    }
+	@Override
+	public ResourceLocation getTextureLocation(AbstractHerobrine herobrine) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/herobrine.png");
+	}
 
-    @Override
-    protected boolean shouldShowName(AbstractHerobrine herobrine) {
-        return (ModConfigs.SHOW_NAMETAG.get() && herobrine.getDisplayName().getString().equals("Herobrine")) && super.shouldShowName(herobrine);
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(AbstractHerobrine herobrine){
-        return new ResourceLocation(Main.MOD_ID,"textures/entity/herobrine.png");
-    }
+	@Override
+	protected boolean shouldShowName(AbstractHerobrine herobrine) {
+		return (ModConfigs.SHOW_NAMETAG.get() && herobrine.getDisplayName().getString().equals("Herobrine"))
+				&& super.shouldShowName(herobrine);
+	}
 }
 

@@ -6,14 +6,22 @@
     ]
   },
   "criteria": {
-    "tough_fighter": {
-      "trigger": "minecraft:player_killed_entity",
+    "tough_fighter":{
       "conditions": {
-        "entity": {
-          "type": "endofherobrine:lurker"
-        }
-      }
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "endofherobrine:herobrine",
+              "nbt": "{IsEnraged:0b}"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
     },
+
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {

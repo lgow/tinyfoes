@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosSheepRender extends SheepRenderer {
+	public PosSheepRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "sheep_eyes.png"));
+	}
 
-    public PosSheepRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"sheep_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Sheep pEntity) {
-        return new ResourceLocation(Main.MOD_ID,"textures/entity/sheep/sheep.png");
-    }
+	@Override
+	public ResourceLocation getTextureLocation(Sheep pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/sheep/sheep.png");
+	}
 }

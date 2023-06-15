@@ -6,13 +6,13 @@
     ]
   },
   "criteria": {
-    "has_item": {
+    "has_netherrack": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:rotten_flesh"
+              "minecraft:netherrack"
             ]
           }
         ]
@@ -27,7 +27,7 @@
   },
   "requirements": [
     [
-      "has_item",
+      "has_netherrack",
       "has_the_recipe"
     ]
   ]

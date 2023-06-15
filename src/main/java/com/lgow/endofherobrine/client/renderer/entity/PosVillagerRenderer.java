@@ -1,5 +1,6 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
+import com.lgow.endofherobrine.client.layer.UncrossedVillagerArmsLayer;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
 import com.lgow.endofherobrine.client.model.PosVillagerModel;
 import com.lgow.endofherobrine.client.model.modellayer.ModModelLayers;
@@ -16,29 +17,29 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosVillagerRenderer extends MobRenderer<PosVillager, PosVillagerModel<PosVillager>> {
+	public PosVillagerRenderer(EntityRendererProvider.Context context) {
+		super(context, new PosVillagerModel<>(context.bakeLayer(ModModelLayers.VILLAGER)), 0.5F);
+		this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
+		this.addLayer(new WhiteEyesLayer<>(this, "villager_eyes.png"));
+		this.addLayer(new VillagerProfessionLayer<>(this, context.getResourceManager(), "villager"));
+		this.addLayer(new UncrossedVillagerArmsLayer<>(this, context.getResourceManager()));
+		this.addLayer(new CrossedArmsItemLayer<>(this, context.getItemInHandRenderer()));
+	}
 
-    public PosVillagerRenderer(EntityRendererProvider.Context context) {
-        super(context, new PosVillagerModel<>(context.bakeLayer(ModModelLayers.POS_VILLAGER)), 0.5F);
-        this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(), context.getItemInHandRenderer()));
-        this.addLayer(new WhiteEyesLayer<>(this,"pos_villager_eyes.png"));
-        this.addLayer(new VillagerProfessionLayer<>(this, context.getResourceManager(), "pos_villager"));
-        this.addLayer(new CrossedArmsItemLayer<>(this, context.getItemInHandRenderer()));
-    }
+	@Override
+	public ResourceLocation getTextureLocation(PosVillager posVillager) {
+		return new ResourceLocation("textures/entity/villager/villager.png");
+	}
 
-    @Override
-    public ResourceLocation getTextureLocation(PosVillager posVillager) {
-        return new ResourceLocation("textures/entity/pos_villager/villager.png");
-    }
-
-    @Override
-    protected void scale(PosVillager pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
-        float f = 0.9375F;
-        if (pLivingEntity.isBaby()) {
-            this.shadowRadius = 0.25F;
-        } else {
-            this.shadowRadius = 0.5F;
-        }
-
-        pMatrixStack.scale(f, f, f);
-    }
+	@Override
+	protected void scale(PosVillager pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
+		float f = 0.9375F;
+		if (pLivingEntity.isBaby()) {
+			this.shadowRadius = 0.25F;
+		}
+		else {
+			this.shadowRadius = 0.5F;
+		}
+		pMatrixStack.scale(f, f, f);
+	}
 }

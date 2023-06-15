@@ -2,7 +2,11 @@
   "replace": false,
   "values": [
     "endofherobrine:glowing_obsidian",
+    "endofherobrine:blackstone_totem",
     "endofherobrine:netherrack_totem",
-    "endofherobrine:blackstone_totem"
+    "endofherobrine:cracked_stone_bricks",
+    "endofherobrine:glowstone",
+    "endofherobrine:mossy_cobblestone",
+    "endofherobrine:mossy_stone_bricks"
   ]
 }

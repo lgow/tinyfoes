@@ -1,14 +1,15 @@
 modLoader="javafml" #mandatory
-loaderVersion="[43,)" #mandatory
-issueTrackerURL= "https://github.com/lgow/endofherobrine/issues/new" #optional
-logoFile="logoFile.png" #optional
-license="GNU General Public License v3.0"
+loaderVersion="[44,)" #mandatory
+issueTrackerURL= "https://github.com/lgow/endofherobrine/issues/" #optional
+logoFile="endofherobrine.png" #optional
+license="All Rights Reserved"
 
 [[mods]]
 displayName="The End of Herobrine"
-version="1.0.5"
+version= "${file.jarVersion}"
 modId="endofherobrine"
-credits='''Uncrossed Arms Villagers - TheBartman'''
+credits="Uncrossed Arms Villagers(Jappa) - TheBartman"
 authors="lgow" #optional
+#updateJSONURL="https://github.com/lgow/endofherobrine/updates.json" #optional
 displayURL="https://www.curseforge.com/minecraft/mc-mods/endofherobrine" #homepage
-description='''''' #mandatory
+description="" #mandatory

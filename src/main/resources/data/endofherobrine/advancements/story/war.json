@@ -10,23 +10,31 @@
     "description": {
       "translate": "advancements.war.description"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
   },
   "criteria": {
-    "requirement": {
-      "trigger": "minecraft:player_killed_entity",
+    "endofherobrine:herobrine": {
       "conditions": {
-        "entity": [{
-            "type": "endofherobrine:herobrine",
+        "entity": [
+          {
             "condition": "minecraft:entity_properties",
+            "entity": "this",
             "predicate": {
+              "type": "endofherobrine:herobrine",
               "nbt": "{IsEnraged:1b}"
             }
-          }]
-      }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
     }
-  }
+  },
+  "requirements": [
+    [
+      "endofherobrine:herobrine"
+    ]
+  ]
 }

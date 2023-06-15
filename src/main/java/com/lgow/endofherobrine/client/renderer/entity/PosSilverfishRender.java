@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosSilverfishRender extends SilverfishRenderer {
+	public PosSilverfishRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "silverfish_eyes.png"));
+	}
 
-    public PosSilverfishRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"silverfish_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Silverfish pEntity) {
-        return new ResourceLocation(Main.MOD_ID,"textures/entity/silverfish.png");
-    }
+	@Override
+	public ResourceLocation getTextureLocation(Silverfish pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/silverfish.png");
+	}
 }

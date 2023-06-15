@@ -11,14 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosHuskRender extends HuskRenderer {
+	public PosHuskRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "biped_eyes.png"));
+	}
 
-    public PosHuskRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"biped_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Zombie pEntity) {
-        return new ResourceLocation(Main.MOD_ID ,"textures/entity/zombie/husk.png");
-    }
+	@Override
+	public ResourceLocation getTextureLocation(Zombie pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/zombie/husk.png");
+	}
 }

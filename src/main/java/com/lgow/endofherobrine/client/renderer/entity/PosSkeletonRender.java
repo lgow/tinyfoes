@@ -11,16 +11,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PosSkeletonRender extends SkeletonRenderer {
+	public PosSkeletonRender(EntityRendererProvider.Context context) {
+		super(context);
+		this.addLayer(new WhiteEyesLayer<>(this, "skeleton_eyes.png"));
+	}
 
-    public PosSkeletonRender(EntityRendererProvider.Context context) {
-        super(context);
-        this.addLayer(new WhiteEyesLayer<>(this,"skeleton_eyes.png"));
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(AbstractSkeleton pEntity) {
-        return new ResourceLocation(Main.MOD_ID,"textures/entity/skeleton/skeleton.png");
-    }
-
-
+	@Override
+	public ResourceLocation getTextureLocation(AbstractSkeleton pEntity) {
+		return new ResourceLocation(Main.MOD_ID, "textures/entity/skeleton/skeleton.png");
+	}
 }
