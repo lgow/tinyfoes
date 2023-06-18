@@ -64,11 +64,11 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (! this.level.isClientSide) {
+		if (! this.level().isClientSide) {
 			Sheep sheep = (Sheep) this.convertBack(this, EntityType.SHEEP, ! this.isAngry() && this.getNum() != 0);
 			sheep.setColor(this.getColor());
 			sheep.setSheared(this.isSheared());
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
 		this.setNum(tag.getInt("Num"));
-		this.readPersistentAngerSaveData(this.level, tag);
+		this.readPersistentAngerSaveData(this.level(), tag);
 	}
 
 	@Override
@@ -130,14 +130,14 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	public MobType getMobType() { return ModMobTypes.POSSESSED; }
 
 	private void createSheep() {
-		PosSheep sheep = EntityInit.SHEEP.get().create(level);
+		PosSheep sheep = EntityInit.SHEEP.get().create(level());
 		sheep.setColor(this.getColor());
 		sheep.setSheared(this.isSheared());
 		sheep.setBaby(this.isBaby());
 		sheep.setCustomName(this.getCustomName());
 		sheep.copyPosition(this);
 		sheep.setNum(this.getNum() + 1);
-		level.addFreshEntity(sheep);
+		level().addFreshEntity(sheep);
 	}
 
 	@Override

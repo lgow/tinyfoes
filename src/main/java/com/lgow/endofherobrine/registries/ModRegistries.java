@@ -11,6 +11,7 @@ import com.lgow.endofherobrine.tileentities.PaintingInit;
 import com.lgow.endofherobrine.world.spawner.SpawnEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 
 import static com.lgow.endofherobrine.Main.MOD_ID;
+import static net.minecraft.core.registries.Registries.CREATIVE_MODE_TAB;
 import static net.minecraftforge.registries.DeferredRegister.create;
 import static net.minecraftforge.registries.ForgeRegistries.*;
 
@@ -38,6 +40,8 @@ public class ModRegistries {
 
 	public static final DeferredRegister<PaintingVariant> MOD_PAINTINGS = create(PAINTING_VARIANTS, MOD_ID);
 
+	public static final DeferredRegister<CreativeModeTab> MOD_TAB = create(CREATIVE_MODE_TAB, MOD_ID);
+
 	public static void register() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		MOD_BLOCKS.register(modEventBus);
@@ -46,6 +50,7 @@ public class ModRegistries {
 		MOD_ITEMS.register(modEventBus);
 		MOD_TILE_ENTITIES.register(modEventBus);
 		MOD_PAINTINGS.register(modEventBus);
+		MOD_TAB.register(modEventBus);
 		BlockInit.register();
 		EnchantmentInit.register();
 		EntityInit.register();

@@ -10,7 +10,7 @@ public class PosAnimalWalkAroundGoal extends WaterAvoidingRandomStrollGoal {
 
 	@Override
 	public boolean canUse() {
-		return ! this.mob.getLevel().hasNearbyAlivePlayer(this.mob.getX(), this.mob.getY(), this.mob.getZ(), 40D)
+		return ! this.mob.level().hasNearbyAlivePlayer(this.mob.getX(), this.mob.getY(), this.mob.getZ(), 40D)
 				&& super.canUse();
 	}
 }

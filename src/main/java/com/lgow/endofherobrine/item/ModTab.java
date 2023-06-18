@@ -4,39 +4,35 @@ import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.block.BlockInit;
 import com.lgow.endofherobrine.enchantment.EnchantmentInit;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegistryObject;
+
+import static com.lgow.endofherobrine.registries.ModRegistries.MOD_TAB;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModTab {
-	public static CreativeModeTab TAB;
+	public static RegistryObject<CreativeModeTab> TAB = MOD_TAB.register("endofherobrine_tab",
+			() -> CreativeModeTab.builder().icon(() -> new ItemStack(ItemInit.HEROBRINE_HEAD_ITEM.get()))
+					.title(Component.translatable("itemGroup.endofherobrine")).build());
 
 	@SubscribeEvent
-	public static void registerModTab(CreativeModeTabEvent.Register event) {
-		TAB = event.registerCreativeModeTab(new ResourceLocation(Main.MOD_ID, "endofherobrine_tab"),
-				builder -> builder.icon(() -> new ItemStack(ItemInit.HEROBRINE_HEAD_ITEM.get()))
-						.title(Component.translatable("itemGroup.endofherobrine")).build());
-	}
-
-	@SubscribeEvent
-	public static void addItemsToTab(CreativeModeTabEvent.BuildContents event) {
-		if (event.getTab().equals(ModTab.TAB)) {
+	public static void addItemsToTab(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTab().equals(ModTab.TAB.get())) {
 			event.accept(BlockInit.GLOWING_OBSIDIAN.get());
 			event.accept(BlockInit.NETHERRACK_TOTEM.get());
 			event.accept(BlockInit.BLACKSTONE_TOTEM.get());
 			event.accept(ItemInit.CURSED_HEAD_ITEM.get());
 			event.accept(ItemInit.HEROBRINE_HEAD_ITEM.get());
-			event.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(EnchantmentInit.BLESSING.get(), 1)));
+			event.accept(
+					EnchantedBookItem.createForEnchantment(new EnchantmentInstance(EnchantmentInit.BLESSING.get(), 1)));
 			event.accept(ItemInit.BUILDER_SPAWN_EGG.get());
 			event.accept(ItemInit.LURKER_SPAWN_EGG.get());
-			event.accept(ItemInit.NIGHTMARE_SPAWN_EGG.get());
-			event.accept(ItemInit.DOPPLEGANGER_SPAWN_EGG.get());
 			event.accept(ItemInit.CHICKEN_SPAWN_EGG.get());
 			event.accept(ItemInit.COW_SPAWN_EGG.get());
 			event.accept(ItemInit.HUSK_SPAWN_EGG.get());

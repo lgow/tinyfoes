@@ -77,7 +77,7 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 			effectLvl = Mth.clamp(effectLvl, 0, 4);
 			MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.BAD_OMEN, 30000, effectLvl, false, false,
 					true);
-			if (!this.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
+			if (!this.level().getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
 				player.addEffect(mobeffectinstance);
 			}
 		}
@@ -131,10 +131,10 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Villager villager = (Villager) this.convertBack(this, EntityType.VILLAGER, !this.isAngry());
 			villager.setVillagerData(this.getVillagerData());
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 }

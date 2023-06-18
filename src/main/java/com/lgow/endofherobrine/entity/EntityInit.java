@@ -1,9 +1,7 @@
 package com.lgow.endofherobrine.entity;
 
 import com.lgow.endofherobrine.entity.herobrine.Builder;
-import com.lgow.endofherobrine.entity.herobrine.Doppelganger;
 import com.lgow.endofherobrine.entity.herobrine.Lurker;
-import com.lgow.endofherobrine.entity.herobrine.Nightmare;
 import com.lgow.endofherobrine.entity.herobrine.boss.HerobrineBoss;
 import com.lgow.endofherobrine.entity.possessed.*;
 import com.lgow.endofherobrine.entity.possessed.animal.*;
@@ -25,10 +23,6 @@ public class EntityInit {
 	public static final RegistryObject<EntityType<Builder>> BUILDER = registerHerobrine("builder", Builder::new);
 
 	public static final RegistryObject<EntityType<Lurker>> LURKER = registerHerobrine("lurker", Lurker::new);
-
-	public static final RegistryObject<EntityType<Nightmare>> NIGHTMARE = registerHerobrine("nightmare", Nightmare::new);
-
-	public static final RegistryObject<EntityType<Doppelganger>> DOPPLEGANGER = registerHerobrine("doppelganger", Doppelganger::new);
 
 	public static final RegistryObject<EntityType<PosChicken>> CHICKEN = registerPossessed("chicken",
 			PosChicken::new, CREATURE, 0.4F, 0.7F);

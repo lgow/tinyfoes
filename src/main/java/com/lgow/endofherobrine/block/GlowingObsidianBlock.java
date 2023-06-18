@@ -12,13 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Collections;
@@ -29,7 +28,7 @@ public class GlowingObsidianBlock extends ModInfestedBlock {
 
 	//Sets the block properties and the default blockstate property
 	public GlowingObsidianBlock() {
-		super(Blocks.OBSIDIAN, Properties.of(Material.STONE, MaterialColor.COLOR_RED)
+		super(Blocks.OBSIDIAN, Properties.copy(Blocks.STONE).mapColor(MapColor.COLOR_RED)
 				.requiresCorrectToolForDrops().strength(10F, 450F).lightLevel((blockState) -> 12));
 		this.registerDefaultState(this.stateDefinition.any().setValue(INFESTED, false));
 	}
@@ -66,11 +65,11 @@ public class GlowingObsidianBlock extends ModInfestedBlock {
 
 	//If not infested, drops itself when broken
 	@Override
-	public List<ItemStack> getDrops(BlockState pState, LootContext.Builder pBuilder) {
+	public List<ItemStack> getDrops(BlockState pState, LootParams.Builder p_287596_) {
 		if(this.isInfested(pState)){
 			return Collections.emptyList();
 		}
-		return super.getDrops(pState, pBuilder);
+		return super.getDrops(pState, p_287596_);
 	}
 
 	//Checks if the block is infested

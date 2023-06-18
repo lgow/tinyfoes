@@ -27,11 +27,9 @@ import static com.lgow.endofherobrine.entity.EntityInit.*;
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RenderSetup {
 	private static void registerRenders() {
-		EntityRenderers.register(HEROBRINE_BOSS.get(), AbstractHerobrineRender::new);
-		EntityRenderers.register(BUILDER.get(), BuilderRenderAbstract::new);
-		EntityRenderers.register(NIGHTMARE.get(), NightmareRender::new);
-		EntityRenderers.register(LURKER.get(), AbstractHerobrineRender::new);
-		EntityRenderers.register(DOPPLEGANGER.get(), DoppelgangerRender::new);
+		EntityRenderers.register(HEROBRINE_BOSS.get(), HerobrineRender::new);
+		EntityRenderers.register(BUILDER.get(), BuilderRender::new);
+		EntityRenderers.register(LURKER.get(), HerobrineRender::new);
 		EntityRenderers.register(CHICKEN.get(), PosChickenRender::new);
 		EntityRenderers.register(COW.get(), PosCowRender::new);
 		EntityRenderers.register(HUSK.get(), PosHuskRender::new);

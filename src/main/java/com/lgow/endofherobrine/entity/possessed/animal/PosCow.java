@@ -50,9 +50,9 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.convertBack(this, EntityType.COW, !this.isAngry());
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 
@@ -79,14 +79,14 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
-		this.readPersistentAngerSaveData(this.level, pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
 	public void dropAllDeathLoot(DamageSource pSource) {
 		super.dropAllDeathLoot(pSource);
-		if (!pSource.is(DamageTypes.OUT_OF_WORLD)) {
-			level.setBlockAndUpdate(this.blockPosition(), Blocks.LAVA.defaultBlockState());
+		if (!pSource.is(DamageTypes.OUTSIDE_BORDER)) {
+			level().setBlockAndUpdate(this.blockPosition(), Blocks.LAVA.defaultBlockState());
 		}
 	}
 

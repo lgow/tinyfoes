@@ -79,7 +79,7 @@ public class PosSilverfish extends Silverfish implements Teleporter {
 	public MobType getMobType() { return ModMobTypes.POSSESSED; }
 
 	protected boolean checkTeleportPos(Player player) {
-		if (!player.level.isClientSide && player.isAlive()) {
+		if (!player.level().isClientSide && player.isAlive()) {
 			double d0 = player.getX() + (this.random.nextInt(800) - 400.5);
 			double d1 = player.getY() + (this.random.nextInt(64) + 12);
 			double d2 = player.getZ() + (this.random.nextInt(800) - 400.5);
@@ -90,7 +90,7 @@ public class PosSilverfish extends Silverfish implements Teleporter {
 
 	@Override
 	public void onAddedToWorld() {
-		List<PosSilverfish> list = this.level.getEntitiesOfClass(PosSilverfish.class,
+		List<PosSilverfish> list = this.level().getEntitiesOfClass(PosSilverfish.class,
 				this.getBoundingBox().inflate(30));
 		if (summonPosSilverfish != null && list.size() == 1) { this.summonPosSilverfish.notifyHurt(); }
 		super.onAddedToWorld();
@@ -126,7 +126,7 @@ public class PosSilverfish extends Silverfish implements Teleporter {
 		public void tick() {
 			--this.lookForFriends;
 			if (this.lookForFriends <= 0) {
-				Level level = this.silverfish.level;
+				Level level = this.silverfish.level();
 				RandomSource randomsource = this.silverfish.getRandom();
 				BlockPos blockpos = this.silverfish.blockPosition();
 				for (int i = 0; i <= 5 && i >= -5; i = (i <= 0 ? 1 : 0) - i) {

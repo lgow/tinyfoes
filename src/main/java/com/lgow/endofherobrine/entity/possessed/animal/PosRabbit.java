@@ -48,10 +48,10 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Rabbit rabbit = (Rabbit) this.convertBack(this, EntityType.RABBIT, !this.isAngry());
 			rabbit.setVariant(this.getVariant());
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
-		this.readPersistentAngerSaveData(this.level, pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	private void spawnLingeringCloud() {
 		Collection<MobEffectInstance> collection = this.getActiveEffects();
 		if (! collection.isEmpty()) {
-			AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+			AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 			areaeffectcloud.setRadius(2.5F);
 			areaeffectcloud.setRadiusOnUse(- 0.5F);
 			areaeffectcloud.setWaitTime(10);
@@ -86,14 +86,14 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 			for (MobEffectInstance mobeffectinstance : collection) {
 				areaeffectcloud.addEffect(new MobEffectInstance(mobeffectinstance));
 			}
-			this.level.addFreshEntity(areaeffectcloud);
+			this.level().addFreshEntity(areaeffectcloud);
 		}
 	}
 
 	private void explode() {
-		if (! this.level.isClientSide) {
+		if (! this.level().isClientSide) {
 			this.dead = true;
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 3f, Level.ExplosionInteraction.MOB);
+			this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3f, Level.ExplosionInteraction.MOB);
 			this.discard();
 			this.spawnLingeringCloud();
 		}

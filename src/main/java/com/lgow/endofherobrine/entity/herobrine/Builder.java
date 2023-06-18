@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -40,8 +41,8 @@ public class Builder extends AbstractHerobrine {
 
 	@Override
 	public boolean checkSafePos(LivingEntity entity, BlockPos.MutableBlockPos mutablePos, boolean avoidwater) {
-		return (mutablePos.getY() > this.level.getMinBuildHeight() && !this.level.getBlockState(mutablePos)
-				.getMaterial().blocksMotion()) || this.level.getBlockState(mutablePos).is(BlockTags.LEAVES);
+		return (mutablePos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(mutablePos)
+				.blocksMotion()) || this.level().getBlockState(mutablePos).is(BlockTags.LEAVES);
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class Builder extends AbstractHerobrine {
 
 	private void build() {
 		if (this.canSeePlayers() && this.getNearestPlayer() != null) {
-			if (this.level.canSeeSky(blockPosition()) && this.distanceTo(getNearestPlayer()) >= 20) {
+			if (this.level().canSeeSky(blockPosition()) && this.distanceTo(getNearestPlayer()) >= 20) {
 				if (this.random.nextInt(5) != 0) {
 					this.selectStructure(LETTERS, 0);
 				}
@@ -98,17 +99,20 @@ public class Builder extends AbstractHerobrine {
 	}
 
 	private void buildSign() {
-		SignText signText = SignText.getRandomText(random);
+		BuilderMessage signText = BuilderMessage.getRandomText(random);
 		BlockPos pos = this.blockPosition();
 		//todo fix sign direction & sign type by biome & sign breaking consequences
-		level.setBlockAndUpdate(pos, Blocks.OAK_SIGN.defaultBlockState()
+		level().setBlockAndUpdate(pos, Blocks.OAK_SIGN.defaultBlockState()
 				.setValue(StandingSignBlock.ROTATION, Mth.floor(this.getXRot()) & 15));
-		level.playSound(this, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.5F,
+		level().playSound(this, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.5F,
 				(float) (0.8F + (Math.random() * 0.2D)));
-		SignBlockEntity existingBlockEntity = (SignBlockEntity) level.getExistingBlockEntity(pos);
+		SignBlockEntity existingBlockEntity = (SignBlockEntity) level().getExistingBlockEntity(pos);
+		SignText text = new SignText();
 		for (int line : signText.lines) {
-			existingBlockEntity.setMessage(line, Component.translatable("sign." + signText.prefix + line));
+			text = text.setMessage(line,Component.translatable("sign." + signText.prefix + line));
 		}
+		existingBlockEntity.setText(text, true);
+		existingBlockEntity.setText(text,false);
 		this.discard();
 	}
 
@@ -120,21 +124,21 @@ public class Builder extends AbstractHerobrine {
 		super.customServerAiStep();
 	}
 
-	private enum SignText {
+	private enum BuilderMessage {
 		LEAVE("leave", 1, 2), STOP("stop", 1), WATCHING("watching", 1), WELCOME("welcome", 1, 2);
 
-		private static final List<SignText> VALUES = List.of(values());
+		private static final List<BuilderMessage> VALUES = List.of(values());
 
 		private final String prefix;
 
 		private final int[] lines;
 
-		SignText(String name, int... lines) {
+		BuilderMessage(String name, int... lines) {
 			this.prefix = name;
 			this.lines = lines;
 		}
 
-		private static SignText getRandomText(RandomSource random) {
+		private static BuilderMessage getRandomText(RandomSource random) {
 			return VALUES.get(random.nextInt(VALUES.size()));
 		}
 	}

@@ -16,7 +16,7 @@ import static com.lgow.endofherobrine.entity.EntityInit.*;
 import static com.lgow.endofherobrine.registries.ModRegistries.MOD_ITEMS;
 
 public class ItemInit {
-	public static final RegistryObject<ForgeSpawnEggItem> BUILDER_SPAWN_EGG, LURKER_SPAWN_EGG, NIGHTMARE_SPAWN_EGG, DOPPLEGANGER_SPAWN_EGG, CHICKEN_SPAWN_EGG, COW_SPAWN_EGG, HUSK_SPAWN_EGG, PIG_SPAWN_EGG, PIGMAN_SPAWN_EGG, RABBIT_SPAWN_EGG, SHEEP_SPAWN_EGG, SILVERFISH_SPAWN_EGG, SKELETON_SPAWN_EGG, STRAY_SPAWN_EGG, VILLAGER_SPAWN_EGG, ZOMBIE_SPAWN_EGG, ZOMBIE_SPAWN_VILLAGER_EGG;
+	public static final RegistryObject<ForgeSpawnEggItem> BUILDER_SPAWN_EGG, LURKER_SPAWN_EGG, CHICKEN_SPAWN_EGG, COW_SPAWN_EGG, HUSK_SPAWN_EGG, PIG_SPAWN_EGG, PIGMAN_SPAWN_EGG, RABBIT_SPAWN_EGG, SHEEP_SPAWN_EGG, SILVERFISH_SPAWN_EGG, SKELETON_SPAWN_EGG, STRAY_SPAWN_EGG, VILLAGER_SPAWN_EGG, ZOMBIE_SPAWN_EGG, ZOMBIE_SPAWN_VILLAGER_EGG;
 
 	public static final RegistryObject<StandingAndWallBlockItem> CURSED_HEAD_ITEM, HEROBRINE_HEAD_ITEM;
 
@@ -30,8 +30,6 @@ public class ItemInit {
 		//SPAWN EGGS
 		BUILDER_SPAWN_EGG = registerSpawnEgg("builder", BUILDER, 44975);
 		LURKER_SPAWN_EGG = registerSpawnEgg("lurker", LURKER, 44975);
-		NIGHTMARE_SPAWN_EGG = registerSpawnEgg("nightmare", NIGHTMARE, 44975);
-		DOPPLEGANGER_SPAWN_EGG = registerSpawnEgg("doppelganger", DOPPLEGANGER, 44975);
 		CHICKEN_SPAWN_EGG = registerSpawnEgg("chicken", CHICKEN, 10489616);
 		COW_SPAWN_EGG = registerSpawnEgg("cow", COW, 4470310);
 		HUSK_SPAWN_EGG = registerSpawnEgg("husk", HUSK, 12691306);

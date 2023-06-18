@@ -22,7 +22,7 @@ public class PosPigRender extends PigRenderer {
 
 	@Override
 	public Vec3 getRenderOffset(Pig pig, float pPartialTicks) {
-		return pig.getLevel().hasNearbyAlivePlayer(pig.getX(), pig.getY(), pig.getZ(), 4) ? new Vec3(
+		return pig.level().hasNearbyAlivePlayer(pig.getX(), pig.getY(), pig.getZ(), 4) ? new Vec3(
 				this.random.nextGaussian() * 0.005D, 0.0D, this.random.nextGaussian() * 0.005D) : super.getRenderOffset(
 				pig, pPartialTicks);
 	}

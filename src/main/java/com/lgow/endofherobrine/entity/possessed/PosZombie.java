@@ -55,7 +55,7 @@ public class PosZombie extends Zombie  implements PossessedMob {
 	@Override
 	protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
 		super.populateDefaultEquipmentSlots(pRandom, pDifficulty);
-		if (pRandom.nextFloat() < (this.level.getDifficulty() == Difficulty.HARD ? 0.2F : 0.05F)) {
+		if (pRandom.nextFloat() < (this.level().getDifficulty() == Difficulty.HARD ? 0.2F : 0.05F)) {
 			int i = pRandom.nextInt(3);
 			this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(i == 0 ? Items.IRON_SWORD : Items.IRON_SHOVEL));
 		}

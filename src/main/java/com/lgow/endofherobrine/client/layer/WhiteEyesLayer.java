@@ -50,7 +50,7 @@ public class WhiteEyesLayer <T extends PathfinderMob, M extends EntityModel<T>> 
 	}
 
 	private boolean shouldRender(T entity) {
-		return (entity.getLevel().getNearestPlayer(entity, 40D) != null || entity.isAggressive()) || this.alwaysRender;
+		return (entity.level().getNearestPlayer(entity, 40D) != null || entity.isAggressive()) || this.alwaysRender;
 	}
 
 	public void render(PoseStack poseStack, MultiBufferSource source, int lightIn, T entity, float swing, float swingAmount, float parTicks, float age, float headYaw, float headPitch) {

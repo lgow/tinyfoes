@@ -5,10 +5,8 @@ import com.lgow.endofherobrine.entity.herobrine.boss.HerobrineBoss;
 import com.lgow.endofherobrine.entity.possessed.*;
 import com.lgow.endofherobrine.entity.possessed.animal.*;
 import com.lgow.endofherobrine.event.PossessionEvents;
-import com.lgow.endofherobrine.event.NightmareEvents;
 import com.lgow.endofherobrine.event.RandomEvents;
-import com.lgow.endofherobrine.event.WrathIncreaserEvents;
-import com.lgow.endofherobrine.networking.ModPacketHandler;
+import com.lgow.endofherobrine.event.WrathHandler;
 import com.lgow.endofherobrine.registries.ModRegistries;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -31,21 +29,18 @@ public class Main {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new PossessionEvents());
 		MinecraftForge.EVENT_BUS.register(new RandomEvents());
-		MinecraftForge.EVENT_BUS.register(new NightmareEvents());
-		MinecraftForge.EVENT_BUS.register(new WrathIncreaserEvents());
+		MinecraftForge.EVENT_BUS.register(new WrathHandler());
+
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> { });
-		ModPacketHandler.register();
 	}
 
 	private void attributes(EntityAttributeCreationEvent event) {
 		event.put(HEROBRINE_BOSS.get(), HerobrineBoss.createAttributes().build());
 		event.put(BUILDER.get(), AbstractHerobrine.setCustomAttributes().build());
 		event.put(LURKER.get(), AbstractHerobrine.setCustomAttributes().build());
-		event.put(NIGHTMARE.get(), AbstractHerobrine.setCustomAttributes().build());
-		event.put(DOPPLEGANGER.get(), AbstractHerobrine.setCustomAttributes().build());
 		event.put(CHICKEN.get(), PosChicken.setCustomAttributes().build());
 		event.put(COW.get(), PosCow.setCustomAttributes().build());
 		event.put(HUSK.get(), PosHusk.setCustomAttributes().build());

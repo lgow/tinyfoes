@@ -52,12 +52,12 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Pig pig = (Pig) this.convertBack(this, EntityType.PIG, !this.isAngry());
 			if(this.isSaddled()){
 				pig.equipSaddle(null);
 			}
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
-		this.readPersistentAngerSaveData(this.level, pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
@@ -92,9 +92,9 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	@Override
 	protected void actuallyHurt(DamageSource source, float amount) {
 		if (source.getEntity() instanceof Player && amount < this.getHealth()) {
-			LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level);
+			LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level());
 			lightningBolt.setPos(this.getX(), this.getY(), this.getZ());
-			level.addFreshEntity(lightningBolt);
+			level().addFreshEntity(lightningBolt);
 		}
 		super.actuallyHurt(source, amount);
 	}

@@ -136,9 +136,9 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			int k1 = this.getInvulnerableTicks() - 1;
 			this.bossEvent.setProgress(1.0F - (float) k1 / 220.0F);
 			if (k1 <= 0) {
-				this.level.explode(this, this.getX(), this.getY(), this.getZ(), 7f, Level.ExplosionInteraction.MOB);
+				this.level().explode(this, this.getX(), this.getY(), this.getZ(), 7f, Level.ExplosionInteraction.MOB);
 				if (! this.isSilent()) {
-					this.level.globalLevelEvent(1023, this.blockPosition(), 0);
+					this.level().globalLevelEvent(1023, this.blockPosition(), 0);
 				}
 			}
 			this.setInvulnerableTicks(k1);
@@ -173,13 +173,13 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			double d8 = this.getHeadX(l);
 			double d10 = this.getHeadY(l);
 			double d2 = this.getHeadZ(l);
-			this.level.addParticle(ParticleTypes.SMOKE, d8 + this.random.nextGaussian() * (double) 0.3F,
+			this.level().addParticle(ParticleTypes.SMOKE, d8 + this.random.nextGaussian() * (double) 0.3F,
 					d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F,
 					0.0D, 0.0D, 0.0D);
 		}
 		if (this.getInvulnerableTicks() > 0) {
 			for (int i1 = 0; i1 < 3; ++ i1) {
-				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(),
+				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(),
 						this.getY() + (double) (this.random.nextFloat() * 3.3F),
 						this.getZ() + this.random.nextGaussian(), 0.7F, 0.7F, 0.9F);
 			}
@@ -225,7 +225,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 
 	private void performRangedAttack(int pHead, double pX, double pY, double pZ, boolean pIsDangerous) {
 		if (! this.isSilent()) {
-			this.level.levelEvent(null, 1024, this.blockPosition(), 0);
+			this.level().levelEvent(null, 1024, this.blockPosition(), 0);
 		}
 		double d0 = this.getHeadX(pHead);
 		double d1 = this.getHeadY(pHead);
@@ -233,13 +233,13 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 		double d3 = pX - d0;
 		double d4 = pY - d1;
 		double d5 = pZ - d2;
-		WitherSkull witherskull = new WitherSkull(this.level, this, d3, d4, d5);
+		WitherSkull witherskull = new WitherSkull(this.level(), this, d3, d4, d5);
 		witherskull.setOwner(this);
 		if (pIsDangerous) {
 			witherskull.setDangerous(true);
 		}
 		witherskull.setPosRaw(d0, d1, d2);
-		this.level.addFreshEntity(witherskull);
+		this.level().addFreshEntity(witherskull);
 	}
 
 	@Override
@@ -258,7 +258,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			return false;
 		}
 		else if (!pSource.is(DamageTypeTags.IS_DROWNING) && ! (pSource.getEntity() instanceof HerobrineBoss)) {
-			if (this.getInvulnerableTicks() > 0 && !pSource.is(DamageTypes.OUT_OF_WORLD)) {
+			if (this.getInvulnerableTicks() > 0 && !pSource.is(DamageTypes.OUTSIDE_BORDER)) {
 				return false;
 			}
 			else {

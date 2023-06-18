@@ -14,17 +14,17 @@ import net.minecraft.world.phys.Vec3;
 
 public interface Teleporter {
 	default boolean checkSafePos(LivingEntity entity, BlockPos.MutableBlockPos mutablePos, boolean avoidWater) {
-		BlockState blockstate = entity.level.getBlockState(mutablePos);
-		boolean blocksMotion = blockstate.getMaterial().blocksMotion();
+		BlockState blockstate = entity.level().getBlockState(mutablePos);
+		boolean blocksMotion = blockstate.blocksMotion();
 		boolean posSafe = avoidWater ? blocksMotion : (blocksMotion || blockstate.getFluidState().is(FluidTags.WATER));
-		return mutablePos.getY() > entity.level.getMinBuildHeight() && !posSafe;
+		return mutablePos.getY() > entity.level().getMinBuildHeight() && !posSafe;
 	}
 
 	default boolean willHaveSightOfTarget(LivingEntity chaser, BlockPos.MutableBlockPos mutablePos, LivingEntity target) {
 		Vec3 mVec = new Vec3(mutablePos.getX(), mutablePos.getY() + chaser.getEyeHeight(), mutablePos.getZ());
 		Vec3 pVec = new Vec3(target.getX(), target.getEyeY(), target.getZ());
 		if (mVec.distanceTo(pVec) <= 128.0D && !target.isSpectator()) {
-			return chaser.level.clip(
+			return chaser.level().clip(
 					new ClipContext(mVec, pVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, chaser)).getType()
 					== HitResult.Type.MISS;
 		}
@@ -36,14 +36,14 @@ public interface Teleporter {
 		while (this.checkSafePos(teleporter,mutablePos, avoidWater)) {
 			mutablePos.move(Direction.DOWN);
 		}
-		BlockState blockstate = teleporter.level.getBlockState(mutablePos);
-		boolean safePos = blockstate.getMaterial().blocksMotion() ||(!avoidWater && blockstate.getFluidState().is(FluidTags.WATER));
+		BlockState blockstate = teleporter.level().getBlockState(mutablePos);
+		boolean safePos = blockstate.blocksMotion() ||(!avoidWater && blockstate.getFluidState().is(FluidTags.WATER));
 		boolean isLurking = target == null || this.willHaveSightOfTarget(teleporter, mutablePos, target);
 		boolean avoidFluid = avoidWater ? blockstate.getFluidState().isEmpty() : blockstate.getFluidState().is(FluidTags.LAVA);
 		if(safePos && !avoidFluid && isLurking) {
 			boolean canTeleport = this.randomTeleport(teleporter, x, y, z, avoidWater);
 			if (canTeleport && !teleporter.isSilent()) {
-				teleporter.level.playSound(null, teleporter.xo, teleporter.yo, teleporter.zo, SoundEvents.ENDERMAN_TELEPORT,
+				teleporter.level().playSound(null, teleporter.xo, teleporter.yo, teleporter.zo, SoundEvents.ENDERMAN_TELEPORT,
 						teleporter.getSoundSource(), 1.0F, 1.0F);
 				teleporter.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
@@ -63,14 +63,14 @@ public interface Teleporter {
 		double d3 = pY;
 		boolean flag = false;
 		BlockPos blockpos = new BlockPos.MutableBlockPos(pX, pY, pZ);
-		Level level = entity.level;
+		Level level = entity.level();
 		if (level.hasChunkAt(blockpos)) {
 			boolean hasChunk = false;
 
 			while(!hasChunk && blockpos.getY() > level.getMinBuildHeight()) {
 				BlockPos below = blockpos.below();
 				BlockState blockstate = level.getBlockState(below);
-				if (blockstate.getMaterial().blocksMotion() || !avoidWater && blockstate.getFluidState().is(FluidTags.WATER)) {
+				if (blockstate.blocksMotion() || !avoidWater && blockstate.getFluidState().is(FluidTags.WATER)) {
 					hasChunk = true;
 				} else {
 					--d3;
@@ -100,7 +100,7 @@ public interface Teleporter {
 	}
 
 	default boolean teleportInFrontOf(LivingEntity chaser, LivingEntity target) {
-		if (!chaser.level.isClientSide && target != null) {
+		if (!chaser.level().isClientSide && target != null) {
 			Vec3 targetPos = target.position();
 			Vec3 chaserPos = chaser.position();
 			Vec3 dir = targetPos.subtract(chaserPos);
@@ -113,7 +113,7 @@ public interface Teleporter {
 	}
 
 	default boolean teleportBehindOf(LivingEntity chaser, LivingEntity target) {
-		if (!chaser.level.isClientSide && target != null) {
+		if (!chaser.level().isClientSide && target != null) {
 			Vec3 targetPos = target.position();
 			Vec3 chaserPos = chaser.position();
 			Vec3 dir = targetPos.subtract(chaserPos);

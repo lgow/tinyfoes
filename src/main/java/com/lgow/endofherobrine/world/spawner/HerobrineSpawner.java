@@ -3,7 +3,7 @@ package com.lgow.endofherobrine.world.spawner;
 import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.entity.EntityInit;
 import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
-import com.lgow.endofherobrine.event.WrathIncreaserEvents;
+import com.lgow.endofherobrine.event.WrathHandler;
 import com.lgow.endofherobrine.util.ModUtil;
 import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.core.BlockPos;
@@ -49,7 +49,7 @@ public class HerobrineSpawner {
 	}
 
 	public void tick(ServerLevel level) {
-		if (this.spawnChance != 0 && WrathIncreaserEvents.getHerobrineHostility(level) > 0 && ModUtil.noHerobrineExists(
+		if (this.spawnChance != 0 && WrathHandler.getHerobrineHostility(level) > 0 && ModUtil.noHerobrineExists(
 				level)) {
 			if (--this.tickDelay <= 0) {
 				int delay = Math.max(this.spawnDelay / 20, 1);
@@ -84,7 +84,7 @@ public class HerobrineSpawner {
 			return true;
 		}
 		else {
-			BlockPos blockPos = this.findPositionAroundPlayer(randomPlayer.level, randomPlayer.getOnPos(), 48);
+			BlockPos blockPos = this.findPositionAroundPlayer(randomPlayer.level(), randomPlayer.getOnPos(), 48);
 			AbstractHerobrine herobrine = null;
 			if (blockPos != null && this.hasEnoughSpace(level, blockPos)) {
 				if (this.random.nextInt(7) != 0) {

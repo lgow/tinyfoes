@@ -36,7 +36,7 @@ public class WrathHandler {
 	}
 
 	private void increaseDestruction(ServerPlayer player, int value) {
-		getScore(player.getLevel(), player.getScoreboardName(), "Destruction").add(value);
+		getScore(player.serverLevel(), player.getScoreboardName(), "Destruction").add(value);
 	}
 
 	//Increases world destruction each time a player breaks a block

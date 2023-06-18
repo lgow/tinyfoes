@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
@@ -22,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.lgow.endofherobrine.entity.EntityInit.*;
 import static net.minecraft.world.entity.EntityType.*;
@@ -39,27 +41,15 @@ import static net.minecraft.world.entity.EntityType.ZOMBIE;
 import static net.minecraft.world.entity.EntityType.ZOMBIE_VILLAGER;
 
 public class ModUtil {
-	private static final HashMap<EntityType, EntityType> animalList = new HashMap<>() {
-		{
-			put(CHICKEN, EntityInit.CHICKEN.get());
-			put(COW, EntityInit.COW.get());
-			put(PIG, EntityInit.PIG.get());
-			put(RABBIT, EntityInit.RABBIT.get());
-			put(SHEEP, EntityInit.SHEEP.get());
-			put(VILLAGER, EntityInit.VILLAGER.get());
-		}
-	};
+	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> animalList = Map.of(
+			EntityType.CHICKEN, EntityInit.CHICKEN.get(), EntityType.COW, EntityInit.COW.get(), EntityType.PIG,
+			EntityInit.PIG.get(), EntityType.RABBIT, EntityInit.RABBIT.get(), EntityType.SHEEP, EntityInit.SHEEP.get(),
+			EntityType.VILLAGER, EntityInit.VILLAGER.get());
 
-	private static final HashMap<EntityType, EntityType> monsterList = new HashMap<>() {
-		{
-			put(HUSK, EntityInit.HUSK.get());
-			put(SILVERFISH, EntityInit.SILVERFISH.get());
-			put(SKELETON, EntityInit.SKELETON.get());
-			put(STRAY, EntityInit.STRAY.get());
-			put(ZOMBIE, EntityInit.ZOMBIE.get());
-			put(ZOMBIE_VILLAGER, EntityInit.ZOMBIE_VILLAGER.get());
-		}
-	};
+	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> monsterList = Map.of(EntityType.HUSK,
+			EntityInit.HUSK.get(), EntityType.SILVERFISH, EntityInit.SILVERFISH.get(), EntityType.SKELETON,
+			EntityInit.SKELETON.get(), EntityType.STRAY, EntityInit.STRAY.get(), EntityType.ZOMBIE,
+			EntityInit.ZOMBIE.get(), EntityType.ZOMBIE_VILLAGER, EntityInit.ZOMBIE_VILLAGER.get());
 
 	//Spawns herobrine relative to a position and direction
 	public static void spawnHerobrine(AbstractHerobrine herobrine, ServerLevel server, Direction dir, Vec3 pos, double offs) {
@@ -99,6 +89,8 @@ public class ModUtil {
 			LivingEntity posMob = ((Mob) entityIn).convertTo(monsterList.get(entityIn.getType()), true);
 			if (posMob instanceof ZombieVillager zVillager) {
 				zVillager.setVillagerData(((ZombieVillager) entityIn).getVillagerData());
+			}else if (posMob instanceof Husk){
+				((Husk) posMob).setNoAi(false);
 			}
 		}
 	}

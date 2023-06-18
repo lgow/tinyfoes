@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static com.lgow.endofherobrine.event.WrathIncreaserEvents.probability;
+import static com.lgow.endofherobrine.event.WrathHandler.probability;
 import static com.lgow.endofherobrine.util.ModUtil.*;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID)
@@ -29,12 +29,11 @@ public class PossessionEvents {
 	@SubscribeEvent
 	public void onMobHurt(LivingHurtEvent event) {
 		LivingEntity target = event.getEntity();
-		if (ModConfigs.MOB_POSSESSION.get() && target.level instanceof ServerLevel server && event.getAmount() < target.getHealth()) {
+		if (ModConfigs.MOB_POSSESSION.get() && target.level() instanceof ServerLevel server && event.getAmount() < target.getHealth()) {
 			target.lastHurtByPlayerTime = 600;
 			if (probability(server, 0.5f)) {
 				possessMobs(target, server, true, false);
 			}
 		}
 	}
-
 }

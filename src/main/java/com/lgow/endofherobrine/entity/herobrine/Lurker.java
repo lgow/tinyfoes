@@ -103,7 +103,7 @@ public class Lurker extends AbstractHerobrine {
 		if (hurtTarget && entityIn instanceof Player player) {
 			player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 150, 1, false, false));
 			player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 150, 1, false, false));
-			level.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.AMBIENT_CAVE.get(),
+			level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.AMBIENT_CAVE.get(),
 					SoundSource.HOSTILE, 0.5F, (float) (0.8F + (Math.random() * 0.2D)), false);
 
 			this.discard();
@@ -120,7 +120,7 @@ public class Lurker extends AbstractHerobrine {
 	private void warnPlayer() {
 		if (this.isLookingAtAnyPlayers() && this.getTargetPlayer() != null) {
 			if(random.nextInt(3) ==0 && this.playSoundCooldown <= 0){
-				level.playSound(null, this.getTargetPlayer().blockPosition(), SoundEvents.AMBIENT_CAVE.get(),
+				level().playSound(null, this.getTargetPlayer().blockPosition(), SoundEvents.AMBIENT_CAVE.get(),
 						SoundSource.HOSTILE, 0.5F, (float) (0.8F + (Math.random() * 0.2D)));
 				this.playSoundCooldown = 4000;
 			}
@@ -141,14 +141,14 @@ public class Lurker extends AbstractHerobrine {
 	}
 
 	private void tooCloseToPlayer() {
-		if (!this.level.isClientSide && this.getNearestPlayer() != null && this.distanceTo(getNearestPlayer()) <= 5
+		if (!this.level().isClientSide && this.getNearestPlayer() != null && this.distanceTo(getNearestPlayer()) <= 5
 				&& !this.getAngry()) {
 			this.teleportAway();
 		}
 	}
 
 	private void teleportAway() {
-		this.level.broadcastEntityEvent(this, (byte) 46);
+		this.level().broadcastEntityEvent(this, (byte) 46);
 		if (!this.isSilent()) {
 			this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 		}
@@ -181,7 +181,7 @@ public class Lurker extends AbstractHerobrine {
 		}
 
 		public boolean canUse() {
-			this.pendingTarget = this.lurker.level.getNearestPlayer(this.startAggroTargetConditions, this.lurker);
+			this.pendingTarget = this.lurker.level().getNearestPlayer(this.startAggroTargetConditions, this.lurker);
 			return this.pendingTarget != null;
 		}
 

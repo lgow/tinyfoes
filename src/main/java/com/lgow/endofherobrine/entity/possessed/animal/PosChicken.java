@@ -54,9 +54,9 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.convertBack(this, EntityType.CHICKEN, !this.isAngry());
-			this.updatePersistentAnger((ServerLevel) this.level, true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
-		this.readPersistentAngerSaveData(this.level, pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	}
 
 	protected void teleportToDodge() {
-		if (! this.level.isClientSide && this.isAlive()) {
+		if (! this.level().isClientSide && this.isAlive()) {
 			double x = this.getX() + (this.random.nextDouble() - 0.5) * 10.0;
 			double y = this.getY() + (double) this.random.nextInt(12);
 			double z = this.getZ() + (this.random.nextDouble() - 0.5) * 10.0;
@@ -93,7 +93,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (! this.level.isClientSide && source.getEntity() instanceof Player && amount < this.getHealth()) {
+		if (! this.level().isClientSide && source.getEntity() instanceof Player && amount < this.getHealth()) {
 			this.teleportToDodge();
 		}
 		return super.hurt(source, amount);

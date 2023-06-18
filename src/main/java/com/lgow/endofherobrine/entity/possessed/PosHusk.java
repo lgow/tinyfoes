@@ -37,7 +37,7 @@ public class PosHusk extends Husk implements PossessedMob {
 	public boolean doHurtTarget(Entity entityIn) {
 		boolean flag = super.doHurtTarget(entityIn);
 		if (flag && this.getMainHandItem().isEmpty() && entityIn instanceof LivingEntity) {
-			float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+			float f = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
 			((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.HUNGER, 280 * (int) f));
 		}
 		return flag;

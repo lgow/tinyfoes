@@ -28,8 +28,8 @@ public class DefendPassiveMobsGoal extends TargetGoal {
 	public boolean canUse() {
 		//Should defend from player interaction?
 		AABB aabb = this.goalOwner.getBoundingBox().inflate(40.0D);
-		List<Mob> list = this.goalOwner.level.getNearbyEntities(Mob.class, this.attackTargeting, this.goalOwner, aabb);
-		List<ServerPlayer> list1 = this.goalOwner.level.getServer().getPlayerList().getPlayers();
+		List<Mob> list = this.goalOwner.level().getNearbyEntities(Mob.class, this.attackTargeting, this.goalOwner, aabb);
+		List<ServerPlayer> list1 = this.goalOwner.level().getServer().getPlayerList().getPlayers();
 		for (LivingEntity livingentity : list) {
 			for (Player player : list1) {
 				if (! (livingentity instanceof Enemy) && livingentity.lastHurtByPlayer == player) {

@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -40,8 +39,7 @@ public class BlockInit {
 		registerInfestedBlock("cracked_stone_bricks", Blocks.CRACKED_STONE_BRICKS);
 		registerInfestedBlock("mossy_cobblestone", Blocks.MOSSY_COBBLESTONE);
 		registerInfestedBlock("mossy_stone_bricks", Blocks.MOSSY_STONE_BRICKS);
-		registerBlock("glowstone", () -> new ModInfestedBlock(Blocks.GLOWSTONE, BlockBehaviour.Properties.of(
-				Material.CLAY).lightLevel((blockState) -> 15).sound(SoundType.GLASS)));
+		registerBlock("glowstone", () -> new ModInfestedBlock(Blocks.GLOWSTONE, BlockBehaviour.Properties.copy(Blocks.PLAYER_HEAD).lightLevel((blockState) -> 15).sound(SoundType.GLASS)));
 	}
 
 	private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> blockSupplier) {
@@ -58,7 +56,7 @@ public class BlockInit {
 	}
 
 	private static void registerInfestedBlock(String name, Block blockIn) {
-		registerBlock(name, () -> new ModInfestedBlock(blockIn, BlockBehaviour.Properties.of(Material.CLAY)));
+		registerBlock(name, () -> new ModInfestedBlock(blockIn, BlockBehaviour.Properties.copy(Blocks.INFESTED_STONE)));
 	}
 
 	private static <T extends Block> RegistryObject<BlockItem> registerBlockItem(String name, Supplier<T> blockSupplier) {

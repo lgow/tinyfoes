@@ -13,6 +13,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +31,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -58,7 +59,7 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	}
 
 	public Player getNearestPlayer() {
-		return this.level.getNearestPlayer(TargetingConditions.forNonCombat().ignoreLineOfSight(), this);
+		return this.level().getNearestPlayer(TargetingConditions.forNonCombat().ignoreLineOfSight(), this);
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	@Override
 	public boolean isInvulnerableTo(DamageSource pSource) {
-		return this instanceof Doppelganger ? super.isInvulnerableTo(pSource) :!pSource.is(DamageTypes.OUT_OF_WORLD);
+		return !pSource.is(DamageTypes.OUTSIDE_BORDER);
 	}
 
 	@Override
@@ -120,7 +121,7 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	public void setPlayerUUID(UUID uuid) { this.entityData.set(PLAYER_UUID, Optional.ofNullable(uuid)); }
 
-	public Player getPlayerByUUID() { return this.level.getPlayerByUUID(getPlayerUUID()); }
+	public Player getPlayerByUUID() { return this.level().getPlayerByUUID(getPlayerUUID()); }
 
 	@Nullable
 	public Player getTargetPlayer() { return this.targetPlayer; }
@@ -157,8 +158,8 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	public boolean isLookingAtAnyPlayers() {
 		boolean isLookinAtAnyPlayers = false;
-		if (!this.level.isClientSide) {
-			for (Player player : this.level.getServer().getPlayerList().getPlayers()) {
+		if (!this.level().isClientSide) {
+			for (Player player : this.level().getServer().getPlayerList().getPlayers()) {
 				isLookinAtAnyPlayers = isLookinAtAnyPlayers || this.isLookingAt(player);
 				if (this.isLookingAt(player)) { this.setTargetPlayer(player); }
 			}
@@ -168,8 +169,8 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	public boolean canSeePlayers() {
 		boolean canSeeplayers = false;
-		if (!this.level.isClientSide) {
-			for (Player player : this.level.getServer().getPlayerList().getPlayers()) {
+		if (!this.level().isClientSide) {
+			for (Player player : this.level().getServer().getPlayerList().getPlayers()) {
 				canSeeplayers = canSeeplayers || this.hasLineOfSight(player);
 			}
 		}
@@ -188,9 +189,9 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 			for (int y = minY; y <= maxY; ++y) {
 				for (int z = minZ; z <= maxZ; ++z) {
 					BlockPos blockpos = new BlockPos(x, y, z);
-					BlockState blockstate = this.level.getBlockState(blockpos);
-					if (!blockstate.isAir() && blockstate.getMaterial() != Material.FIRE) {
-						destroyBlock = this.level.destroyBlock(blockpos, true);
+					BlockState blockstate = this.level().getBlockState(blockpos);
+					if (!blockstate.isAir() && !blockstate.is(BlockTags.FIRE)) {
+						destroyBlock = this.level().destroyBlock(blockpos, true);
 					}
 				}
 			}
@@ -201,9 +202,9 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	}
 
 	public void spawnPositoning(BlockPos pos) {
-		BlockState blockState = level.getBlockState(pos.above());
-		boolean blocksMotion = blockState.getMaterial().blocksMotion();
-		if (blocksMotion && level.canSeeSky(pos.above())) {
+		BlockState blockState = level().getBlockState(pos.above());
+		boolean blocksMotion = blockState.blocksMotion();
+		if (blocksMotion && level().canSeeSky(pos.above())) {
 			this.moveTo(pos.above(), getXRot(), getYRot());
 		}
 		else if (isInWall()) {
@@ -212,14 +213,14 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	}
 
 	protected boolean tpToWatchPlayer(Player player) {
-		if (!this.level.isClientSide && this.isAlive() && player != null) {
+		if (!this.level().isClientSide && this.isAlive() && player != null) {
 			double randX = this.random.nextIntBetweenInclusive(15, 40);
 			double randZ = this.random.nextIntBetweenInclusive(15, 40);
 			double x = player.getX() + (this.random.nextBoolean() ? randX : -randX);
 			double y = player.getY() + this.random.nextInt(16);
 			double z = player.getZ() + (this.random.nextBoolean() ? randZ : -randZ);
 			return this.attemptTeleport(this, x, y, z, player,
-					!player.level.getBiome(player.getOnPos()).is(BiomeTags.IS_OCEAN));
+					!player.level().getBiome(player.getOnPos()).is(BiomeTags.IS_OCEAN));
 		}
 		return false;
 	}
