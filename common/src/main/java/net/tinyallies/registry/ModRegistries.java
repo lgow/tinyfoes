@@ -1,0 +1,18 @@
+package net.tinyallies.registry;
+
+import dev.architectury.registry.registries.DeferredRegister;
+import net.minecraft.core.registries.Registries;
+import net.tinyallies.TinyAlliesCommon;
+import net.tinyallies.entity.ModEntities;
+import net.tinyallies.items.ModItems;
+import net.minecraft.world.item.Item;
+
+public class ModRegistries {
+	public static final DeferredRegister<Item> MOD_ITEMS = DeferredRegister.create(TinyAlliesCommon.MODID, Registries.ITEM);
+
+	public static void register() {
+		MOD_ITEMS.register();
+		ModEntities.register();
+		ModItems.register();
+	}
+}

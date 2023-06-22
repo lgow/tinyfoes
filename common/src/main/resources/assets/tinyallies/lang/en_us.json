@@ -1,3 +1,14 @@
 {
-  "item.tinyallies.example_item": "Example Item"
+  "entity.tinyallies.creeper": "Creepy",
+  "entity.tinyallies.skeleton": "Skelly",
+  "entity.tinyallies.enderman": "Enderboy",
+  "entity.tinyallies.spider": "Spidey",
+  "entity.tinyallies.zombie": "Zomby",
+
+  "item.tinyallies.babyfier": "The Babyfier",
+  "death_msg.1" : "%s died protecting %s",
+  "death_msg.2" : "%s traded its life for %s",
+  "death_msg.3" : "%s sacrificed itself for %s",
+  "death_msg.4" : "%s was killed for the sake of %s's safety",
+  "death_msg.0" : "%s gave its life for %s"
 }

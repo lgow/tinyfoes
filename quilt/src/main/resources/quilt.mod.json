@@ -17,6 +17,11 @@
       "contact": {
         "sources": "https://github.com/architectury/architectury-templates"
       },
+      "license": {
+        "name": "All Rights Reserved",
+        "id": "ARR",
+        "url": ""
+      },
       "icon": "assets/tinyallies/icon.png"
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
