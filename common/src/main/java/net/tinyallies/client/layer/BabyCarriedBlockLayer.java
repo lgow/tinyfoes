@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.tinyallies.client.model.BabyEndermanModel;
 import net.tinyallies.entity.BabyEnderman;
 
-//@OnlyIn(Dist.CLIENT)
 public class BabyCarriedBlockLayer extends RenderLayer<BabyEnderman, BabyEndermanModel<BabyEnderman>> {
 	private final BlockRenderDispatcher blockRenderer;
 
@@ -23,15 +22,15 @@ public class BabyCarriedBlockLayer extends RenderLayer<BabyEnderman, BabyEnderma
 	@Override
 	public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, BabyEnderman pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		BlockState blockstate = pLivingEntity.getCarriedBlock();
+		boolean sitting = pLivingEntity.isInSittingPose();
 		if (blockstate != null) {
 			pPoseStack.pushPose();
 			pPoseStack.translate(0.0F, 0.6875F, -0.75F);
-			pPoseStack.mulPose(Axis.XP.rotationDegrees(20.0F));
+			pPoseStack.mulPose(Axis.XP.rotationDegrees(sitting? 10.0F : 20F));
 			pPoseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
-			float offsetY = pLivingEntity.isInSittingPose() ? 0.08F : 0;
-			float offset = pLivingEntity.isInSittingPose() ? 0.38F : 0;
-			pPoseStack.translate(0.25F + offset, 0.6F + offsetY, 0.25F - offset);
-			float f = 0.5F;
+			float offsetY = sitting ? 0.65F : 0;
+			float handOffset = sitting ? -0.05F : -0.15F;
+			pPoseStack.translate(0.25F + handOffset, 0.6F - offsetY, 0.25F - handOffset);
 			pPoseStack.scale(-0.5F, -0.5F, 0.5F);
 			pPoseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
 			this.blockRenderer.renderSingleBlock(blockstate, pPoseStack, pBuffer, pPackedLight,

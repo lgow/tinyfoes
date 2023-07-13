@@ -1,4 +1,5 @@
 package net.tinyallies.entity;
+
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -6,6 +7,7 @@ import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -20,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public interface BabyMonster {
-
 	boolean isTamed();
 
 	void setTamed(boolean pTamed);
@@ -29,8 +30,7 @@ public interface BabyMonster {
 
 	void setMonsterParent(LivingEntity living);
 
-	@Nullable
-	UUID getParentUUID();
+	@Nullable UUID getParentUUID();
 
 	void setParentUUID(@Nullable UUID pUuid);
 
@@ -45,32 +45,19 @@ public interface BabyMonster {
 	boolean isFood(ItemStack pStack);
 
 	default void defaultBabyGoals(PathfinderMob entity) {
-////		entity.goalSelector.addGoal(1, new LookAtPlayerGoal(entity, Player.class ,100, 100));
-//
-//		entity.goalSelector.addGoal(1, new FloatGoal(entity));
-//		entity.goalSelector.addGoal(3, new BabySitsWhenOrderedToGoal(entity));
-//		entity.goalSelector.addGoal(4, new FollowPlayerGoal(entity, 1.0D, 10.0F, 2.0F, false));
-//		entity.goalSelector.addGoal(6, new BabyMonsterPanicGoal(entity, 1.5D));
-//		entity.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(entity, 0.8D));
-//		entity.goalSelector.addGoal(8, new LookAtPlayerGoal(entity, Player.class, 8.0F));
-//		entity.goalSelector.addGoal(9, new RandomLookAroundGoal(entity));
-//		entity.targetSelector.addGoal(1, new DefendParentTargetGoal(entity));
-//		entity.targetSelector.addGoal(2, new HurtByTargetGoal(entity));
-//		entity.targetSelector.addGoal(3, new HelpAttackTargetGoal(entity));
-//		entity.targetSelector.addGoal(4, new WildBabyTargeGoal<>(entity, Player.class, false));
-//
-////		entity.goalSelector.addGoal(1, new FloatGoal(entity));
-////		entity.goalSelector.addGoal(1, new BabyMonsterPanicGoal(entity, 1.5D));
-//////		entity.goalSelector.addGoal(2, new BabySitsWhenOrderedToGoal(entity));
-////		entity.goalSelector.addGoal(6, new FollowPlayerGoal(entity, 1.0D, 10.0F, 2.0F, false));
-////		entity.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(entity, 1.0D));
-//		entity.goalSelector.addGoal(10, new LookAtPlayerGoal(entity, Player.class, 8.0F));
-//		entity.goalSelector.addGoal(10, new RandomLookAroundGoal(entity));
-////		entity.targetSelector.addGoal(1, new DefendParentTargetGoal(entity));
-////		entity.targetSelector.addGoal(2, new HelpAttackTargetGoal(entity));
-//		entity.targetSelector.addGoal(3, (new HurtByTargetGoal(entity)).setAlertOthers());
-////		entity.targetSelector.addGoal(4, new WildBabyTargeGoal<>(entity, Player.class, false));
-
+		entity.goalSelector.addGoal(1, new FloatGoal(entity));
+		entity.goalSelector.addGoal(3, new BabySitsWhenOrderedToGoal(entity));
+		entity.goalSelector.addGoal(4, new FollowPlayerGoal(entity, 1.0D, 10.0F, 2.0F, false));
+		entity.goalSelector.addGoal(6, new BabyMonsterPanicGoal(entity, 1.5D));
+		entity.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(entity, 0.8D));
+		entity.goalSelector.addGoal(8, new LookAtPlayerGoal(entity, Player.class, 8.0F));
+		entity.goalSelector.addGoal(9, new RandomLookAroundGoal(entity));
+		entity.targetSelector.addGoal(1, new DefendParentTargetGoal(entity));
+		entity.targetSelector.addGoal(2, new HurtByTargetGoal(entity));
+		entity.targetSelector.addGoal(3, new HelpAttackTargetGoal(entity));
+		entity.targetSelector.addGoal(4, new WildBabyTargeGoal<>(entity, Player.class, false));
+		entity.goalSelector.addGoal(10, new LookAtPlayerGoal(entity, Player.class, 8.0F));
+		entity.goalSelector.addGoal(10, new RandomLookAroundGoal(entity));
 	}
 
 	default void addTamedSaveData(CompoundTag pCompound, boolean orderedToSit) {
@@ -107,11 +94,9 @@ public interface BabyMonster {
 
 	Class<? extends PathfinderMob> getMonsterParentClass();
 
-
 	default boolean canBeAdopted() {
 		return this.getMonsterParent() == null;
 	}
-
 
 	default void spawnTamingParticles(boolean pTamed, LivingEntity entity) {
 		ParticleOptions particleoptions = ParticleTypes.HEART;
@@ -150,4 +135,13 @@ public interface BabyMonster {
 	void reassessTameGoals();
 
 	void adopt(Player pPlayer);
+
+	default void updatePose(LivingEntity pTarget) {
+		if (this.isOrderedToSit()) {
+			pTarget.setPose(Pose.SITTING);
+		}
+		else {
+			pTarget.setPose(Pose.STANDING);
+		}
+	}
 }

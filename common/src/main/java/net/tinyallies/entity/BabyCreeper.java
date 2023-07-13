@@ -23,7 +23,6 @@ import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
@@ -54,6 +53,8 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 
 	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
 			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
+
+	public boolean recentlyPopped;
 
 	private boolean orderedToSit;
 
@@ -123,17 +124,21 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 		return new ItemStack(Items.CREEPER_SPAWN_EGG);
 	}
 
-//	@Override
-//	public void explodeCreeper() {
-//		if (!this.level.isClientSide) {
-//			this.dead = true;
-//			//			this.level.explode(this,this.getX(),this.getY(), this.getZ(), this.isPowered() ? 2.0F : 1.0F, Level.ExplosionInteraction.MOB );
-//			this.explode(this.getX(), this.getY(), this.getZ(), this.isPowered() ? 2.0F : 1.0F);
-//			this.finalizeExplosion();
-//			if (this.isPowered()) { this.discard(); }
-//			this.spawnLingeringCloud();
-//		}
-//	}
+	@Override
+	public void explodeCreeper() {
+		if (!this.level.isClientSide) {
+			this.explode(this.getX(), this.getY(), this.getZ(), this.isPowered() ? 2.0F : 1.0F);
+			this.finalizeExplosion();
+			if (this.isPowered()) {
+				this.discard();
+			}
+			else {
+				this.hurt(this.damageSources().generic(), 1);
+			}
+			this.spawnLingeringCloud();
+			this.dead = true;
+		}
+	}
 
 	public void explode(double x, double y, double z, float radius) {
 		float f2 = radius * 2.0F;
@@ -186,22 +191,21 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 	}
 
 	private void finalizeExplosion() {
-		switch (this.getRandom().nextInt(5)) {
-			case 4: {
-				this.playSound(SoundEvents.FIREWORK_ROCKET_TWINKLE);
-				this.twinkletime = 10;
-			}
-			default: {
-				this.playSound(this.random.nextBoolean() ? SoundEvents.FIREWORK_ROCKET_LARGE_BLAST
-						: SoundEvents.FIREWORK_ROCKET_BLAST);
-				this.level.broadcastEntityEvent(this, (byte) 101);
-			}
+		if (this.getRandom().nextInt(5) == 4) {
+			this.playSound(SoundEvents.FIREWORK_ROCKET_TWINKLE);
+			this.twinkletime = 10;
+		}
+		else {
+			this.playSound(this.random.nextBoolean() ? SoundEvents.FIREWORK_ROCKET_LARGE_BLAST
+					: SoundEvents.FIREWORK_ROCKET_BLAST);
+			this.level.broadcastEntityEvent(this, (byte) 101);
+			this.twinkletime = 2;
 		}
 	}
 
-//	public void setPowered(boolean b) {
-//		this.entityData.set(DATA_IS_POWERED, b);
-//	}
+	public void setPowered(boolean b) {
+		this.entityData.set(DATA_IS_POWERED, b);
+	}
 
 	@Override
 	protected void registerGoals() {
@@ -264,7 +268,6 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
-		Item item = itemstack.getItem();
 		if (this.level.isClientSide) {
 			boolean flag = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack) && !this.isTamed()
 					&& !this.isAngry();
@@ -410,19 +413,14 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 			this.setMonsterParent(null);
 			this.reassessTameGoals();
 		}
-		if (this.isOrderedToSit()) {
-			this.setPose(Pose.SITTING);
-		}
-		else {
-			this.setPose(Pose.STANDING);
-		}
-//		if (this.swell >= this.maxSwell) {
-//			this.swell = this.random.nextInt(10) + 5;
-//			this.explodeCreeper();
-//		}
 		if (twinkletime-- > 0) {
 			this.level.broadcastEntityEvent(this, (byte) 100);
 		}
+		if (this.swell >= 30) {
+			this.explodeCreeper();
+			this.swell = 0;
+		}
+		this.updatePose(this);
 		super.tick();
 	}
 
@@ -526,23 +524,24 @@ public class BabyCreeper extends Creeper implements NeutralMob, BabyMonster {
 	}
 
 	static class BabySwellGoal extends Goal {
-		private final Creeper creeper;
+		private final BabyCreeper creeper;
 
 		@Nullable private LivingEntity target;
 
-		public BabySwellGoal(Creeper pCreeper) {
+		public BabySwellGoal(BabyCreeper pCreeper) {
 			this.creeper = pCreeper;
 		}
 
 		public boolean canUse() {
 			LivingEntity livingentity = this.creeper.getTarget();
 			return this.creeper.getSwellDir() > 0 || livingentity != null && this.creeper.distanceToSqr(livingentity)
-					< 4.0D;
+					< 4.0D && !this.creeper.recentlyPopped;
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return this.target != null && this.target.isAlive() && this.creeper.distanceToSqr(this.target) < 4;
+			return this.target != null && this.target.isAlive() && this.creeper.distanceToSqr(this.target) < 4
+					&& !this.creeper.recentlyPopped;
 		}
 
 		public void start() {

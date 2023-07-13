@@ -13,15 +13,15 @@ public class LookForParentGoal extends Goal {
 
 	private final double speedModifier;
 
+	private final Class<? extends PathfinderMob> parentClass;
+
 	private BabyMonster baby;
 
 	@Nullable private Mob parent;
 
-	private Class<? extends PathfinderMob> parentClass;
-
 	private int timeToRecalcPath;
 
-	public LookForParentGoal(Mob pMob, double pSpeedModifier,  Class<? extends PathfinderMob> pParentClass) {
+	public LookForParentGoal(Mob pMob, double pSpeedModifier, Class<? extends PathfinderMob> pParentClass) {
 		if (pMob instanceof BabyMonster babyMonster) {
 			this.baby = babyMonster;
 		}
@@ -31,7 +31,7 @@ public class LookForParentGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		if (this.baby.isTamed()){
+		if (this.baby.isTamed()) {
 			return false;
 		}
 		List<? extends Mob> list = this.mob.level.getEntitiesOfClass(parentClass,
@@ -54,8 +54,8 @@ public class LookForParentGoal extends Goal {
 			return false;
 		}
 		else {
-				this.parent = newParent;
-			if (this.baby.getMonsterParent() == null){
+			this.parent = newParent;
+			if (this.baby.getMonsterParent() == null) {
 				this.baby.setMonsterParent(newParent);
 				this.baby.reassessTameGoals();
 			}

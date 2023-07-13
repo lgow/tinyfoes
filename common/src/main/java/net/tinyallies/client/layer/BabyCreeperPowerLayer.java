@@ -1,13 +1,13 @@
 package net.tinyallies.client.layer;
 
-import net.tinyallies.client.model.BabyCreeperModel;
-import net.tinyallies.entity.BabyCreeper;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.tinyallies.client.model.BabyCreeperModel;
+import net.tinyallies.entity.BabyCreeper;
 
 public class BabyCreeperPowerLayer extends EnergySwirlLayer<BabyCreeper, BabyCreeperModel> {
 	private static final ResourceLocation POWER_LOCATION = new ResourceLocation(

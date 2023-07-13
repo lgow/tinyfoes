@@ -40,8 +40,7 @@ public class ModEntities {
 					.updateInterval(20).sized(0.1F, 0.1F).build("blob"));
 
 	public static <T extends Entity> RegistrySupplier<EntityType<T>> registerBaby(String name, EntityType.EntityFactory<T> pFactory, MobCategory pCategory, float width, float height) {
-		return create(name, () -> EntityType.Builder.of(pFactory, pCategory)
-				.sized(width, height).build(name));
+		return create(name, () -> EntityType.Builder.of(pFactory, pCategory).sized(width, height).build(name));
 	}
 
 	public static <T extends EntityType<?>> RegistrySupplier<T> create(final String path, final Supplier<T> type) {

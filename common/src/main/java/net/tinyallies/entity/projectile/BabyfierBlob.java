@@ -1,7 +1,5 @@
 package net.tinyallies.entity.projectile;
 
-import net.tinyallies.entity.ModEntities;
-import net.tinyallies.util.ModUtil;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -9,6 +7,8 @@ import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.tinyallies.entity.ModEntities;
+import net.tinyallies.util.ModUtil;
 
 public class BabyfierBlob extends ThrowableProjectile {
 	public BabyfierBlob(EntityType<BabyfierBlob> pEntityType, Level pLevel) {
@@ -26,7 +26,7 @@ public class BabyfierBlob extends ThrowableProjectile {
 	@Override
 	protected void onHit(HitResult pResult) {
 		if (!this.level.isClientSide) {
-			this.level.broadcastEntityEvent(this, (byte)3);
+			this.level.broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
 		super.onHit(pResult);
@@ -39,22 +39,20 @@ public class BabyfierBlob extends ThrowableProjectile {
 		}
 		super.onHitEntity(pResult);
 	}
-
-//	private ParticleOptions getParticle() {
-//		ItemStack itemstack = this.getItemRaw();
-//		return (ParticleOptions)(itemstack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemParticleOption(ParticleTypes.ITEM, itemstack));
-//	}
-
-//	public void handleEntityEvent(byte pId) {
-//		if (pId == 3) {
-//			ParticleOptions particleoptions = this.getParticle();
-//
-//			for(int i = 0; i < 8; ++i) {
-//				this.level.addParticle(particleoptions, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
-//			}
-//		}
-//
-//	}
+	//	private ParticleOptions getParticle() {
+	//		ItemStack itemstack = this.getItemRaw();
+	//		return (ParticleOptions)(itemstack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemParticleOption(ParticleTypes.ITEM, itemstack));
+	//	}
+	//	public void handleEntityEvent(byte pId) {
+	//		if (pId == 3) {
+	//			ParticleOptions particleoptions = this.getParticle();
+	//
+	//			for(int i = 0; i < 8; ++i) {
+	//				this.level.addParticle(particleoptions, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+	//			}
+	//		}
+	//
+	//	}
 
 	@Override
 	protected float getGravity() {

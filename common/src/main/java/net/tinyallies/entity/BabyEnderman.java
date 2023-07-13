@@ -17,6 +17,8 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -133,9 +135,10 @@ public class BabyEnderman extends EnderMan implements NeutralMob, BabyMonster {
 
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
+		Item item = itemstack.getItem();
 		if (this.level.isClientSide) {
-			boolean flag = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack)
-					&& !this.isTamed() && !this.isAngry();
+			boolean flag = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack) && !this.isTamed()
+					&& !this.isAngry();
 			return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
 		}
 		else {
@@ -150,6 +153,29 @@ public class BabyEnderman extends EnderMan implements NeutralMob, BabyMonster {
 					this.playSound(SoundEvents.PARROT_EAT);
 					if (this.getHealth() == this.getMaxHealth()) { this.level.broadcastEntityEvent(this, (byte) 7); }
 					return InteractionResult.SUCCESS;
+				}
+				if (pPlayer.isCrouching()) {
+					if (itemstack.isEmpty()) {
+						this.spawnAtLocation(this.getCarriedBlock().getBlock());
+						this.setCarriedBlock(null);
+						return InteractionResult.SUCCESS;
+					}
+					else if (itemstack.getItem() instanceof BlockItem block) {
+						if (this.getCarriedBlock() != null) {
+							this.spawnAtLocation(this.getCarriedBlock().getBlock());
+						}
+						this.setCarriedBlock(block.getBlock().defaultBlockState());
+						return InteractionResult.SUCCESS;
+					}
+					else {
+						if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
+							this.setOrderedToSit(!this.isOrderedToSit());
+							this.jumping = false;
+							this.navigation.stop();
+							this.setTarget(null);
+							return InteractionResult.SUCCESS;
+						}
+					}
 				}
 				else {
 					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
@@ -263,12 +289,7 @@ public class BabyEnderman extends EnderMan implements NeutralMob, BabyMonster {
 			this.setMonsterParent(null);
 			this.reassessTameGoals();
 		}
-		if (this.isInSittingPose()) {
-			this.setPose(Pose.SITTING);
-		}
-		else {
-			this.setPose(Pose.STANDING);
-		}
+		this.updatePose(this);
 		super.tick();
 	}
 

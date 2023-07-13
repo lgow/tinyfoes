@@ -25,28 +25,25 @@ public class BabySitsWhenOrderedToGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		if (this.mob instanceof BabyMonster baby) {
-			if (!baby.isTamed()) {
-				return false;
-			}
-			else if (this.mob.isInWaterOrBubble()) {
-				return false;
-			}
-			else if (!this.mob.isOnGround()) {
-				return false;
+		if (!baby.isTamed()) {
+			return false;
+		}
+		else if (this.mob.isInWaterOrBubble()) {
+			return false;
+		}
+		else if (!this.mob.isOnGround()) {
+			return false;
+		}
+		else {
+			LivingEntity livingentity = baby.getOwner();
+			if (livingentity == null) {
+				return true;
 			}
 			else {
-				LivingEntity livingentity = baby.getOwner();
-				if (livingentity == null) {
-					return true;
-				}
-				else {
-					return (!(this.mob.distanceToSqr(livingentity) < 144.0D) || livingentity.getLastHurtByMob() == null)
-							&& baby.isOrderedToSit();
-				}
+				return (!(this.mob.distanceToSqr(livingentity) < 144.0D) || livingentity.getLastHurtByMob() == null)
+						&& baby.isOrderedToSit();
 			}
 		}
-		return false;
 	}
 
 	public void start() {

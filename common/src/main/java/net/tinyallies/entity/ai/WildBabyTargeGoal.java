@@ -30,6 +30,6 @@ public class WildBabyTargeGoal <T extends LivingEntity> extends NearestAttackabl
 	@Override
 	public void stop() {
 		super.stop();
-		this.mob.level.getServer().sendSystemMessage(Component.literal( "stop"));
+		this.mob.level.getServer().sendSystemMessage(Component.literal("stop"));
 	}
 }

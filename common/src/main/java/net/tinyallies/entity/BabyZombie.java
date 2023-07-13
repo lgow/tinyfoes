@@ -294,12 +294,7 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 			this.setMonsterParent(null);
 			this.reassessTameGoals();
 		}
-		if (this.isInSittingPose()) {
-			this.setPose(Pose.SITTING);
-		}
-		else {
-			this.setPose(Pose.STANDING);
-		}
+		this.updatePose(this);
 		super.tick();
 	}
 

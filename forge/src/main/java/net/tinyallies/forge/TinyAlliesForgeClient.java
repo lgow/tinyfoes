@@ -9,11 +9,11 @@ import net.tinyallies.client.TinyAlliesCommonClient;
 
 @Mod.EventBusSubscriber(modid = TinyAlliesCommon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TinyAlliesForgeClient {
+	@SubscribeEvent
+	public static void onInitializeClient(RegisterEvent event) {
+		TinyAlliesCommonClient.preClientInit();
+	}
 
-    @SubscribeEvent
-    public static void onInitializeClient(RegisterEvent event) {
-        TinyAlliesCommonClient.preClientInit();
-    }
 //    @SubscribeEvent
 //    public static void onClientSetup(FMLClientSetupEvent event) {
 //        TinyAlliesCommonClient.onInitializeClient();

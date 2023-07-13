@@ -1,6 +1,5 @@
 package net.tinyallies.items;
 
-import net.tinyallies.entity.projectile.BabyfierBlob;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.tinyallies.entity.projectile.BabyfierBlob;
 
 import java.util.function.Predicate;
 
