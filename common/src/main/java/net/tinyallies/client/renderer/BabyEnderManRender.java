@@ -11,10 +11,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.BabyCarriedBlockLayer;
 import net.tinyallies.client.layer.GlowingEyesLayer;
-import net.tinyallies.client.model.BabyEndermanModel;
-import net.tinyallies.entity.BabyEnderman;
+import net.tinyallies.client.model.BabyEnderManModel;
+import net.tinyallies.entity.EnderBoy;
 
-public class BabyEndermanRender extends MobRenderer<BabyEnderman, BabyEndermanModel<BabyEnderman>> {
+public class BabyEnderManRender extends MobRenderer<EnderBoy, BabyEnderManModel<EnderBoy>> {
 	private static final ResourceLocation ENDERMAN_LOCATION = new ResourceLocation(
 			"textures/entity/enderman/enderman.png");
 
@@ -22,21 +22,21 @@ public class BabyEndermanRender extends MobRenderer<BabyEnderman, BabyEndermanMo
 
 	private final RandomSource random = RandomSource.create();
 
-	public BabyEndermanRender(EntityRendererProvider.Context p_173992_) {
-		super(p_173992_, new BabyEndermanModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.25F);
+	public BabyEnderManRender(EntityRendererProvider.Context p_173992_) {
+		super(p_173992_, new BabyEnderManModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.25F);
 		this.addLayer(new GlowingEyesLayer<>(this, ENDERMAN_EYES_LOCATION));
 		this.addLayer(new BabyCarriedBlockLayer(this, p_173992_.getBlockRenderDispatcher()));
 	}
 
-	public void render(BabyEnderman pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+	public void render(EnderBoy pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
 		BlockState blockstate = pEntity.getCarriedBlock();
-		BabyEndermanModel<BabyEnderman> endermanmodel = this.getModel();
+		BabyEnderManModel<EnderBoy> endermanmodel = this.getModel();
 		endermanmodel.carrying = blockstate != null;
 		endermanmodel.creepy = pEntity.isCreepy();
 		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
 	}
 
-	public Vec3 getRenderOffset(BabyEnderman pEntity, float pPartialTicks) {
+	public Vec3 getRenderOffset(EnderBoy pEntity, float pPartialTicks) {
 		if (pEntity.isCreepy()) {
 			double d0 = 0.02D;
 			return new Vec3(this.random.nextGaussian() * d0, 0.0D, this.random.nextGaussian() * d0);
@@ -46,7 +46,7 @@ public class BabyEndermanRender extends MobRenderer<BabyEnderman, BabyEndermanMo
 		}
 	}
 
-	public ResourceLocation getTextureLocation(BabyEnderman pEntity) {
+	public ResourceLocation getTextureLocation(EnderBoy pEntity) {
 		return ENDERMAN_LOCATION;
 	}
 }

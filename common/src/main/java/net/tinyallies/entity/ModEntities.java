@@ -20,19 +20,19 @@ public class ModEntities {
 	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyAlliesCommon.REGISTRIES.get(
 			Registries.ENTITY_TYPE);
 
-	public static final RegistrySupplier<EntityType<BabyCreeper>> CREEPY = registerBaby("creeper", BabyCreeper::new,
+	public static final RegistrySupplier<EntityType<Creepy>> CREEPY = registerBaby("creeper", Creepy::new,
 			MONSTER, 0.33F, 0.85F);
 
-	public static final RegistrySupplier<EntityType<BabySkeleton>> SKELLY = registerBaby("skeleton", BabySkeleton::new,
+	public static final RegistrySupplier<EntityType<Skelly>> SKELLY = registerBaby("skeleton", Skelly::new,
 			MONSTER, 0.33F, 1.05F);
 
-	public static final RegistrySupplier<EntityType<BabyEnderman>> ENDERBOY = registerBaby("enderman",
-			BabyEnderman::new, MONSTER, 0.33F, 1.4F);
+	public static final RegistrySupplier<EntityType<EnderBoy>> ENDERBOY = registerBaby("enderman",
+			EnderBoy::new, MONSTER, 0.33F, 1.4F);
 
-	public static final RegistrySupplier<EntityType<BabySpider>> SPIDEY = registerBaby("spider", BabySpider::new,
+	public static final RegistrySupplier<EntityType<Spidey>> SPIDEY = registerBaby("spider", Spidey::new,
 			MONSTER, 0.9F, 0.45F);
 
-	public static final RegistrySupplier<EntityType<BabyZombie>> ZOMBY = registerBaby("zombie", BabyZombie::new,
+	public static final RegistrySupplier<EntityType<Zomby>> ZOMBY = registerBaby("zombie", Zomby::new,
 			MONSTER, 0.33F, 1.05F);
 
 	public static final RegistrySupplier<EntityType<BabyfierBlob>> BLOB = create("blob",

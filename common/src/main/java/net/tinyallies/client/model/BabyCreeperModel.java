@@ -6,10 +6,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.CreeperModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
-import net.tinyallies.entity.BabyCreeper;
+import net.tinyallies.entity.Creepy;
 import net.tinyallies.util.ModUtil;
 
-public class BabyCreeperModel extends CreeperModel<BabyCreeper> {
+public class BabyCreeperModel extends CreeperModel<Creepy> {
 	private final ModelPart head, body, rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg;
 
 	private boolean shouldOffsetLegs;
@@ -51,7 +51,7 @@ public class BabyCreeperModel extends CreeperModel<BabyCreeper> {
 	}
 
 	@Override
-	public void setupAnim(BabyCreeper pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+	public void setupAnim(Creepy pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		if (pEntity.isInSittingPose()) {
 			this.rightFrontLeg.xRot = (-(float) Math.PI / 2F);

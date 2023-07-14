@@ -1,6 +1,7 @@
 package net.tinyallies.entity;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,61 +9,210 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.FleeSunGoal;
-import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
-import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
-import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Ocelot;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 import net.tinyallies.entity.ai.LookForParentGoal;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
-	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(BabySkeleton.class,
+public class Creepy extends Creeper implements NeutralMob, BabyMonster {
+	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Creepy.class,
 			EntityDataSerializers.BYTE);
 
 	protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(
-			BabySkeleton.class, EntityDataSerializers.OPTIONAL_UUID);
+			Creepy.class, EntityDataSerializers.OPTIONAL_UUID);
 
-	protected static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.05F);
+	protected static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 0.85F);
 
 	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
 			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
 
+	public boolean recentlyPopped;
+
 	private boolean orderedToSit;
 
-	private LivingEntity animalParent;
+	private @Nullable LivingEntity animalParent;
 
 	private AvoidEntityGoal<Player> avoidPlayersGoal;
 
 	private LookForParentGoal followParentGoal;
 
-	public BabySkeleton(EntityType<? extends BabySkeleton> pEntityType, Level pLevel) {
+	private int twinkletime;
+
+	public Creepy(EntityType<? extends Creeper> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 		this.reassessTameGoals();
 	}
 
+	public static float getSeenPercent(Vec3 pExplosionVector, Entity pEntity) {
+		AABB aabb = pEntity.getBoundingBox();
+		double d0 = 1.0D / ((aabb.maxX - aabb.minX) * 2.0D + 1.0D);
+		double d1 = 1.0D / ((aabb.maxY - aabb.minY) * 2.0D + 1.0D);
+		double d2 = 1.0D / ((aabb.maxZ - aabb.minZ) * 2.0D + 1.0D);
+		double d3 = (1.0D - Math.floor(1.0D / d0) * d0) / 2.0D;
+		double d4 = (1.0D - Math.floor(1.0D / d2) * d2) / 2.0D;
+		if (!(d0 < 0.0D) && !(d1 < 0.0D) && !(d2 < 0.0D)) {
+			int i = 0;
+			int j = 0;
+			for (double d5 = 0.0D; d5 <= 1.0D; d5 += d0) {
+				for (double d6 = 0.0D; d6 <= 1.0D; d6 += d1) {
+					for (double d7 = 0.0D; d7 <= 1.0D; d7 += d2) {
+						double d8 = Mth.lerp(d5, aabb.minX, aabb.maxX);
+						double d9 = Mth.lerp(d6, aabb.minY, aabb.maxY);
+						double d10 = Mth.lerp(d7, aabb.minZ, aabb.maxZ);
+						Vec3 vec3 = new Vec3(d8 + d3, d9, d10 + d4);
+						if (pEntity.level.clip(new ClipContext(vec3, pExplosionVector, ClipContext.Block.COLLIDER,
+								ClipContext.Fluid.NONE, pEntity)).getType() == HitResult.Type.MISS) {
+							++i;
+						}
+						++j;
+					}
+				}
+			}
+			return (float) i / (float) j;
+		}
+		else {
+			return 0.0F;
+		}
+	}
+
+	@Override
+	public boolean isInvulnerableTo(DamageSource pSource) {
+		return (pSource.getEntity() instanceof BabyMonster baby && baby.getOwner() == this.getOwner())
+				|| super.isInvulnerableTo(pSource);
+	}
+
+	@Override
+	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
+		return pPose == Pose.SITTING ? 0.68F : 0.8F;
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose pPose) {
+		return POSES.getOrDefault(pPose, STANDING);
+	}
+
+	@Nullable
+	public ItemStack getPickResult() {
+		return new ItemStack(Items.CREEPER_SPAWN_EGG);
+	}
+
+	@Override
+	public void explodeCreeper() {
+		if (!this.level.isClientSide) {
+			this.explode(this.getX(), this.getY(), this.getZ(), this.isPowered() ? 2.0F : 1.0F);
+			this.finalizeExplosion();
+			if (this.isPowered()) {
+				this.discard();
+			}
+			else {
+				this.hurt(this.damageSources().generic(), 1);
+			}
+			this.spawnLingeringCloud();
+			this.dead = true;
+		}
+	}
+
+	public void explode(double x, double y, double z, float radius) {
+		float f2 = radius * 2.0F;
+		int k1 = Mth.floor(x - (double) f2 - 1.0D);
+		int l1 = Mth.floor(x + (double) f2 + 1.0D);
+		int i2 = Mth.floor(y - (double) f2 - 1.0D);
+		int i1 = Mth.floor(y + (double) f2 + 1.0D);
+		int j2 = Mth.floor(z - (double) f2 - 1.0D);
+		int j1 = Mth.floor(z + (double) f2 + 1.0D);
+		List<Entity> list = this.level.getEntities(this, new AABB(k1, i2, j2, l1, i1, j1));
+		Vec3 vec3 = new Vec3(x, y, z);
+		for (int k2 = 0; k2 < list.size(); ++k2) {
+			Entity entity = list.get(k2);
+			if (!entity.ignoreExplosion()) {
+				double d12 = Math.sqrt(entity.distanceToSqr(vec3)) / (double) f2;
+				if (d12 <= 1.0D) {
+					double d5 = entity.getX() - x;
+					double d7 = (entity instanceof PrimedTnt ? entity.getY() : entity.getEyeY()) - y;
+					double d9 = entity.getZ() - z;
+					double d13 = Math.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
+					if (d13 != 0.0D) {
+						d5 /= d13;
+						d7 /= d13;
+						d9 /= d13;
+						double d14 = getSeenPercent(vec3, entity);
+						double d10 = (1.0D - d12) * d14;
+						double v = (d10 * d10 + d10) / 2.0D * 7.0D * f2 + 1.0D;
+						if (!(entity instanceof LivingEntity living && wantsToAttack(living, this.getOwner()))) {
+							entity.hurt(this.damageSources().explosion(null, this), (float) ((int) v));
+						}
+						else {
+							entity.hurt(this.damageSources().explosion(null, this), (float) ((int) v));
+						}
+						double d11;
+						if (entity instanceof LivingEntity livingentity) {
+							d11 = ProtectionEnchantment.getExplosionKnockbackAfterDampener(livingentity, d10);
+						}
+						else {
+							d11 = d10;
+						}
+						d5 *= d11;
+						d7 *= d11;
+						d9 *= d11;
+						Vec3 vec31 = new Vec3(d5, d7, d9);
+						entity.setDeltaMovement(entity.getDeltaMovement().add(vec31));
+					}
+				}
+			}
+		}
+	}
+
+	private void finalizeExplosion() {
+		if (this.getRandom().nextInt(5) == 4) {
+			this.playSound(SoundEvents.FIREWORK_ROCKET_TWINKLE);
+			this.twinkletime = 10;
+		}
+		else {
+			this.playSound(this.random.nextBoolean() ? SoundEvents.FIREWORK_ROCKET_LARGE_BLAST
+					: SoundEvents.FIREWORK_ROCKET_BLAST);
+			this.level.broadcastEntityEvent(this, (byte) 101);
+			this.twinkletime = 2;
+		}
+	}
+
+	public void setPowered(boolean b) {
+		this.entityData.set(DATA_IS_POWERED, b);
+	}
+
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
-		this.goalSelector.addGoal(1, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.5D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(2, new BabySwellGoal(this));
+		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Ocelot.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Cat.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
 		this.defaultBabyGoals(this);
 	}
 
@@ -81,33 +231,23 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 		}
 	}
 
-	@Override
-	public boolean isInvulnerableTo(DamageSource pSource) {
-		return (pSource.getEntity() instanceof BabyMonster baby && baby.getOwner() == this.getOwner())
-				|| super.isInvulnerableTo(pSource);
-	}
-
-	@Nullable
-	public ItemStack getPickResult() {
-		return new ItemStack(Items.SKELETON_SPAWN_EGG);
-	}
-
-	@Override
-	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
-		return pPose == Pose.SITTING ? 0.58F : 0.93F;
-	}
-
-	public EntityDimensions getDimensions(Pose pPose) {
-		return POSES.getOrDefault(pPose, STANDING);
-	}
-
 	public boolean isFood(ItemStack pStack) {
-		return pStack.is(Items.BONE_MEAL);
+		return pStack.is(Items.GUNPOWDER);
+	}
+
+	@Override
+	public @Nullable LivingEntity getMonsterParent() {
+		return this.animalParent;
+	}
+
+	@Override
+	public void setMonsterParent(LivingEntity living) {
+		this.animalParent = living;
 	}
 
 	@Override
 	public Class<? extends PathfinderMob> getMonsterParentClass() {
-		return Skeleton.class;
+		return Creeper.class;
 	}
 
 	public boolean hurt(DamageSource pSource, float pAmount) {
@@ -128,7 +268,6 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
-		Item item = itemstack.getItem();
 		if (this.level.isClientSide) {
 			boolean flag = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack) && !this.isTamed()
 					&& !this.isAngry();
@@ -143,29 +282,9 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 						itemstack.shrink(1);
 					}
 					this.gameEvent(GameEvent.EAT, this);
-					this.playSound(SoundEvents.CANDLE_PLACE);
-					if (this.getHealth() == this.getMaxHealth()) { this.level.broadcastEntityEvent(this, (byte) 8); }
+					this.playSound(SoundEvents.GOAT_EAT);
+					if (this.getHealth() == this.getMaxHealth()) { this.level.broadcastEntityEvent(this, (byte) 7); }
 					return InteractionResult.SUCCESS;
-				}
-				if (pPlayer.isCrouching()) {
-					if (item instanceof ArmorItem || item instanceof BowItem) {
-						EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
-						if (!this.getItemBySlot(slot).isEmpty()) {
-							this.spawnAtLocation(getItemBySlot(slot));
-						}
-						this.setItemSlotAndDropWhenKilled(slot, itemstack.copy());
-						if (!pPlayer.getAbilities().instabuild) { pPlayer.getInventory().removeItem(itemstack); }
-						this.playSound(
-								slot.isArmor() ? SoundEvents.ARMOR_EQUIP_GENERIC : SoundEvents.ITEM_FRAME_ADD_ITEM);
-						return InteractionResult.SUCCESS;
-					}
-					else if (itemstack.isEmpty()) {
-						this.getAllSlots().forEach(stack -> {
-							this.setItemSlot(getEquipmentSlotForItem(stack), ItemStack.EMPTY);
-							this.spawnAtLocation(stack);
-						});
-						return InteractionResult.SUCCESS;
-					}
 				}
 				else {
 					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
@@ -214,6 +333,9 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 		super.readAdditionalSaveData(pCompound);
 		readTamedSaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
+		if (this.orderedToSit) {
+			this.setPose(Pose.SITTING);
+		}
 		this.setInSittingPose(orderedToSit);
 		readPersistentAngerSaveData(this.level, pCompound);
 	}
@@ -224,8 +346,17 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 	}
 
 	public void handleEntityEvent(byte pId) {
-		if (pId == 8) {
-			this.spawnInvertedHealAndHarmParticles(this);
+		if (pId == 101) {
+			this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		}
+		else if (pId == 100) {
+			for (int i = 0; i < this.getRandom().nextInt(5) + 2; ++i) {
+				double d0 = this.getRandom().nextGaussian() * 0.05D;
+				double d1 = this.getRandom().nextGaussian() * 0.05D;
+				double d2 = this.getRandom().nextGaussian() * 0.05D;
+				this.level.addParticle(ParticleTypes.CRIT, this.getRandomX(2.0D), this.getRandomY() + 0.5D,
+						this.getRandomZ(2.0D), d0, d1, d2);
+			}
 		}
 		else if (pId == 7) {
 			this.spawnTamingParticles(true, this);
@@ -251,16 +382,6 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 		else {
 			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -5));
 		}
-	}
-
-	@Override
-	public LivingEntity getMonsterParent() {
-		return this.animalParent;
-	}
-
-	@Override
-	public void setMonsterParent(LivingEntity living) {
-		this.animalParent = living;
 	}
 
 	public boolean isInSittingPose() {
@@ -292,6 +413,13 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 			this.setMonsterParent(null);
 			this.reassessTameGoals();
 		}
+		if (twinkletime-- > 0) {
+			this.level.broadcastEntityEvent(this, (byte) 100);
+		}
+		if (this.swell >= 30) {
+			this.explodeCreeper();
+			this.swell = 0;
+		}
 		this.updatePose(this);
 		super.tick();
 	}
@@ -314,14 +442,14 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 	public void setRemainingPersistentAngerTime(int pRemainingPersistentAngerTime) {
 	}
 
-	@org.jetbrains.annotations.Nullable
+	@Nullable
 	@Override
 	public UUID getPersistentAngerTarget() {
 		return null;
 	}
 
 	@Override
-	public void setPersistentAngerTarget(@org.jetbrains.annotations.Nullable UUID pPersistentAngerTarget) {
+	public void setPersistentAngerTarget(@Nullable UUID pPersistentAngerTarget) {
 	}
 
 	@Override
@@ -393,5 +521,54 @@ public class BabySkeleton extends Skeleton implements NeutralMob, BabyMonster {
 
 	public void setOrderedToSit(boolean pOrderedToSit) {
 		this.orderedToSit = pOrderedToSit;
+	}
+
+	static class BabySwellGoal extends Goal {
+		private final Creepy creeper;
+
+		@Nullable private LivingEntity target;
+
+		public BabySwellGoal(Creepy pCreeper) {
+			this.creeper = pCreeper;
+		}
+
+		public boolean canUse() {
+			LivingEntity livingentity = this.creeper.getTarget();
+			return this.creeper.getSwellDir() > 0 || livingentity != null && this.creeper.distanceToSqr(livingentity)
+					< 4.0D && !this.creeper.recentlyPopped;
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return this.target != null && this.target.isAlive() && this.creeper.distanceToSqr(this.target) < 4
+					&& !this.creeper.recentlyPopped;
+		}
+
+		public void start() {
+			this.target = this.creeper.getTarget();
+		}
+
+		public void stop() {
+			this.target = null;
+		}
+
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		public void tick() {
+			if (this.target == null) {
+				this.creeper.setSwellDir(-1);
+			}
+			else if (this.creeper.distanceToSqr(this.target) > 49.0D) {
+				this.creeper.setSwellDir(-1);
+			}
+			else if (!this.creeper.getSensing().hasLineOfSight(this.target)) {
+				this.creeper.setSwellDir(-1);
+			}
+			else {
+				this.creeper.setSwellDir(1);
+			}
+		}
 	}
 }

@@ -4,10 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.SkeletonModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.tinyallies.entity.BabySkeleton;
+import net.tinyallies.entity.Skelly;
 import net.tinyallies.util.ModUtil;
 
-public class BabySkeletonModel extends SkeletonModel<BabySkeleton> {
+public class BabySkeletonModel extends SkeletonModel<Skelly> {
 	public BabySkeletonModel(ModelPart pRoot) {
 		super(pRoot);
 	}
@@ -19,7 +19,7 @@ public class BabySkeletonModel extends SkeletonModel<BabySkeleton> {
 	}
 
 	@Override
-	public void setupAnim(BabySkeleton pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+	public void setupAnim(Skelly pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 		if (pEntity.isInSittingPose()) {
 			this.rightArm.xRot += (-(float) Math.PI / 5F);

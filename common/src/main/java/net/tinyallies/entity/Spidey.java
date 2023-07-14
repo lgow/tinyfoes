@@ -32,12 +32,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BabySpider extends Spider implements NeutralMob, BabyMonster {
-	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(BabySpider.class,
+public class Spidey extends Spider implements NeutralMob, BabyMonster {
+	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Spidey.class,
 			EntityDataSerializers.BYTE);
 
 	protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(
-			BabySpider.class, EntityDataSerializers.OPTIONAL_UUID);
+			Spidey.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	protected static EntityDimensions STANDING = EntityDimensions.scalable(0.9F, 0.45F);
 
@@ -52,7 +52,7 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 
 	private LookForParentGoal followParentGoal;
 
-	public BabySpider(EntityType<? extends Spider> pEntityType, Level pLevel) {
+	public Spidey(EntityType<? extends Spider> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 		this.reassessTameGoals();
 	}
@@ -373,11 +373,11 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 	}
 
 	static class BabySpiderAttackGoal extends MeleeAttackGoal {
-		private final BabySpider babySpider;
+		private final Spidey spidey;
 
-		public BabySpiderAttackGoal(BabySpider pSpider) {
+		public BabySpiderAttackGoal(Spidey pSpider) {
 			super(pSpider, 1.0D, true);
-			this.babySpider = pSpider;
+			this.spidey = pSpider;
 		}
 
 		/**
@@ -398,7 +398,7 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 				return false;
 			}
 			else {
-				return !this.babySpider.isOrderedToSit() && super.canContinueToUse();
+				return !this.spidey.isOrderedToSit() && super.canContinueToUse();
 			}
 		}
 
@@ -408,16 +408,16 @@ public class BabySpider extends Spider implements NeutralMob, BabyMonster {
 	}
 
 	static class BabySpiderLeapAtTargetGoal extends LeapAtTargetGoal {
-		private final BabySpider babySpider;
+		private final Spidey spidey;
 
-		public BabySpiderLeapAtTargetGoal(BabySpider pBabySpider, float pYd) {
-			super(pBabySpider, pYd);
-			this.babySpider = pBabySpider;
+		public BabySpiderLeapAtTargetGoal(Spidey pSpidey, float pYd) {
+			super(pSpidey, pYd);
+			this.spidey = pSpidey;
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return !this.babySpider.isOrderedToSit() && super.canContinueToUse();
+			return !this.spidey.isOrderedToSit() && super.canContinueToUse();
 		}
 	}
 }

@@ -8,8 +8,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.EnderMan;
-import net.tinyallies.entity.BabyCreeper;
-import net.tinyallies.entity.BabyEnderman;
+import net.tinyallies.entity.Creepy;
+import net.tinyallies.entity.EnderBoy;
 import net.tinyallies.entity.ModEntities;
 
 import java.util.Map;
@@ -26,11 +26,11 @@ public class ModUtil {
 		if (bayficationList.containsKey(entityIn.getType())) {
 			Mob baby = entityIn.convertTo(bayficationList.get(entityIn.getType()), true);
 			baby.setHealth(entityIn.getHealth());
-			if (baby instanceof BabyCreeper creeper) {
+			if (baby instanceof Creepy creeper) {
 				creeper.setPowered(((Creeper) entityIn).isPowered());
 				creeper.setSwellDir(((Creeper) entityIn).getSwellDir());
 			}
-			else if (baby instanceof BabyEnderman enderman) {
+			else if (baby instanceof EnderBoy enderman) {
 				enderman.setCarriedBlock(((EnderMan) entityIn).getCarriedBlock());
 				enderman.setTarget(entityIn.getTarget());
 			}

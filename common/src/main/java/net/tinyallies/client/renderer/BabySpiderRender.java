@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.GlowingEyesLayer;
 import net.tinyallies.client.model.BabySpiderModel;
-import net.tinyallies.entity.BabySpider;
+import net.tinyallies.entity.Spidey;
 
-public class BabySpiderRender <T extends BabySpider> extends MobRenderer<T, BabySpiderModel<T>> {
+public class BabySpiderRender <T extends Spidey> extends MobRenderer<T, BabySpiderModel<T>> {
 	private static final ResourceLocation SPIDER_LOCATION = new ResourceLocation("textures/entity/spider/spider.png");
 
 	private static final ResourceLocation SPIDER_EYES_LOCATION = new ResourceLocation(

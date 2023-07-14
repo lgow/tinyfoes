@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.SpiderModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.tinyallies.entity.BabySpider;
+import net.tinyallies.entity.Spidey;
 import net.tinyallies.util.ModUtil;
 
-public class BabySpiderModel <T extends BabySpider> extends SpiderModel<T> {
+public class BabySpiderModel <T extends Spidey> extends SpiderModel<T> {
 	private final ModelPart body0, body1, head, rightHindLeg, leftHindLeg, rightMiddleHindLeg, leftMiddleHindLeg, rightMiddleFrontLeg, leftMiddleFrontLeg, rightFrontLeg, leftFrontLeg;
 
 	public BabySpiderModel(ModelPart modelPart) {

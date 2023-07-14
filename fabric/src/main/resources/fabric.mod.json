@@ -23,5 +23,9 @@
     "fabric": "*",
     "minecraft": ">=1.19.4",
     "architectury": ">=8.1.79"
-  }
+  },
+  "mixins": [
+    "tinyallies.mixins.json",
+    "tinyallies-common.mixins.json"
+  ]
 }

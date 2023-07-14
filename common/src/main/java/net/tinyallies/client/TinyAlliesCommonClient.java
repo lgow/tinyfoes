@@ -15,7 +15,7 @@ public class TinyAlliesCommonClient {
 		//renderers
 		EntityRendererRegistry.register(ModEntities.CREEPY, BabyCreeperRender::new);
 		EntityRendererRegistry.register(ModEntities.SKELLY, BabySkeletonRenderer::new);
-		EntityRendererRegistry.register(ModEntities.ENDERBOY, BabyEndermanRender::new);
+		EntityRendererRegistry.register(ModEntities.ENDERBOY, BabyEnderManRender::new);
 		EntityRendererRegistry.register(ModEntities.SPIDEY, BabySpiderRender::new);
 		EntityRendererRegistry.register(ModEntities.ZOMBY, BabyZombieRenderer::new);
 		EntityRendererRegistry.register(ModEntities.BLOB, BlobRenderer::new);

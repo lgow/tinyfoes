@@ -14,8 +14,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FleeSunGoal;
-import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
@@ -30,16 +32,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
-	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(BabyZombie.class,
+public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
+	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Skelly.class,
 			EntityDataSerializers.BYTE);
 
 	protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(
-			BabyZombie.class, EntityDataSerializers.OPTIONAL_UUID);
+			Skelly.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	protected static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.05F);
 
-	private static final Map<Pose, EntityDimensions> BABY_POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
+	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
 			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
 
 	private boolean orderedToSit;
@@ -50,15 +52,17 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 
 	private LookForParentGoal followParentGoal;
 
-	public BabyZombie(EntityType<? extends Zombie> pEntityType, Level pLevel) {
+	public Skelly(EntityType<? extends Skelly> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 		this.reassessTameGoals();
 	}
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.0D));
-		this.goalSelector.addGoal(2, new ZombieAttackGoal(this, 1.0D, false));
+		this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
+		this.goalSelector.addGoal(1, new RestrictSunGoal(this));
+		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.5D));
+		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
 		this.defaultBabyGoals(this);
 	}
 
@@ -78,48 +82,32 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 	}
 
 	@Override
-	public boolean isBaby() {
-		return true;
-	}
-
-	@Override
-	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
-		return pPose == Pose.SITTING ? 0.6F : 0.93F;
-	}
-
-	public EntityDimensions getDimensions(Pose pPose) {
-		return BABY_POSES.getOrDefault(pPose, STANDING);
-	}
-
-	@Nullable
-	public ItemStack getPickResult() {
-		return new ItemStack(Items.ZOMBIE_SPAWN_EGG);
-	}
-
-	@Override
 	public boolean isInvulnerableTo(DamageSource pSource) {
 		return (pSource.getEntity() instanceof BabyMonster baby && baby.getOwner() == this.getOwner())
 				|| super.isInvulnerableTo(pSource);
 	}
 
+	@Nullable
+	public ItemStack getPickResult() {
+		return new ItemStack(Items.SKELETON_SPAWN_EGG);
+	}
+
+	@Override
+	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
+		return pPose == Pose.SITTING ? 0.58F : 0.93F;
+	}
+
+	public EntityDimensions getDimensions(Pose pPose) {
+		return POSES.getOrDefault(pPose, STANDING);
+	}
+
 	public boolean isFood(ItemStack pStack) {
-		Item item = pStack.getItem();
-		return item.isEdible() && pStack.getItem().getFoodProperties().isMeat();
-	}
-
-	@Override
-	public LivingEntity getMonsterParent() {
-		return this.animalParent;
-	}
-
-	@Override
-	public void setMonsterParent(LivingEntity living) {
-		this.animalParent = living;
+		return pStack.is(Items.BONE_MEAL);
 	}
 
 	@Override
 	public Class<? extends PathfinderMob> getMonsterParentClass() {
-		return Zombie.class;
+		return Skeleton.class;
 	}
 
 	public boolean hurt(DamageSource pSource, float pAmount) {
@@ -150,17 +138,17 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 			if (this.isTamed()) {
 				InteractionResult interactionresult = super.mobInteract(pPlayer, pHand);
 				if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-					this.heal((float) itemstack.getItem().getFoodProperties().getNutrition());
+					this.heal((float) 4);
 					if (!pPlayer.getAbilities().instabuild) {
 						itemstack.shrink(1);
 					}
 					this.gameEvent(GameEvent.EAT, this);
-					this.playSound(SoundEvents.FOX_EAT);
+					this.playSound(SoundEvents.CANDLE_PLACE);
 					if (this.getHealth() == this.getMaxHealth()) { this.level.broadcastEntityEvent(this, (byte) 8); }
 					return InteractionResult.SUCCESS;
 				}
 				if (pPlayer.isCrouching()) {
-					if (item instanceof ArmorItem || item instanceof SwordItem) {
+					if (item instanceof ArmorItem || item instanceof BowItem) {
 						EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
 						if (!this.getItemBySlot(slot).isEmpty()) {
 							this.spawnAtLocation(getItemBySlot(slot));
@@ -263,6 +251,16 @@ public class BabyZombie extends Zombie implements NeutralMob, BabyMonster {
 		else {
 			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -5));
 		}
+	}
+
+	@Override
+	public LivingEntity getMonsterParent() {
+		return this.animalParent;
+	}
+
+	@Override
+	public void setMonsterParent(LivingEntity living) {
+		this.animalParent = living;
 	}
 
 	public boolean isInSittingPose() {

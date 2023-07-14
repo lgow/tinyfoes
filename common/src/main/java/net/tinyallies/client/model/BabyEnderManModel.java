@@ -5,11 +5,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EndermanModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.tinyallies.entity.BabyEnderman;
+import net.tinyallies.entity.EnderBoy;
 import net.tinyallies.util.ModUtil;
 
-public class BabyEndermanModel <T extends BabyEnderman> extends EndermanModel<T> {
-	public BabyEndermanModel(ModelPart pRoot) {
+public class BabyEnderManModel <T extends EnderBoy> extends EndermanModel<T> {
+	public BabyEnderManModel(ModelPart pRoot) {
 		super(pRoot);
 	}
 

@@ -12,10 +12,10 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.BabyHeldItemLayer;
 import net.tinyallies.client.model.BabyZombieModel;
-import net.tinyallies.entity.BabyZombie;
+import net.tinyallies.entity.Zomby;
 import net.tinyallies.util.TinyAlliesResLoc;
 
-public class BabyZombieRenderer extends AbstractZombieRenderer<BabyZombie, ZombieModel<BabyZombie>> {
+public class BabyZombieRenderer extends AbstractZombieRenderer<Zomby, ZombieModel<Zomby>> {
 	public BabyZombieRenderer(EntityRendererProvider.Context p_174456_) {
 		this(p_174456_, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
 	}
@@ -33,7 +33,7 @@ public class BabyZombieRenderer extends AbstractZombieRenderer<BabyZombie, Zombi
 	}
 
 	@Override
-	public Vec3 getRenderOffset(BabyZombie entity, float f) {
+	public Vec3 getRenderOffset(Zomby entity, float f) {
 		return entity.isInSittingPose() ? new Vec3(0, -0.31, 0) : super.getRenderOffset(entity, f);
 	}
 

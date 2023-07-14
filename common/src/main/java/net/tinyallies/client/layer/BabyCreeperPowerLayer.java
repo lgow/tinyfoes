@@ -7,15 +7,15 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.tinyallies.client.model.BabyCreeperModel;
-import net.tinyallies.entity.BabyCreeper;
+import net.tinyallies.entity.Creepy;
 
-public class BabyCreeperPowerLayer extends EnergySwirlLayer<BabyCreeper, BabyCreeperModel> {
+public class BabyCreeperPowerLayer extends EnergySwirlLayer<Creepy, BabyCreeperModel> {
 	private static final ResourceLocation POWER_LOCATION = new ResourceLocation(
 			"textures/entity/creeper/creeper_armor.png");
 
 	private final BabyCreeperModel model;
 
-	public BabyCreeperPowerLayer(RenderLayerParent<BabyCreeper, BabyCreeperModel> pRenderer, EntityModelSet pModelSet) {
+	public BabyCreeperPowerLayer(RenderLayerParent<Creepy, BabyCreeperModel> pRenderer, EntityModelSet pModelSet) {
 		super(pRenderer);
 		this.model = new BabyCreeperModel(pModelSet.bakeLayer(ModelLayers.CREEPER_ARMOR));
 	}
@@ -28,7 +28,7 @@ public class BabyCreeperPowerLayer extends EnergySwirlLayer<BabyCreeper, BabyCre
 		return POWER_LOCATION;
 	}
 
-	protected EntityModel<BabyCreeper> model() {
+	protected EntityModel<Creepy> model() {
 		return this.model;
 	}
 }

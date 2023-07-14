@@ -11,9 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.BabyHeldItemLayer;
 import net.tinyallies.client.model.BabySkeletonModel;
-import net.tinyallies.entity.BabySkeleton;
+import net.tinyallies.entity.Skelly;
 
-public class BabySkeletonRenderer extends HumanoidMobRenderer<BabySkeleton, SkeletonModel<BabySkeleton>> {
+public class BabySkeletonRenderer extends HumanoidMobRenderer<Skelly, SkeletonModel<Skelly>> {
 	public BabySkeletonRenderer(EntityRendererProvider.Context p_174380_) {
 		this(p_174380_, ModelLayers.SKELETON, ModelLayers.SKELETON_INNER_ARMOR, ModelLayers.SKELETON_OUTER_ARMOR);
 	}
@@ -30,11 +30,11 @@ public class BabySkeletonRenderer extends HumanoidMobRenderer<BabySkeleton, Skel
 	}
 
 	@Override
-	public Vec3 getRenderOffset(BabySkeleton entity, float f) {
+	public Vec3 getRenderOffset(Skelly entity, float f) {
 		return entity.isInSittingPose() ? new Vec3(0, -0.343, 0) : super.getRenderOffset(entity, f);
 	}
 
-	public ResourceLocation getTextureLocation(BabySkeleton pEntity) {
+	public ResourceLocation getTextureLocation(Skelly pEntity) {
 		return new ResourceLocation("textures/entity/skeleton/skeleton.png");
 	}
 }

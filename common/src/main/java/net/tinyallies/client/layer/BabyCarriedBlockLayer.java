@@ -8,19 +8,19 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.state.BlockState;
-import net.tinyallies.client.model.BabyEndermanModel;
-import net.tinyallies.entity.BabyEnderman;
+import net.tinyallies.client.model.BabyEnderManModel;
+import net.tinyallies.entity.EnderBoy;
 
-public class BabyCarriedBlockLayer extends RenderLayer<BabyEnderman, BabyEndermanModel<BabyEnderman>> {
+public class BabyCarriedBlockLayer extends RenderLayer<EnderBoy, BabyEnderManModel<EnderBoy>> {
 	private final BlockRenderDispatcher blockRenderer;
 
-	public BabyCarriedBlockLayer(RenderLayerParent<BabyEnderman, BabyEndermanModel<BabyEnderman>> pRenderer, BlockRenderDispatcher pBlockRenderer) {
+	public BabyCarriedBlockLayer(RenderLayerParent<EnderBoy, BabyEnderManModel<EnderBoy>> pRenderer, BlockRenderDispatcher pBlockRenderer) {
 		super(pRenderer);
 		this.blockRenderer = pBlockRenderer;
 	}
 
 	@Override
-	public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, BabyEnderman pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+	public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, EnderBoy pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		BlockState blockstate = pLivingEntity.getCarriedBlock();
 		boolean sitting = pLivingEntity.isInSittingPose();
 		if (blockstate != null) {

@@ -27,7 +27,7 @@
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "net.tinyallies.quilt.QuiltTinyAllies"
+        "net.tinyallies.quilt.TinyAlliesQuilt"
       ]
     },
     "depends": [
