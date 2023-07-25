@@ -11,21 +11,21 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.BabyHeldItemLayer;
-import net.tinyallies.client.model.BabyZombieModel;
+import net.tinyallies.client.model.ZombyModel;
 import net.tinyallies.entity.Zomby;
 import net.tinyallies.util.TinyAlliesResLoc;
 
-public class BabyZombieRenderer extends AbstractZombieRenderer<Zomby, ZombieModel<Zomby>> {
-	public BabyZombieRenderer(EntityRendererProvider.Context p_174456_) {
+public class ZombyRenderer extends AbstractZombieRenderer<Zomby, ZombieModel<Zomby>> {
+	public ZombyRenderer(EntityRendererProvider.Context p_174456_) {
 		this(p_174456_, ModelLayers.ZOMBIE, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
 	}
 
-	public BabyZombieRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation pZombieLayer, ModelLayerLocation pInnerArmor, ModelLayerLocation pOuterArmor) {
-		super(pContext, new BabyZombieModel(pContext.bakeLayer(pZombieLayer)),
+	public ZombyRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation pZombieLayer, ModelLayerLocation pInnerArmor, ModelLayerLocation pOuterArmor) {
+		super(pContext, new ZombyModel(pContext.bakeLayer(pZombieLayer)),
 				new ZombieModel<>(pContext.bakeLayer(pInnerArmor)), new ZombieModel<>(pContext.bakeLayer(pOuterArmor)));
 		this.layers.clear();
-		this.addLayer(new HumanoidArmorLayer<>(this, new BabyZombieModel(pContext.bakeLayer(pInnerArmor)),
-				new BabyZombieModel(pContext.bakeLayer(pOuterArmor)), pContext.getModelManager()));
+		this.addLayer(new HumanoidArmorLayer<>(this, new ZombyModel(pContext.bakeLayer(pInnerArmor)),
+				new ZombyModel(pContext.bakeLayer(pOuterArmor)), pContext.getModelManager()));
 		this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), 1.0F, 1.0F, 1.0F,
 				pContext.getItemInHandRenderer()));
 		//		this.addLayer(new ElytraLayer<>(this, pContext.getModelSet()));

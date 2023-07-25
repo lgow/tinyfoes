@@ -9,28 +9,27 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.tinyallies.client.layer.BabyCarriedBlockLayer;
+import net.tinyallies.client.layer.EnderBoyCarriedBlockLayer;
 import net.tinyallies.client.layer.GlowingEyesLayer;
-import net.tinyallies.client.model.BabyEnderManModel;
+import net.tinyallies.client.model.EnderBoyModel;
 import net.tinyallies.entity.EnderBoy;
 
-public class BabyEnderManRender extends MobRenderer<EnderBoy, BabyEnderManModel<EnderBoy>> {
+public class EnderBoyRenderer extends MobRenderer<EnderBoy, EnderBoyModel<EnderBoy>> {
 	private static final ResourceLocation ENDERMAN_LOCATION = new ResourceLocation(
 			"textures/entity/enderman/enderman.png");
-
-	private static final ResourceLocation ENDERMAN_EYES_LOCATION = new ResourceLocation("textures/entity/enderman/enderman_eyes.png");
-
+	private static final ResourceLocation ENDERMAN_EYES_LOCATION = new ResourceLocation(
+			"textures/entity/enderman/enderman_eyes.png");
 	private final RandomSource random = RandomSource.create();
 
-	public BabyEnderManRender(EntityRendererProvider.Context p_173992_) {
-		super(p_173992_, new BabyEnderManModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.25F);
+	public EnderBoyRenderer(EntityRendererProvider.Context p_173992_) {
+		super(p_173992_, new EnderBoyModel<>(p_173992_.bakeLayer(ModelLayers.ENDERMAN)), 0.25F);
 		this.addLayer(new GlowingEyesLayer<>(this, ENDERMAN_EYES_LOCATION));
-		this.addLayer(new BabyCarriedBlockLayer(this, p_173992_.getBlockRenderDispatcher()));
+		this.addLayer(new EnderBoyCarriedBlockLayer(this, p_173992_.getBlockRenderDispatcher()));
 	}
 
 	public void render(EnderBoy pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
 		BlockState blockstate = pEntity.getCarriedBlock();
-		BabyEnderManModel<EnderBoy> endermanmodel = this.getModel();
+		EnderBoyModel<EnderBoy> endermanmodel = this.getModel();
 		endermanmodel.carrying = blockstate != null;
 		endermanmodel.creepy = pEntity.isCreepy();
 		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);

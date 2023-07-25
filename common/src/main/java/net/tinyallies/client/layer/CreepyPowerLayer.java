@@ -6,18 +6,17 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.tinyallies.client.model.BabyCreeperModel;
+import net.tinyallies.client.model.CreepyModel;
 import net.tinyallies.entity.Creepy;
 
-public class BabyCreeperPowerLayer extends EnergySwirlLayer<Creepy, BabyCreeperModel> {
+public class CreepyPowerLayer extends EnergySwirlLayer<Creepy, CreepyModel> {
 	private static final ResourceLocation POWER_LOCATION = new ResourceLocation(
 			"textures/entity/creeper/creeper_armor.png");
+	private final CreepyModel model;
 
-	private final BabyCreeperModel model;
-
-	public BabyCreeperPowerLayer(RenderLayerParent<Creepy, BabyCreeperModel> pRenderer, EntityModelSet pModelSet) {
+	public CreepyPowerLayer(RenderLayerParent<Creepy, CreepyModel> pRenderer, EntityModelSet pModelSet) {
 		super(pRenderer);
-		this.model = new BabyCreeperModel(pModelSet.bakeLayer(ModelLayers.CREEPER_ARMOR));
+		this.model = new CreepyModel(pModelSet.bakeLayer(ModelLayers.CREEPER_ARMOR));
 	}
 
 	protected float xOffset(float pTickCount) {

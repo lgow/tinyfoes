@@ -8,10 +8,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.tinyallies.entity.Spidey;
 import net.tinyallies.util.ModUtil;
 
-public class BabySpiderModel <T extends Spidey> extends SpiderModel<T> {
+public class SpideyModel <T extends Spidey> extends SpiderModel<T> {
 	private final ModelPart body0, body1, head, rightHindLeg, leftHindLeg, rightMiddleHindLeg, leftMiddleHindLeg, rightMiddleFrontLeg, leftMiddleFrontLeg, rightFrontLeg, leftFrontLeg;
 
-	public BabySpiderModel(ModelPart modelPart) {
+	public SpideyModel(ModelPart modelPart) {
 		super(modelPart);
 		this.head = modelPart.getChild("head");
 		this.body0 = modelPart.getChild("body0");

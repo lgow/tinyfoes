@@ -9,14 +9,12 @@ import net.tinyallies.entity.BabyMonster;
 
 import java.util.EnumSet;
 
-public class DefendParentTargetGoal extends TargetGoal {
+public class DefendOwnerTargetGoal extends TargetGoal {
 	private BabyMonster baby;
-
 	private LivingEntity ownerLastHurtBy;
-
 	private int timestamp;
 
-	public DefendParentTargetGoal(PathfinderMob pTameAnimal) {
+	public DefendOwnerTargetGoal(PathfinderMob pTameAnimal) {
 		super(pTameAnimal, false);
 		if (pTameAnimal instanceof BabyMonster babyMonster) {
 			this.baby = babyMonster;
@@ -34,7 +32,7 @@ public class DefendParentTargetGoal extends TargetGoal {
 				this.ownerLastHurtBy = livingentity.getLastHurtByMob();
 				int i = livingentity.getLastHurtByMobTimestamp();
 				return i != this.timestamp && this.canAttack(this.ownerLastHurtBy, TargetingConditions.DEFAULT)
-						&& this.baby.wantsToAttack(this.ownerLastHurtBy, livingentity);
+						&& this.baby.babyWantsToAttack(this.ownerLastHurtBy, livingentity);
 			}
 		}
 		else {

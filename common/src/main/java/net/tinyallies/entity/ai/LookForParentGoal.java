@@ -10,15 +10,10 @@ import java.util.List;
 
 public class LookForParentGoal extends Goal {
 	private final Mob mob;
-
 	private final double speedModifier;
-
 	private final Class<? extends PathfinderMob> parentClass;
-
 	private BabyMonster baby;
-
 	@Nullable private Mob parent;
-
 	private int timeToRecalcPath;
 
 	public LookForParentGoal(Mob pMob, double pSpeedModifier, Class<? extends PathfinderMob> pParentClass) {
@@ -31,9 +26,6 @@ public class LookForParentGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		if (this.baby.isTamed()) {
-			return false;
-		}
 		List<? extends Mob> list = this.mob.level.getEntitiesOfClass(parentClass,
 				this.mob.getBoundingBox().inflate(8.0D, 4.0D, 8.0D));
 		Mob newParent = null;
@@ -55,8 +47,8 @@ public class LookForParentGoal extends Goal {
 		}
 		else {
 			this.parent = newParent;
-			if (this.baby.getMonsterParent() == null) {
-				this.baby.setMonsterParent(newParent);
+			if (this.baby.getParent() == null) {
+				this.baby.setParent(newParent);
 				this.baby.reassessTameGoals();
 			}
 			return true;

@@ -10,19 +10,19 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.BabyHeldItemLayer;
-import net.tinyallies.client.model.BabySkeletonModel;
+import net.tinyallies.client.model.SkellyModel;
 import net.tinyallies.entity.Skelly;
 
-public class BabySkeletonRenderer extends HumanoidMobRenderer<Skelly, SkeletonModel<Skelly>> {
-	public BabySkeletonRenderer(EntityRendererProvider.Context p_174380_) {
+public class SkellyRenderer extends HumanoidMobRenderer<Skelly, SkeletonModel<Skelly>> {
+	public SkellyRenderer(EntityRendererProvider.Context p_174380_) {
 		this(p_174380_, ModelLayers.SKELETON, ModelLayers.SKELETON_INNER_ARMOR, ModelLayers.SKELETON_OUTER_ARMOR);
 	}
 
-	public BabySkeletonRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation p_174383_, ModelLayerLocation pInnerModelLayer, ModelLayerLocation pOuterModelLayer) {
-		super(pContext, new BabySkeletonModel(pContext.bakeLayer(p_174383_)), 0.25F);
+	public SkellyRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation p_174383_, ModelLayerLocation pInnerModelLayer, ModelLayerLocation pOuterModelLayer) {
+		super(pContext, new SkellyModel(pContext.bakeLayer(p_174383_)), 0.25F);
 		this.layers.clear();
-		this.addLayer(new HumanoidArmorLayer<>(this, new BabySkeletonModel(pContext.bakeLayer(pInnerModelLayer)),
-				new BabySkeletonModel(pContext.bakeLayer(pOuterModelLayer)), pContext.getModelManager()));
+		this.addLayer(new HumanoidArmorLayer<>(this, new SkellyModel(pContext.bakeLayer(pInnerModelLayer)),
+				new SkellyModel(pContext.bakeLayer(pOuterModelLayer)), pContext.getModelManager()));
 		this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), 1.0F, 1.0F, 1.0F,
 				pContext.getItemInHandRenderer()));
 		//		this.addLayer(new ElytraLayer<>(this, pContext.getModelSet()));

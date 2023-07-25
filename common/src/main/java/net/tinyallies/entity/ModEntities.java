@@ -19,22 +19,16 @@ import static net.minecraft.world.entity.MobCategory.MONSTER;
 public class ModEntities {
 	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyAlliesCommon.REGISTRIES.get(
 			Registries.ENTITY_TYPE);
-
-	public static final RegistrySupplier<EntityType<Creepy>> CREEPY = registerBaby("creeper", Creepy::new,
-			MONSTER, 0.33F, 0.85F);
-
-	public static final RegistrySupplier<EntityType<Skelly>> SKELLY = registerBaby("skeleton", Skelly::new,
-			MONSTER, 0.33F, 1.05F);
-
-	public static final RegistrySupplier<EntityType<EnderBoy>> ENDERBOY = registerBaby("enderman",
-			EnderBoy::new, MONSTER, 0.33F, 1.4F);
-
-	public static final RegistrySupplier<EntityType<Spidey>> SPIDEY = registerBaby("spider", Spidey::new,
-			MONSTER, 0.9F, 0.45F);
-
-	public static final RegistrySupplier<EntityType<Zomby>> ZOMBY = registerBaby("zombie", Zomby::new,
-			MONSTER, 0.33F, 1.05F);
-
+	public static final RegistrySupplier<EntityType<Creepy>> CREEPY = registerBaby("creeper", Creepy::new, MONSTER,
+			0.33F, 0.85F);
+	public static final RegistrySupplier<EntityType<Skelly>> SKELLY = registerBaby("skeleton", Skelly::new, MONSTER,
+			0.33F, 1.05F);
+	public static final RegistrySupplier<EntityType<EnderBoy>> ENDERBOY = registerBaby("enderman", EnderBoy::new,
+			MONSTER, 0.33F, 1.4F);
+	public static final RegistrySupplier<EntityType<Spidey>> SPIDEY = registerBaby("spider", Spidey::new, MONSTER, 0.9F,
+			0.45F);
+	public static final RegistrySupplier<EntityType<Zomby>> ZOMBY = registerBaby("zombie", Zomby::new, MONSTER, 0.33F,
+			1.05F);
 	public static final RegistrySupplier<EntityType<BabyfierBlob>> BLOB = create("blob",
 			() -> EntityType.Builder.<BabyfierBlob> of(BabyfierBlob::new, MobCategory.MISC).clientTrackingRange(4)
 					.updateInterval(20).sized(0.1F, 0.1F).build("blob"));

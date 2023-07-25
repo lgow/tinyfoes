@@ -15,7 +15,7 @@ import net.tinyallies.entity.ModEntities;
 import java.util.Map;
 
 public class ModUtil {
-	private static final Map<EntityType<? extends PathfinderMob>, EntityType<? extends PathfinderMob>> bayficationList = Map.ofEntries(
+	private static final Map<EntityType<? extends PathfinderMob>, EntityType<? extends PathfinderMob>> babyficationList = Map.ofEntries(
 			Map.entry(EntityType.CREEPER, ModEntities.CREEPY.get()),
 			Map.entry(EntityType.SKELETON, ModEntities.SKELLY.get()),
 			Map.entry(EntityType.ENDERMAN, ModEntities.ENDERBOY.get()),
@@ -23,8 +23,8 @@ public class ModUtil {
 			Map.entry(EntityType.ZOMBIE, ModEntities.ZOMBY.get()));
 
 	public static void babifyMob(Mob entityIn) {
-		if (bayficationList.containsKey(entityIn.getType())) {
-			Mob baby = entityIn.convertTo(bayficationList.get(entityIn.getType()), true);
+		if (babyficationList.containsKey(entityIn.getType())) {
+			Mob baby = entityIn.convertTo(babyficationList.get(entityIn.getType()), true);
 			baby.setHealth(entityIn.getHealth());
 			if (baby instanceof Creepy creeper) {
 				creeper.setPowered(((Creeper) entityIn).isPowered());
@@ -34,6 +34,9 @@ public class ModUtil {
 				enderman.setCarriedBlock(((EnderMan) entityIn).getCarriedBlock());
 				enderman.setTarget(entityIn.getTarget());
 			}
+		}
+		else {
+			entityIn.setBaby(true);
 		}
 	}
 

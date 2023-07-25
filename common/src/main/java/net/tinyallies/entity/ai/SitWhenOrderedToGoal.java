@@ -7,12 +7,11 @@ import net.tinyallies.entity.BabyMonster;
 
 import java.util.EnumSet;
 
-public class BabySitsWhenOrderedToGoal extends Goal {
+public class SitWhenOrderedToGoal extends Goal {
 	private final PathfinderMob mob;
-
 	private BabyMonster baby;
 
-	public BabySitsWhenOrderedToGoal(PathfinderMob pMob) {
+	public SitWhenOrderedToGoal(PathfinderMob pMob) {
 		this.mob = pMob;
 		if (this.mob instanceof BabyMonster baby) {
 			this.baby = baby;

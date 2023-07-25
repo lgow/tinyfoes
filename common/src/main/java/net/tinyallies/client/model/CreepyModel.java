@@ -9,12 +9,11 @@ import net.minecraft.util.Mth;
 import net.tinyallies.entity.Creepy;
 import net.tinyallies.util.ModUtil;
 
-public class BabyCreeperModel extends CreeperModel<Creepy> {
+public class CreepyModel extends CreeperModel<Creepy> {
 	private final ModelPart head, body, rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg;
-
 	private boolean shouldOffsetLegs;
 
-	public BabyCreeperModel(ModelPart pRoot) {
+	public CreepyModel(ModelPart pRoot) {
 		super(pRoot);
 		this.head = pRoot.getChild("head");
 		this.body = pRoot.getChild("body");

@@ -7,17 +7,17 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.tinyallies.client.layer.BabyCreeperPowerLayer;
-import net.tinyallies.client.model.BabyCreeperModel;
+import net.tinyallies.client.layer.CreepyPowerLayer;
+import net.tinyallies.client.model.CreepyModel;
 import net.tinyallies.entity.Creepy;
 
-public class BabyCreeperRender extends MobRenderer<Creepy, BabyCreeperModel> {
+public class CreepyRenderer extends MobRenderer<Creepy, CreepyModel> {
 	private static final ResourceLocation CREEPER_LOCATION = new ResourceLocation(
 			"textures/entity/creeper/creeper.png");
 
-	public BabyCreeperRender(EntityRendererProvider.Context context) {
-		super(context, new BabyCreeperModel(context.bakeLayer(ModelLayers.CREEPER)), 0.25F);
-		this.addLayer(new BabyCreeperPowerLayer(this, context.getModelSet()));
+	public CreepyRenderer(EntityRendererProvider.Context context) {
+		super(context, new CreepyModel(context.bakeLayer(ModelLayers.CREEPER)), 0.25F);
+		this.addLayer(new CreepyPowerLayer(this, context.getModelSet()));
 	}
 
 	protected void scale(Creepy pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {

@@ -8,8 +8,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.tinyallies.entity.EnderBoy;
 import net.tinyallies.util.ModUtil;
 
-public class BabyEnderManModel <T extends EnderBoy> extends EndermanModel<T> {
-	public BabyEnderManModel(ModelPart pRoot) {
+public class EnderBoyModel <T extends EnderBoy> extends EndermanModel<T> {
+	public EnderBoyModel(ModelPart pRoot) {
 		super(pRoot);
 	}
 
@@ -26,8 +26,8 @@ public class BabyEnderManModel <T extends EnderBoy> extends EndermanModel<T> {
 			this.rightLeg.xRot = -1.49F;
 			this.leftLeg.xRot = -1.49F;
 			if (this.carrying) {
-				this.rightArm.xRot += (-(float) Math.PI / 3F);
-				this.leftArm.xRot += (-(float) Math.PI / 3F);
+				this.rightArm.xRot += (-(float) Math.PI / 3.5F);
+				this.leftArm.xRot += (-(float) Math.PI / 3.5F);
 				this.rightArm.yRot += ((float) Math.PI / 10.4F);
 				this.leftArm.yRot += (-(float) Math.PI / 10.4F);
 				this.rightLeg.yRot = ((float) Math.PI / 7.5F);
@@ -40,7 +40,7 @@ public class BabyEnderManModel <T extends EnderBoy> extends EndermanModel<T> {
 				this.leftLeg.yRot = (-(float) Math.PI / 10F);
 			}
 		}
-		else{
+		else {
 			if (this.carrying) {
 				this.rightArm.yRot += ((float) Math.PI / 6.5F);
 				this.leftArm.yRot += (-(float) Math.PI / 6.5F);

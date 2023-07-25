@@ -22,6 +22,5 @@ public abstract class ZombieMixin extends Monster {
 		if (this.isBaby()) { ModUtil.babifyMob(this); }
 		super.customServerAiStep();
 	}
-
 }
 

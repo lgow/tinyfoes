@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 public class ModItems {
 	public static final Registrar<Item> ITEM_REGISTRAR = ModRegistries.MOD_ITEMS.getRegistrar();
-
 	public static final RegistrySupplier<Item> BABYFIER = registerItem("babyfier",
 			() -> new BabyfierItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 

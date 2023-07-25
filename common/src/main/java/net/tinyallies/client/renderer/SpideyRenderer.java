@@ -7,21 +7,20 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.tinyallies.client.layer.GlowingEyesLayer;
-import net.tinyallies.client.model.BabySpiderModel;
+import net.tinyallies.client.model.SpideyModel;
 import net.tinyallies.entity.Spidey;
 
-public class BabySpiderRender <T extends Spidey> extends MobRenderer<T, BabySpiderModel<T>> {
+public class SpideyRenderer <T extends Spidey> extends MobRenderer<T, SpideyModel<T>> {
 	private static final ResourceLocation SPIDER_LOCATION = new ResourceLocation("textures/entity/spider/spider.png");
-
 	private static final ResourceLocation SPIDER_EYES_LOCATION = new ResourceLocation(
 			"textures/entity/spider_eyes.png");
 
-	public BabySpiderRender(EntityRendererProvider.Context p_174401_) {
+	public SpideyRenderer(EntityRendererProvider.Context p_174401_) {
 		this(p_174401_, ModelLayers.SPIDER);
 	}
 
-	public BabySpiderRender(EntityRendererProvider.Context pContext, ModelLayerLocation pLayer) {
-		super(pContext, new BabySpiderModel<>(pContext.bakeLayer(pLayer)), 0.4F);
+	public SpideyRenderer(EntityRendererProvider.Context pContext, ModelLayerLocation pLayer) {
+		super(pContext, new SpideyModel<>(pContext.bakeLayer(pLayer)), 0.4F);
 		this.addLayer(new GlowingEyesLayer<>(this, SPIDER_EYES_LOCATION));
 	}
 

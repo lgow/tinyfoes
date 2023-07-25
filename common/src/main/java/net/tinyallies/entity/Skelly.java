@@ -2,30 +2,25 @@ package net.tinyallies.entity;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.FleeSunGoal;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
-import net.minecraft.world.entity.ai.goal.RestrictSunGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.scores.Team;
 import net.tinyallies.entity.ai.LookForParentGoal;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -35,56 +30,50 @@ import java.util.UUID;
 public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 	protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Skelly.class,
 			EntityDataSerializers.BYTE);
-
 	protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNERUUID_ID = SynchedEntityData.defineId(
 			Skelly.class, EntityDataSerializers.OPTIONAL_UUID);
-
-	protected static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.05F);
-
+	private static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.05F);
 	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
 			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
-
+	private final AvoidEntityGoal<Player> avoidPlayersGoal = new AvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D,
+			1.33D);
+	private final LookForParentGoal followParentGoal = new LookForParentGoal(this, 1.0F, this.getParentClass());
+	private final NearestAttackableTargetGoal<Player> targetPlayerGoal = new NearestAttackableTargetGoal<>(this, Player.class, true);
 	private boolean orderedToSit;
-
-	private LivingEntity animalParent;
-
-	private AvoidEntityGoal<Player> avoidPlayersGoal;
-
-	private LookForParentGoal followParentGoal;
+	private LivingEntity parent;
 
 	public Skelly(EntityType<? extends Skelly> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
-		this.reassessTameGoals();
+		reassessTameGoals();
+		applyAttributeModifiers();
 	}
+
+	
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
-		this.goalSelector.addGoal(1, new RestrictSunGoal(this));
-		this.goalSelector.addGoal(0, new FleeSunGoal(this, 1.5D));
-		this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
+		this.goalSelector.addGoal(0, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
+		this.goalSelector.addGoal(6, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.0D));
 		this.defaultBabyGoals(this);
 	}
 
 	public void reassessTameGoals() {
-		if (this.avoidPlayersGoal == null) {
-			this.avoidPlayersGoal = new AvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, 1.33D);
-		}
-		if (this.followParentGoal == null) {
-			this.followParentGoal = new LookForParentGoal(this, 1.0F, this.getMonsterParentClass());
-		}
-		this.goalSelector.removeGoal(this.followParentGoal);
+			this.goalSelector.removeGoal(this.followParentGoal);
 		this.goalSelector.removeGoal(this.avoidPlayersGoal);
-		if (!this.isTamed() && this.getMonsterParent() == null) {
-			this.goalSelector.addGoal(4, this.avoidPlayersGoal);
-			this.goalSelector.addGoal(3, this.followParentGoal);
+		this.goalSelector.removeGoal(this.targetPlayerGoal);
+		if (!this.isTamed()) {
+			if (this.getParent() == null) {
+				this.goalSelector.addGoal(4, this.avoidPlayersGoal);
+			}else {
+				this.goalSelector.addGoal(0, this.followParentGoal);
+				this.targetSelector.addGoal(3, this.targetPlayerGoal);
+			}
 		}
 	}
 
 	@Override
 	public boolean isInvulnerableTo(DamageSource pSource) {
-		return (pSource.getEntity() instanceof BabyMonster baby && baby.getOwner() == this.getOwner())
-				|| super.isInvulnerableTo(pSource);
+		return this.hasSameOwner(pSource.getEntity()) || super.isInvulnerableTo(pSource);
 	}
 
 	@Nullable
@@ -101,103 +90,48 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 		return POSES.getOrDefault(pPose, STANDING);
 	}
 
-	public boolean isFood(ItemStack pStack) {
-		return pStack.is(Items.BONE_MEAL);
+	@Override
+	public boolean isFood(ItemStack itemstack) {
+		return itemstack.is(Items.BONE_MEAL);
 	}
 
 	@Override
-	public Class<? extends PathfinderMob> getMonsterParentClass() {
+	public Class<? extends PathfinderMob> getParentClass() {
 		return Skeleton.class;
 	}
 
 	public boolean hurt(DamageSource pSource, float pAmount) {
-		if (this.isInvulnerableTo(pSource)) {
-			return false;
-		}
-		else {
-			Entity entity = pSource.getEntity();
-			if (!this.level.isClientSide) {
-				this.setOrderedToSit(false);
-			}
-			if (entity != null && !(entity instanceof Player) && !(entity instanceof AbstractArrow)) {
-				pAmount = (pAmount + 1.0F) / 2.0F;
-			}
-			return super.hurt(pSource, pAmount);
-		}
+		return babyHurt(this, pSource, super.hurt(pSource, pAmount));
 	}
 
-	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
+	public @NotNull InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
 		Item item = itemstack.getItem();
-		if (this.level.isClientSide) {
-			boolean flag = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack) && !this.isTamed()
-					&& !this.isAngry();
-			return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
-		}
-		else {
-			if (this.isTamed()) {
-				InteractionResult interactionresult = super.mobInteract(pPlayer, pHand);
-				if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
-					this.heal((float) 4);
-					if (!pPlayer.getAbilities().instabuild) {
-						itemstack.shrink(1);
+		if (!this.level.isClientSide && this.isOwnedBy(pPlayer) && this.isTamed()) {
+			if (pPlayer.isCrouching()) {
+				if (item instanceof ArmorItem || item instanceof BowItem) {
+					EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
+					if (!this.getItemBySlot(slot).isEmpty()) {
+						this.spawnAtLocation(getItemBySlot(slot));
 					}
-					this.gameEvent(GameEvent.EAT, this);
-					this.playSound(SoundEvents.CANDLE_PLACE);
-					if (this.getHealth() == this.getMaxHealth()) { this.level.broadcastEntityEvent(this, (byte) 8); }
+					this.setItemSlotAndDropWhenKilled(slot, itemstack.copy());
+					if (!pPlayer.getAbilities().instabuild) { pPlayer.getInventory().removeItem(itemstack); }
+					this.playSound(slot.isArmor() ? SoundEvents.ARMOR_EQUIP_GENERIC : SoundEvents.ITEM_FRAME_ADD_ITEM);
 					return InteractionResult.SUCCESS;
 				}
-				if (pPlayer.isCrouching()) {
-					if (item instanceof ArmorItem || item instanceof BowItem) {
-						EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
-						if (!this.getItemBySlot(slot).isEmpty()) {
-							this.spawnAtLocation(getItemBySlot(slot));
-						}
-						this.setItemSlotAndDropWhenKilled(slot, itemstack.copy());
-						if (!pPlayer.getAbilities().instabuild) { pPlayer.getInventory().removeItem(itemstack); }
-						this.playSound(
-								slot.isArmor() ? SoundEvents.ARMOR_EQUIP_GENERIC : SoundEvents.ITEM_FRAME_ADD_ITEM);
-						return InteractionResult.SUCCESS;
-					}
-					else if (itemstack.isEmpty()) {
-						this.getAllSlots().forEach(stack -> {
-							this.setItemSlot(getEquipmentSlotForItem(stack), ItemStack.EMPTY);
-							this.spawnAtLocation(stack);
-						});
-						return InteractionResult.SUCCESS;
-					}
+				else if (itemstack.isEmpty()) {
+					this.getAllSlots().forEach(stack -> {
+						this.spawnAtLocation(stack);
+						this.setItemSlot(getEquipmentSlotForItem(stack), ItemStack.EMPTY);
+					});
+					return InteractionResult.SUCCESS;
 				}
-				else {
-					if ((!interactionresult.consumesAction()) && this.isOwnedBy(pPlayer)) {
-						this.setOrderedToSit(!this.isOrderedToSit());
-						this.jumping = false;
-						this.navigation.stop();
-						this.setTarget(null);
-						return InteractionResult.SUCCESS;
-					}
-				}
-				return interactionresult;
 			}
-			else if (isFood(itemstack) && !this.isAngry() && this.canBeAdopted()) {
-				if (!pPlayer.getAbilities().instabuild) {
-					itemstack.shrink(1);
-				}
-				if (this.random.nextInt(3) == 0) {
-					this.adopt(pPlayer);
-					this.navigation.stop();
-					this.setTarget(null);
-					this.setOrderedToSit(true);
-					this.level.broadcastEntityEvent(this, (byte) 7);
-				}
-				else {
-					this.level.broadcastEntityEvent(this, (byte) 6);
-				}
-				return InteractionResult.SUCCESS;
-			}
-			return super.mobInteract(pPlayer, pHand);
 		}
+		return babyInteract(pPlayer, pHand, super.mobInteract(pPlayer, pHand));
 	}
 
+	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.entityData.define(DATA_FLAGS_ID, (byte) 0);
@@ -206,15 +140,15 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
-		this.addTamedSaveData(pCompound, this.orderedToSit);
+		addBabySaveData(pCompound, this.orderedToSit);
 		addPersistentAngerSaveData(pCompound);
 	}
 
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
-		readTamedSaveData(pCompound, this);
+		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
-		this.setInSittingPose(orderedToSit);
+		setInSittingPose(orderedToSit);
 		readPersistentAngerSaveData(this.level, pCompound);
 	}
 
@@ -224,85 +158,79 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 	}
 
 	public void handleEntityEvent(byte pId) {
-		if (pId == 8) {
-			this.spawnInvertedHealAndHarmParticles(this);
-		}
-		else if (pId == 7) {
-			this.spawnTamingParticles(true, this);
-		}
-		else if (pId == 6) {
-			this.spawnTamingParticles(false, this);
-		}
-		else {
-			super.handleEntityEvent(pId);
-		}
+		super.handleEntityEvent(pId);
+		handleBabyEvent(pId);
 	}
 
 	@Override
-	public boolean isTamed() {
-		return (this.entityData.get(DATA_FLAGS_ID) & 4) != 0;
-	}
-
-	public void setTamed(boolean pTamed) {
-		byte b0 = this.entityData.get(DATA_FLAGS_ID);
-		if (pTamed) {
-			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 4));
-		}
-		else {
-			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -5));
-		}
+	public LivingEntity getParent() {
+		return this.parent;
 	}
 
 	@Override
-	public LivingEntity getMonsterParent() {
-		return this.animalParent;
-	}
-
-	@Override
-	public void setMonsterParent(LivingEntity living) {
-		this.animalParent = living;
-	}
-
-	public boolean isInSittingPose() {
-		return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
-	}
-
-	public void setInSittingPose(boolean pSitting) {
-		byte b0 = this.entityData.get(DATA_FLAGS_ID);
-		if (pSitting) {
-			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 | 1));
-		}
-		else {
-			this.entityData.set(DATA_FLAGS_ID, (byte) (b0 & -2));
-		}
-	}
-
-	@Override
-	public void adopt(Player pPlayer) {
-		this.setTamed(true);
-		this.setParentUUID(pPlayer.getUUID());
-		this.setMonsterParent(null);
-		this.setPersistenceRequired();
-		this.reassessTameGoals();
+	public void setParent(LivingEntity living) {
+		this.parent = living;
 	}
 
 	@Override
 	public void tick() {
-		if (this.getMonsterParent() != null && !this.getMonsterParent().isAlive()) {
-			this.setMonsterParent(null);
+		if (this.getParent() != null && !this.getParent().isAlive()) {
+			this.setParent(null);
 			this.reassessTameGoals();
 		}
 		this.updatePose(this);
 		super.tick();
 	}
 
-	@Nullable
-	public UUID getParentUUID() {
-		return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
+	@Override
+	protected void tickLeash() {
+		if (this.getLeashHolder() != null && this.isInSittingPose()) {
+			if (this.distanceTo(getLeashHolder()) > 10.0f) {
+				this.dropLeash(true, true);
+			}
+			return;
+		}
+		super.tickLeash();
 	}
 
-	public void setParentUUID(@Nullable UUID pUuid) {
-		this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(pUuid));
+	public boolean canAttack(LivingEntity livingEntity) {
+		return !this.hasSameOwner(livingEntity) && super.canAttack(livingEntity);
+	}
+
+	public Team getTeam() {
+		return getBabyTeam(super.getTeam());
+	}
+
+	public boolean isAlliedTo(Entity pEntity) {
+		return babyIsAlliedTo(pEntity, super.isAlliedTo(pEntity));
+	}
+
+	public void die(DamageSource pCause) {
+		super.die(pCause);
+		if (this.dead) { this.sendDeathMessage(this); }
+	}
+
+	@Override
+	public boolean isPreventingPlayerRest(Player pPlayer) {
+		return !this.isTamed();
+	}
+
+	public boolean isOrderedToSit() {
+		return this.orderedToSit;
+	}
+
+	public void setOrderedToSit(boolean pOrderedToSit) {
+		this.orderedToSit = pOrderedToSit;
+	}
+
+	@Override
+	public double getMyRidingOffset() {
+		return this.isBaby() ? -0.6 : -0.45;
+	}
+
+	@Override
+	public boolean isUndead() {
+		return true;
 	}
 
 	@Override
@@ -328,70 +256,31 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 	public void startPersistentAngerTimer() {
 	}
 
-	public boolean canAttack(LivingEntity pTarget) {
-		return !this.isOwnedBy(pTarget) && super.canAttack(pTarget);
+	//===================================================
+	public boolean isTamed() {
+		return (this.entityData.get(DATA_FLAGS_ID) & 4) != 0;
 	}
 
-	public boolean isOwnedBy(LivingEntity pEntity) {
-		return pEntity == this.getOwner();
+	public void setTamed(boolean pTamed) {
+		byte flagsID = this.entityData.get(DATA_FLAGS_ID);
+		this.entityData.set(DATA_FLAGS_ID, pTamed ? (byte) (flagsID | 4) : (byte) (flagsID & -1));
 	}
 
-	@Override
-	public boolean wantsToAttack(LivingEntity pTarget, LivingEntity pOwner) {
-		return BabyMonster.super.wantsToAttack(pTarget, pOwner);
+	@Nullable
+	public UUID getOwnerUUID() {
+		return this.entityData.get(DATA_OWNERUUID_ID).orElse(null);
 	}
 
-	public Team getTeam() {
-		if (this.isTamed()) {
-			LivingEntity livingentity = this.getOwner();
-			if (livingentity != null) {
-				return livingentity.getTeam();
-			}
-		}
-		return super.getTeam();
+	public void setOwnerUUID(@Nullable UUID pUuid) {
+		this.entityData.set(DATA_OWNERUUID_ID, Optional.ofNullable(pUuid));
 	}
 
-	public boolean isAlliedTo(Entity pEntity) {
-		if (this.isTamed()) {
-			LivingEntity livingentity = this.getOwner();
-			if (pEntity == livingentity) {
-				return true;
-			}
-			if (livingentity != null) {
-				return livingentity.isAlliedTo(pEntity);
-			}
-		}
-		return super.isAlliedTo(pEntity);
+	public boolean isInSittingPose() {
+		return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
 	}
 
-	public void die(DamageSource pCause) {
-		net.minecraft.network.chat.Component deathMessage = this.getCombatTracker().getDeathMessage();
-		super.die(pCause);
-		if (this.dead) {
-			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
-					&& this.getOwner() instanceof ServerPlayer) {
-				if (this.getCombatTracker().getKiller() != this.getOwner() && this.getTarget() != null) {
-					this.getOwner().sendSystemMessage(
-							Component.translatable("death_msg." + this.getRandom().nextInt(5), this.getName(),
-									this.getOwner().getName()));
-				}
-				else {
-					this.getOwner().sendSystemMessage(deathMessage);
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean isPreventingPlayerRest(Player pPlayer) {
-		return !this.isTamed();
-	}
-
-	public boolean isOrderedToSit() {
-		return this.orderedToSit;
-	}
-
-	public void setOrderedToSit(boolean pOrderedToSit) {
-		this.orderedToSit = pOrderedToSit;
+	public void setInSittingPose(boolean pSitting) {
+		byte flagsID = this.entityData.get(DATA_FLAGS_ID);
+		this.entityData.set(DATA_FLAGS_ID, pSitting ? (byte) (flagsID | 1) : (byte) (flagsID & -2));
 	}
 }

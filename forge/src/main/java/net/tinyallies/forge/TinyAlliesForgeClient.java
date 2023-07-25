@@ -13,9 +13,8 @@ public class TinyAlliesForgeClient {
 	public static void onInitializeClient(RegisterEvent event) {
 		TinyAlliesCommonClient.preClientInit();
 	}
-
-//    @SubscribeEvent
-//    public static void onClientSetup(FMLClientSetupEvent event) {
-//        TinyAlliesCommonClient.onInitializeClient();
-//    }
+	//    @SubscribeEvent
+	//    public static void onClientSetup(FMLClientSetupEvent event) {
+	//        TinyAlliesCommonClient.onInitializeClient();
+	//    }
 }

@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.state.BlockState;
-import net.tinyallies.client.model.BabyEnderManModel;
+import net.tinyallies.client.model.EnderBoyModel;
 import net.tinyallies.entity.EnderBoy;
 
-public class BabyCarriedBlockLayer extends RenderLayer<EnderBoy, BabyEnderManModel<EnderBoy>> {
+public class EnderBoyCarriedBlockLayer extends RenderLayer<EnderBoy, EnderBoyModel<EnderBoy>> {
 	private final BlockRenderDispatcher blockRenderer;
 
-	public BabyCarriedBlockLayer(RenderLayerParent<EnderBoy, BabyEnderManModel<EnderBoy>> pRenderer, BlockRenderDispatcher pBlockRenderer) {
+	public EnderBoyCarriedBlockLayer(RenderLayerParent<EnderBoy, EnderBoyModel<EnderBoy>> pRenderer, BlockRenderDispatcher pBlockRenderer) {
 		super(pRenderer);
 		this.blockRenderer = pBlockRenderer;
 	}
@@ -26,10 +26,10 @@ public class BabyCarriedBlockLayer extends RenderLayer<EnderBoy, BabyEnderManMod
 		if (blockstate != null) {
 			pPoseStack.pushPose();
 			pPoseStack.translate(0.0F, 0.6875F, -0.75F);
-			pPoseStack.mulPose(Axis.XP.rotationDegrees(sitting? 10.0F : 20F));
+			pPoseStack.mulPose(Axis.XP.rotationDegrees(sitting ? 10.0F : 20F));
 			pPoseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
 			float offsetY = sitting ? 0.65F : 0;
-			float handOffset = sitting ? -0.05F : -0.15F;
+			float handOffset = sitting ? -0.0F : -0.15F;
 			pPoseStack.translate(0.25F + handOffset, 0.6F - offsetY, 0.25F - handOffset);
 			pPoseStack.scale(-0.5F, -0.5F, 0.5F);
 			pPoseStack.mulPose(Axis.YP.rotationDegrees(90.0F));

@@ -7,8 +7,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.tinyallies.entity.Zomby;
 import net.tinyallies.util.ModUtil;
 
-public class BabyZombieModel extends ZombieModel<Zomby> {
-	public BabyZombieModel(ModelPart pRoot) {
+public class ZombyModel extends ZombieModel<Zomby> {
+	public ZombyModel(ModelPart pRoot) {
 		super(pRoot);
 	}
 

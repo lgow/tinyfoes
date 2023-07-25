@@ -15,10 +15,6 @@ public class BabyfierBlob extends ThrowableProjectile {
 		super(pEntityType, pLevel);
 	}
 
-	protected BabyfierBlob(double pX, double pY, double pZ, Level pLevel) {
-		super(ModEntities.BLOB.get(), pX, pY, pZ, pLevel);
-	}
-
 	public BabyfierBlob(LivingEntity pShooter, Level pLevel) {
 		super(ModEntities.BLOB.get(), pShooter, pLevel);
 	}
@@ -34,29 +30,15 @@ public class BabyfierBlob extends ThrowableProjectile {
 
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
-		if (!level.isClientSide) {
-			ModUtil.babifyMob((Mob) pResult.getEntity());
+		if (!level.isClientSide && pResult.getEntity() instanceof Mob mob) {
+			ModUtil.babifyMob(mob);
 		}
 		super.onHitEntity(pResult);
 	}
-	//	private ParticleOptions getParticle() {
-	//		ItemStack itemstack = this.getItemRaw();
-	//		return (ParticleOptions)(itemstack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemParticleOption(ParticleTypes.ITEM, itemstack));
-	//	}
-	//	public void handleEntityEvent(byte pId) {
-	//		if (pId == 3) {
-	//			ParticleOptions particleoptions = this.getParticle();
-	//
-	//			for(int i = 0; i < 8; ++i) {
-	//				this.level.addParticle(particleoptions, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
-	//			}
-	//		}
-	//
-	//	}
 
 	@Override
 	protected float getGravity() {
-		return 0.01F;
+		return 0.0F;
 	}
 
 	@Override
