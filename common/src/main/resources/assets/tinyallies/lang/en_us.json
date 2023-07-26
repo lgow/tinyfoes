@@ -1,0 +1,18 @@
+{
+  "entity.tinyallies.creeper": "Creepy",
+  "entity.tinyallies.skeleton": "Skelly",
+  "entity.tinyallies.enderman": "Enderboy",
+  "entity.tinyallies.spider": "Spidey",
+  "entity.tinyallies.zombie": "Zomby",
+  "item.tinyallies.babyfier": "The Babyfier",
+  "death_msg.0": " while courageously protecting %s",
+  "death_msg.1": " in defense of %s",
+  "death_msg.2": ", bravely defending %s",
+  "death_msg.3": " for the sake of %s's safety",
+  "death_msg.4": " while shielding %s from harm",
+  "death_msg.5": ", sacrificing itself to shield %s",
+  "death_msg.6": " to save %s",
+  "death_msg.7": " while bravely fighting for %s",
+  "death_msg.8": " during guard duty for %s",
+  "death_msg.9": " to keep %s safe"
+}

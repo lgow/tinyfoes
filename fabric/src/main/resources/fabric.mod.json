@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "tinyallies",
+  "version": "${version}",
+  "name": "Tiny Allies",
+  "description": "Tiny Allies adds tamable baby versions of the classic vanilla monsters!",
+  "authors": [
+    "Lgowz"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/tinyallies/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.tinyallies.fabric.FabricTinyAllies"
+    ]
+  },
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.19.4",
+    "architectury": ">=8.1.79"
+  },
+  "mixins": [
+    "tinyallies.mixins.json",
+    "tinyallies-common.mixins.json"
+  ]
+}

@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[45,)"
+#issueTrackerURL = ""
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "tinyallies"
+version = "${version}"
+displayName = "Tiny Allies"
+authors = "Lgowz"
+description = '''
+Tiny Allies adds tamable baby versions of the classic vanilla monsters!
+'''
+#logoFile = "assets/tinyallies/icon.png"
+
+[[dependencies.tinyallies]]
+modId = "forge"
+mandatory = true
+versionRange = "[45,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tinyallies]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.19.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tinyallies]]
+modId = "architectury"
+mandatory = true
+versionRange = "[8.1.79,)"
+ordering = "AFTER"
+side = "BOTH"

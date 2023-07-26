@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "net.tinyallies.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "CreeperMixin",
+    "EnderManMixin",
+    "SkeletonMixin",
+    "SpiderMixin",
+    "ZombieMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
