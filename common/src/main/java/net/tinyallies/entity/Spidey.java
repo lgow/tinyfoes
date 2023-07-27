@@ -136,7 +136,7 @@ public class Spidey extends Spider implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level, pCompound);
+		readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override

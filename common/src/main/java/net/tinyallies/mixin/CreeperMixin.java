@@ -39,10 +39,10 @@ public class CreeperMixin extends Monster {
 	public void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
 		ItemStack itemStack = player.getItemInHand(interactionHand);
 		if (itemStack.is(this.getPickResult().getItem())) {
-			if (!this.level.isClientSide) {
-				Mob mob = ModEntities.CREEPY.get().create(level);
+			if (!this.level().isClientSide) {
+				Mob mob = ModEntities.CREEPY.get().create(level());
 				mob.setPos(this.position());
-				this.level.addFreshEntity(mob);
+				this.level().addFreshEntity(mob);
 			}
 			cir.setReturnValue(InteractionResult.sidedSuccess(true));
 		}

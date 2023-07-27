@@ -35,7 +35,7 @@ public class FollowOwnerGoal extends Goal {
 		if (this.mob instanceof BabyMonster baby) {
 			this.baby = baby;
 		}
-		this.level = pTamable.level;
+		this.level = pTamable.level();
 		this.speedModifier = pSpeedModifier;
 		this.navigation = pTamable.getNavigation();
 		this.startDistance = pStartDistance;
@@ -57,8 +57,8 @@ public class FollowOwnerGoal extends Goal {
 		}
 		else if (this.baby.isUndead()) {
 			LivingEntity lastHurtByMob = owner1.getLastHurtByMob();
-			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner1 && lastHurtByMob.getCombatTracker()
-					.isInCombat()) {
+			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner1
+					&& lastHurtByMob.getCombatTracker().getCombatDuration() > 0) {
 				return false;
 			}
 			LivingEntity lastHurtMob = owner1.getLastHurtMob();
@@ -67,7 +67,8 @@ public class FollowOwnerGoal extends Goal {
 			}
 		}
 		owner = owner1;
-		return this.mob.distanceToSqr(owner1) >= (double) (this.startDistance * this.startDistance) || !this.mob.hasLineOfSight(this.owner);
+		return this.mob.distanceToSqr(owner1) >= (double) (this.startDistance * this.startDistance)
+				|| !this.mob.hasLineOfSight(this.owner);
 	}
 
 	public boolean canContinueToUse() {
@@ -107,20 +108,21 @@ public class FollowOwnerGoal extends Goal {
 				return;
 			}
 			else {
-				if (this.mob instanceof EnderBoy && this.mob.level.isRaining()) {
+				if (this.mob instanceof EnderBoy && this.mob.level().isRaining()) {
 					return;
 				}
 				if (this.baby.isUndead()) {
 					ItemStack helmet = this.mob.getItemBySlot(EquipmentSlot.HEAD);
-					if (helmet.isEmpty() && this.mob.level.isDay()) {
-						return ;
+					if (helmet.isEmpty() && this.mob.level().isDay()) {
+						return;
 					}
-					else if (!helmet.isEmpty() && (helmet.getMaxDamage() - helmet.getDamageValue()) <= helmet.getMaxDamage() / 3) {
-						return ;
+					else if (!helmet.isEmpty()
+							&& (helmet.getMaxDamage() - helmet.getDamageValue()) <= helmet.getMaxDamage() / 3) {
+						return;
 					}
 					LivingEntity lastHurtByMob = owner.getLastHurtByMob();
 					if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner
-							&& lastHurtByMob.getCombatTracker().isInCombat()) {
+							&& lastHurtByMob.getCombatTracker().getCombatDuration() > 0) {
 						return;
 					}
 					LivingEntity lastHurtMob = owner.getLastHurtMob();
@@ -169,17 +171,20 @@ public class FollowOwnerGoal extends Goal {
 		else if (!this.canFly && blockstate.getBlock() instanceof LeavesBlock) {
 			return false;
 		}
-		else if (this.mob instanceof EnderBoy && this.mob.level.isRainingAt(pPos)) {
+		else if (this.mob instanceof EnderBoy && this.mob.level().isRainingAt(pPos)) {
 			return false;
 		}
 		else if (this.baby.isUndead()) {
 			ItemStack helmet = this.mob.getItemBySlot(EquipmentSlot.HEAD);
+			if (helmet.isEmpty() && this.mob.level().isDay()) {
+				return false;
+			}
 			if (!helmet.isEmpty() && (helmet.getMaxDamage() - helmet.getDamageValue()) <= helmet.getMaxDamage() / 3) {
 				return false;
 			}
 			LivingEntity lastHurtByMob = owner.getLastHurtByMob();
-			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner && lastHurtByMob.getCombatTracker()
-					.isInCombat()) {
+			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner
+					&& lastHurtByMob.getCombatTracker().getCombatDuration() > 0) {
 				return false;
 			}
 			LivingEntity lastHurtMob = owner.getLastHurtMob();

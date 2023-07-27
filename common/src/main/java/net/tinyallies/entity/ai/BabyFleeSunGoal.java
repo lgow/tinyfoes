@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.tinyallies.entity.BabyMonster;
 
 public class BabyFleeSunGoal extends FleeSunGoal {
-	private final Level level = this.mob.level;
+	private final Level level = this.mob.level();
 	private final BabyMonster baby = (BabyMonster) this.mob;
 	private final LivingEntity owner1 = baby.getOwner();
 
@@ -27,12 +27,11 @@ public class BabyFleeSunGoal extends FleeSunGoal {
 		}
 		if(owner1 !=null){
 			ItemStack helmet = this.mob.getItemBySlot(EquipmentSlot.HEAD);
-			if (helmet.isEmpty() || (helmet.getMaxDamage() - helmet.getDamageValue()) <= helmet.getMaxDamage() / 3) {
+			if (helmet.isEmpty() || (helmet.getMaxDamage() - helmet.getDamageValue()) >= helmet.getMaxDamage() / 3) {
 				return false;
 			}
 			LivingEntity lastHurtByMob = owner1.getLastHurtByMob();
-			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner1 && lastHurtByMob.getCombatTracker()
-					.isInCombat()) {
+			if (lastHurtByMob != null && lastHurtByMob.getLastHurtMob() == owner1 && lastHurtByMob.getCombatTracker().getCombatDuration() > 0) {
 				return false;
 			}
 			LivingEntity lastHurtMob = owner1.getLastHurtMob();

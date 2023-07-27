@@ -78,7 +78,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 						double d9 = Mth.lerp(d6, aabb.minY, aabb.maxY);
 						double d10 = Mth.lerp(d7, aabb.minZ, aabb.maxZ);
 						Vec3 vec3 = new Vec3(d8 + d3, d9, d10 + d4);
-						if (pEntity.level.clip(new ClipContext(vec3, pExplosionVector, ClipContext.Block.COLLIDER,
+						if (pEntity.level().clip(new ClipContext(vec3, pExplosionVector, ClipContext.Block.COLLIDER,
 								ClipContext.Fluid.NONE, pEntity)).getType() == HitResult.Type.MISS) {
 							++i;
 						}
@@ -149,7 +149,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 
 	@Override
 	public void explodeCreeper() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.explode(this.getX(), this.getY(), this.getZ(), this.isPowered() ? 2.0F : 1.0F);
 			this.finalizeExplosion();
 			if (this.isPowered()) {
@@ -171,7 +171,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 		int i1 = Mth.floor(y + (double) f2 + 1.0D);
 		int j2 = Mth.floor(z - (double) f2 - 1.0D);
 		int j1 = Mth.floor(z + (double) f2 + 1.0D);
-		List<Entity> list = this.level.getEntities(this, new AABB(k1, i2, j2, l1, i1, j1));
+		List<Entity> list = this.level().getEntities(this, new AABB(k1, i2, j2, l1, i1, j1));
 		Vec3 vec3 = new Vec3(x, y, z);
 		for (int k2 = 0; k2 < list.size(); ++k2) {
 			Entity entity = list.get(k2);
@@ -221,7 +221,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 		else {
 			this.playSound(this.random.nextBoolean() ? SoundEvents.FIREWORK_ROCKET_LARGE_BLAST
 					: SoundEvents.FIREWORK_ROCKET_BLAST);
-			this.level.broadcastEntityEvent(this, (byte) 101);
+			this.level().broadcastEntityEvent(this, (byte) 101);
 			this.twinkleTime = 2;
 		}
 	}
@@ -251,6 +251,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 	}
 
 	public boolean hurt(DamageSource pSource, float pAmount) {
+		this.setSwellDir(0);
 		return babyHurt(this, pSource, super.hurt(pSource, pAmount));
 	}
 
@@ -276,7 +277,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level, pCompound);
+		readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
@@ -289,14 +290,14 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 		super.handleEntityEvent(pId);
 		handleBabyEvent(pId);
 		if (pId == 101) {
-			this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+			this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		}
 		else if (pId == 100) {
 			for (int i = 0; i < this.getRandom().nextInt(5) + 2; ++i) {
 				double d0 = this.getRandom().nextGaussian() * 0.05D;
 				double d1 = this.getRandom().nextGaussian() * 0.05D;
 				double d2 = this.getRandom().nextGaussian() * 0.05D;
-				this.level.addParticle(ParticleTypes.CRIT, this.getRandomX(2.0D), this.getRandomY() + 0.5D,
+				this.level().addParticle(ParticleTypes.CRIT, this.getRandomX(2.0D), this.getRandomY() + 0.5D,
 						this.getRandomZ(2.0D), d0, d1, d2);
 			}
 		}
@@ -309,7 +310,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 			this.reassessTameGoals();
 		}
 		if (twinkleTime-- > 0) {
-			this.level.broadcastEntityEvent(this, (byte) 100);
+			this.level().broadcastEntityEvent(this, (byte) 100);
 		}
 		if (this.swell >= 30) {
 			this.explodeCreeper();

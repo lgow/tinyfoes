@@ -21,8 +21,8 @@ public class BabyMonsterPanicGoal extends PanicGoal {
 	protected boolean shouldPanic() {
 		if (this.mob.isOnFire()) {
 			BlockPos blockPos = this.mob.blockPosition();
-			BlockState blockState = this.mob.level.getBlockState(blockPos);
-			return !this.baby.isUndead() || !this.mob.level.canSeeSky(blockPos) && !blockState.is(BlockTags.FIRE)
+			BlockState blockState = this.mob.level().getBlockState(blockPos);
+			return !this.baby.isUndead() || !this.mob.level().canSeeSky(blockPos) && !blockState.is(BlockTags.FIRE)
 					&& !blockState.getFluidState().is(FluidTags.LAVA);
 		}
 		return this.mob.isFreezing();

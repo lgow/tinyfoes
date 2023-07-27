@@ -30,7 +30,7 @@ public class SitWhenOrderedToGoal extends Goal {
 		else if (this.mob.isInWaterOrBubble()) {
 			return false;
 		}
-		else if (!this.mob.isOnGround()) {
+		else if (!this.mob.onGround()) {
 			return false;
 		}
 		else {

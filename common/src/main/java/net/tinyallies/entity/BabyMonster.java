@@ -65,7 +65,7 @@ public interface BabyMonster {
 
 	default LivingEntity getOwner() {
 		UUID uuid = this.getOwnerUUID();
-		return uuid == null ? null : this.getAsMob().level.getPlayerByUUID(uuid);
+		return uuid == null ? null : this.getAsMob().level().getPlayerByUUID(uuid);
 	}
 
 	default boolean isOwnedBy(Entity pEntity) {
@@ -106,7 +106,7 @@ public interface BabyMonster {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
 		PathfinderMob mob = this.getAsMob();
 		NeutralMob neutral = this.getAsNeutral();
-		if (mob.level.isClientSide) {
+		if (mob.level().isClientSide) {
 			boolean canInteract = this.isOwnedBy(pPlayer) || this.isTamed() || isFood(itemstack) && !this.isTamed()
 					&& !neutral.isAngry();
 			return canInteract ? InteractionResult.CONSUME : InteractionResult.PASS;
@@ -120,7 +120,7 @@ public interface BabyMonster {
 					}
 					mob.gameEvent(GameEvent.EAT, mob);
 					mob.playSound(SoundEvents.GOAT_EAT);
-					if (mob.getHealth() == mob.getMaxHealth()) { mob.level.broadcastEntityEvent(mob, (byte) 7); }
+					if (mob.getHealth() == mob.getMaxHealth()) { mob.level().broadcastEntityEvent(mob, (byte) 7); }
 					return InteractionResult.SUCCESS;
 				}
 				else {
@@ -144,10 +144,10 @@ public interface BabyMonster {
 					mob.getNavigation().stop();
 					neutral.setTarget(null);
 					this.setOrderedToSit(true);
-					mob.level.broadcastEntityEvent(mob, (byte) 7);
+					mob.level().broadcastEntityEvent(mob, (byte) 7);
 				}
 				else {
-					mob.level.broadcastEntityEvent(mob, (byte) 6);
+					mob.level().broadcastEntityEvent(mob, (byte) 6);
 				}
 				return InteractionResult.SUCCESS;
 			}
@@ -182,7 +182,7 @@ public interface BabyMonster {
 			double d0 = entity.getRandom().nextGaussian() * 0.02D;
 			double d1 = entity.getRandom().nextGaussian() * 0.02D;
 			double d2 = entity.getRandom().nextGaussian() * 0.02D;
-			entity.level.addParticle(particleOptions, entity.getRandomX(1.0D), entity.getRandomY() + 0.5D,
+			entity.level().addParticle(particleOptions, entity.getRandomX(1.0D), entity.getRandomY() + 0.5D,
 					entity.getRandomZ(1.0D), d0, d1, d2);
 		}
 	}
@@ -211,7 +211,7 @@ public interface BabyMonster {
 	}
 
 	default boolean babyHurt(LivingEntity livingEntity, DamageSource pSource, boolean b) {
-		if (!livingEntity.isInvulnerableTo(pSource) && !livingEntity.level.isClientSide) {
+		if (!livingEntity.isInvulnerableTo(pSource) && !livingEntity.level().isClientSide) {
 			((BabyMonster) livingEntity).setOrderedToSit(false);
 		}
 		return b;
@@ -219,10 +219,10 @@ public interface BabyMonster {
 
 	default void sendDeathMessage(PathfinderMob entity) {
 		Component deathMessage = entity.getCombatTracker().getDeathMessage();
-		if (!entity.level.isClientSide && entity.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
+		if (!entity.level().isClientSide && entity.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)) {
 			LivingEntity owner = ((BabyMonster) entity).getOwner();
 			if (owner instanceof ServerPlayer serverPlayer) {
-				if (entity.getCombatTracker().getKiller() != owner && entity.getTarget() != null) {
+				if (entity.getKillCredit() != owner && entity.getTarget() != null) {
 					int randomMessageIndex = entity.getRandom().nextInt(10);
 					Component deathMessageCopy = deathMessage.copy().append(
 							Component.translatable("death_msg." + randomMessageIndex, owner.getName()));

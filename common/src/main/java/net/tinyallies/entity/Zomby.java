@@ -116,7 +116,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
 		Item item = itemstack.getItem();
-		if (!this.level.isClientSide && this.isTamed() && this.isOwnedBy(pPlayer)) {
+		if (!this.level().isClientSide && this.isTamed() && this.isOwnedBy(pPlayer)) {
 			if (pPlayer.isCrouching()) {
 				if (item instanceof ArmorItem || item instanceof SwordItem) {
 					EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
@@ -158,7 +158,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level, pCompound);
+		readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override

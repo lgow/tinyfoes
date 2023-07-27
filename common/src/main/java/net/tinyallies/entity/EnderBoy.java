@@ -132,7 +132,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
-		if (!this.level.isClientSide && this.isTamed() && this.isOwnedBy(pPlayer) && pPlayer.isCrouching()) {
+		if (!this.level().isClientSide && this.isTamed() && this.isOwnedBy(pPlayer) && pPlayer.isCrouching()) {
 			if (itemstack.isEmpty()) {
 				this.spawnAtLocation(this.getCarriedBlock().getBlock());
 				this.setCarriedBlock(null);
@@ -167,7 +167,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level, pCompound);
+		readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 	}
 
 	public static class FleeRainGoal extends FleeSunGoal {
-		private final Level level = this.mob.level;
+		private final Level level = this.mob.level();
 		private final EnderBoy baby = (EnderBoy) this.mob;
 		private double wantedX, wantedY, wantedZ;
 
@@ -300,17 +300,6 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 			}
 			if (!this.level.isRaining()) {
 				return false;
-			}
-			LivingEntity owner = this.baby.getOwner();
-			if (owner != null) {
-				LivingEntity lastHurtByMob = owner.getLastHurtByMob();
-				if (lastHurtByMob != null) {
-					return !(lastHurtByMob.getLastHurtMob() == owner && lastHurtByMob.getCombatTracker().isInCombat());
-				}
-				LivingEntity lastHurtMob = owner.getLastHurtMob();
-				if (lastHurtMob != null) {
-					return !(lastHurtMob.isAlive() || lastHurtMob.distanceToSqr(owner) > 14.0D);
-				}
 			}
 			return this.setWantedPos();
 		}
@@ -339,12 +328,12 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 
 		@Override
 		public boolean canUse() {
-			return !this.mob.level.isRaining() && super.canUse();
+			return !this.mob.level().isRaining() && super.canUse();
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return !this.mob.level.isRaining() && super.canContinueToUse();
+			return !this.mob.level().isRaining() && super.canContinueToUse();
 		}
 	}
 }

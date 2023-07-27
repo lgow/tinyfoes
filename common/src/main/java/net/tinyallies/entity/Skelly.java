@@ -107,7 +107,7 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 	public @NotNull InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
 		Item item = itemstack.getItem();
-		if (!this.level.isClientSide && this.isOwnedBy(pPlayer) && this.isTamed()) {
+		if (!this.level().isClientSide && this.isOwnedBy(pPlayer) && this.isTamed()) {
 			if (pPlayer.isCrouching()) {
 				if (item instanceof ArmorItem || item instanceof BowItem) {
 					EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
@@ -149,7 +149,7 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level, pCompound);
+		readPersistentAngerSaveData(this.level(), pCompound);
 	}
 
 	@Override

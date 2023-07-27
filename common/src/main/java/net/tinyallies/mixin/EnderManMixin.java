@@ -36,10 +36,10 @@ public class EnderManMixin extends Monster {
 	protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
 		ItemStack itemStack = player.getItemInHand(interactionHand);
 		if (itemStack.is(this.getPickResult().getItem())) {
-			if (!this.level.isClientSide) {
-				Mob mob = ModEntities.ENDERBOY.get().create(level);
+			if (!this.level().isClientSide) {
+				Mob mob = ModEntities.ENDERBOY.get().create(level());
 				mob.setPos(this.position());
-				this.level.addFreshEntity(mob);
+				this.level().addFreshEntity(mob);
 			}
 			return InteractionResult.SUCCESS;
 		}
