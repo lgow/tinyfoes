@@ -8,7 +8,6 @@ import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalWalkAroundGoal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -31,9 +30,7 @@ public interface PossessedAnimal extends PossessedMob {
 	}
 
 	default void registerPosAnimalGoals(PathfinderMob mob, double attackSpeed, double panicSpeed) {
-		this.registerPosMobGoals(mob);
-		mob.goalSelector.addGoal(0, new MeleeAttackGoal(mob, attackSpeed, true));
-		mob.goalSelector.addGoal(3, new PosAnimalPanicGoal(mob, panicSpeed));
+		this.registerPosMobGoals(mob, false, attackSpeed);mob.goalSelector.addGoal(3, new PosAnimalPanicGoal(mob, panicSpeed));
 		mob.goalSelector.addGoal(5, new PosAnimalWalkAroundGoal(mob, 1.0D));
 		mob.targetSelector.addGoal(0, new DefendPassiveMobsGoal(mob));
 		mob.targetSelector.addGoal(1, new PosAnimalTargetGoal<>(mob, Player.class));

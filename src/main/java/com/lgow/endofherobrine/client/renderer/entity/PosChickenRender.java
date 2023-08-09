@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.renderer.entity.ChickenRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +18,6 @@ public class PosChickenRender extends ChickenRenderer {
 
 	@Override
 	public ResourceLocation getTextureLocation(Chicken pEntity) {
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/chicken.png");
+		return new ModResourceLocation("textures/entity/chicken.png");
 	}
 }

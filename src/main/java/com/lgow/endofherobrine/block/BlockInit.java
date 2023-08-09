@@ -1,8 +1,7 @@
 package com.lgow.endofherobrine.block;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.registries.ModRegistries;
-import net.minecraft.resources.ResourceLocation;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
@@ -23,7 +22,7 @@ public class BlockInit {
 	public static final RegistryObject<BlockItem> GLOWING_OBSIDIAN, NETHERRACK_TOTEM, BLACKSTONE_TOTEM;
 
 	public static final TagKey<Block> NO_OVERRIDE = BlockTags.create(
-			new ResourceLocation(Main.MOD_ID, "prevent_builder_override"));
+			new ModResourceLocation("prevent_builder_override"));
 
 	static {
 		//SkullBlocks

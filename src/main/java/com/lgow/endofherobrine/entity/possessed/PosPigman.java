@@ -43,9 +43,8 @@ public class PosPigman extends Zombie implements PossessedMob {
 
 	@Override
 	protected void registerGoals() {
-		this.registerPosMobGoals(this);
+		this.registerPosMobGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1.5, true));
-
 		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 

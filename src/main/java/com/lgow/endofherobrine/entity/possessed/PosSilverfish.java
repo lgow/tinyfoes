@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class PosSilverfish extends Silverfish implements Teleporter {
+public class PosSilverfish extends Silverfish implements Teleporter, PossessedMob {
 	private SummonPosSilverfishGoal summonPosSilverfish;
 
 	public PosSilverfish(EntityType<? extends PosSilverfish> type, Level level) { super(type, level); }
@@ -58,12 +58,9 @@ public class PosSilverfish extends Silverfish implements Teleporter {
 
 	@Override
 	protected void registerGoals() {
+		this.registerPosMobGoals(this, true);
 		this.summonPosSilverfish = new SummonPosSilverfishGoal(this);
-		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.0D, false));
 		this.goalSelector.addGoal(3, this.summonPosSilverfish);
-		this.goalSelector.addGoal(6, new FloatGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(2, (new HurtByTargetGoal(this)).setAlertOthers());
 	}
 
 	@Override

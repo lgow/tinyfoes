@@ -13,7 +13,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -39,7 +38,7 @@ public class Lurker extends AbstractHerobrine {
 
 	@Override
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-		if (!this.canSeePlayers()) { this.tpToWatchPlayer(this.getNearestPlayer()); }
+		if (!this.canSeeAnyPlayers()) { this.tpToWatchPlayer(this.getNearestPlayer()); }
 		this.resetTpCooldown();
 		return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
 	}
@@ -66,59 +65,8 @@ public class Lurker extends AbstractHerobrine {
 		this.setAngry(pCompound.getBoolean("IsAngry"));
 	}
 
-	@Override
-	public void customServerAiStep() {
-		this.playSoundCooldown--;
-		this.teleportCooldown--;
-		this.leave();
-		this.tooCloseToPlayer();
-		this.warnPlayer();
-		this.lurkPlayer();
-		super.customServerAiStep();
-	}
-
-	private void leave() {
-		if (this.canSeePlayers()) {
-			this.lastLurkedTimer = 0;
-
-			if(watchedPlayerTimer > 4000){
-				this.teleportAway();
-			}
-			else {
-				this.watchedPlayerTimer++;
-			}
-		}
-		else if (this.lastLurkedTimer > 600) {
-			this.teleportAway();
-		}
-		else{
-			this.lastLurkedTimer++;
-		}
-
-	}
-
-	@Override
-	public boolean doHurtTarget(Entity entityIn) {
-		boolean hurtTarget = super.doHurtTarget(entityIn);
-		if (hurtTarget && entityIn instanceof Player player) {
-			player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 150, 1, false, false));
-			player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 150, 1, false, false));
-			level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.AMBIENT_CAVE.get(),
-					SoundSource.HOSTILE, 0.5F, (float) (0.8F + (Math.random() * 0.2D)), false);
-
-			this.discard();
-		}
-		return hurtTarget;
-	}
-
-	private void lurkPlayer() {
-		if (this.teleportCooldown <= 0 && this.lastLurkedTimer > 60 && this.tpToWatchPlayer(this.getNearestPlayer())) {
-			this.resetTpCooldown();
-		}
-	}
-
 	private void warnPlayer() {
-		if (this.isLookingAtAnyPlayers() && this.getTargetPlayer() != null) {
+		if (this.canSeeAnyPlayers() && this.getTargetPlayer() != null) {
 			if(random.nextInt(3) ==0 && this.playSoundCooldown <= 0){
 				level().playSound(null, this.getTargetPlayer().blockPosition(), SoundEvents.AMBIENT_CAVE.get(),
 						SoundSource.HOSTILE, 0.5F, (float) (0.8F + (Math.random() * 0.2D)));
@@ -128,16 +76,6 @@ public class Lurker extends AbstractHerobrine {
 				this.playSoundCooldown = 600;
 			}
 		}
-	}
-
-	public boolean isBeingLookedAtBy(Player pPlayer) {
-		Vec3 vec3 = pPlayer.getViewVector(1.0F).normalize();
-		Vec3 vec31 = new Vec3(this.getX() - pPlayer.getX(), this.getEyeY() - pPlayer.getEyeY(),
-				this.getZ() - pPlayer.getZ());
-		double d0 = vec31.length();
-		vec31 = vec31.normalize();
-		double d1 = vec3.dot(vec31);
-		return d1 > 1.0D - 0.025D / d0 && pPlayer.hasLineOfSight(this);
 	}
 
 	private void tooCloseToPlayer() {
@@ -154,6 +92,70 @@ public class Lurker extends AbstractHerobrine {
 		}
 		this.discard();
 	}
+
+	private void lurkPlayer() {
+		if (this.teleportCooldown <= 0 && this.lastLurkedTimer > 60 && this.tpToWatchPlayer(this.getNearestPlayer())) {
+			this.resetTpCooldown();
+		}
+	}
+
+	private void leave() {
+		if (this.canSeeAnyPlayers()) {
+			this.lastLurkedTimer = 0;
+
+			if(watchedPlayerTimer > 4000){
+				this.teleportAway();
+			}
+			else {
+				this.watchedPlayerTimer++;
+			}
+		}
+		else if (this.lastLurkedTimer > 600) {
+			this.teleportAway();
+		}
+		else{
+			this.lastLurkedTimer++;
+		}
+	}
+
+	@Override
+	public void customServerAiStep() {
+		this.playSoundCooldown--;
+		this.teleportCooldown--;
+		this.leave();
+		this.tooCloseToPlayer();
+		this.warnPlayer();
+		this.lurkPlayer();
+		super.customServerAiStep();
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity entityIn) {
+		boolean hurtTarget = super.doHurtTarget(entityIn);
+		if (hurtTarget && entityIn instanceof Player player) {
+			player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 150, 1, false, false));
+			player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 150, 1, false, false));
+			level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.AMBIENT_CAVE.get(),
+					SoundSource.HOSTILE, 0.5F, (float) (0.8F + (Math.random() * 0.2D)), false);
+
+			this.discard();
+		}
+		return hurtTarget;
+	}
+
+
+
+	public boolean isBeingLookedAtBy(Player pPlayer) {
+		Vec3 vec3 = pPlayer.getViewVector(1.0F).normalize();
+		Vec3 vec31 = new Vec3(this.getX() - pPlayer.getX(), this.getEyeY() - pPlayer.getEyeY(),
+				this.getZ() - pPlayer.getZ());
+		double d0 = vec31.length();
+		vec31 = vec31.normalize();
+		double d1 = vec3.dot(vec31);
+		return d1 > 1.0D - 0.025D / d0 && pPlayer.hasLineOfSight(this);
+	}
+
+
 
 	private boolean getAngry() {
 		return this.entityData.get(IS_ANGRY);

@@ -37,10 +37,8 @@ public class PosZombie extends Zombie  implements PossessedMob {
 
 	@Override
 	protected void registerGoals() {
+		this.registerPosMobGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1, true));
-		this.goalSelector.addGoal(2, new StarePlayerGoal(this, 40));
-		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 	}
 
 	@Override

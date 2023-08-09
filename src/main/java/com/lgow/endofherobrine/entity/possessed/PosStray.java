@@ -22,7 +22,7 @@ import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class PosStray extends Stray {
+public class PosStray extends Stray implements PossessedMob {
 	public PosStray(EntityType<? extends PosStray> type, Level level) { super(type, level); }
 
 	public static AttributeSupplier.Builder setCustomAttributes() {
@@ -53,10 +53,8 @@ public class PosStray extends Stray {
 
 	@Override
 	protected void registerGoals() {
+		this.registerPosMobGoals(this, true);
 		this.goalSelector.addGoal(0, new RangedBowAttackGoal<>(this, 1.0D, 15, 30.0F));
-		this.goalSelector.addGoal(2, new StarePlayerGoal(this, 40));
-		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 	}
 
 	@Override

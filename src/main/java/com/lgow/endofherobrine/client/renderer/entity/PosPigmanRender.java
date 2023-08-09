@@ -1,10 +1,10 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
 import com.lgow.endofherobrine.client.model.PosPigmanModel;
 import com.lgow.endofherobrine.client.model.modellayer.ModModelLayers;
 import com.lgow.endofherobrine.entity.possessed.PosPigman;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
@@ -27,6 +27,6 @@ public class PosPigmanRender extends HumanoidMobRenderer<PosPigman, PosPigmanMod
 
 	@Override
 	public ResourceLocation getTextureLocation(PosPigman p_113771_) {
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/pigman.png");
+		return new ModResourceLocation("textures/entity/pigman.png");
 	}
 }

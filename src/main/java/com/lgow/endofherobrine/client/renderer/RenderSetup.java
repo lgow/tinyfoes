@@ -8,12 +8,12 @@ import com.lgow.endofherobrine.client.model.PosVillagerModel;
 import com.lgow.endofherobrine.client.model.modellayer.ModModelLayers;
 import com.lgow.endofherobrine.client.renderer.entity.*;
 import com.lgow.endofherobrine.tileentities.BlockEntityInit;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.model.SkullModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -49,9 +49,9 @@ public class RenderSetup {
 	//attaches the head skins to the skull types
 	private static void registerHeadSkins() {
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ModSkullBlock.Types.HEROBRINE,
-				new ResourceLocation(Main.MOD_ID, "textures/entity/herobrine.png"));
+				new ModResourceLocation("textures/entity/herobrine.png"));
 		SkullBlockRenderer.SKIN_BY_TYPE.put(ModSkullBlock.Types.CURSED,
-				new ResourceLocation(Main.MOD_ID, "textures/block/cursed_head.png"));
+				new ModResourceLocation("textures/block/cursed_head.png"));
 	}
 
 	@SubscribeEvent

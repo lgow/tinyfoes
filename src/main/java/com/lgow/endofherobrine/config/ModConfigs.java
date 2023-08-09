@@ -10,7 +10,7 @@ public class ModConfigs {
 
 	public static final ForgeConfigSpec CLIENT_SPEC, COMMON_SPEC;
 
-	public static ForgeConfigSpec.IntValue REMAIN_POSSESSED, TICK_DELAY, SPAWN_DELAY, SPAWN_CHANCE;
+	public static ForgeConfigSpec.IntValue REMAIN_POSSESSED, SPAWN_COOLDOWN, SPAWN_CHANCE;
 
 	public static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, MOB_POSSESSION, CONVERT_BACK, SPAWN_BUILDER;
 
@@ -38,20 +38,17 @@ public class ModConfigs {
 	public static class Common {
 		Common(ForgeConfigSpec.Builder builder) {
 			builder.push("Common configs for The End of Herobrine Mod");
-			LEGACY_STRUCTURES = builder.comment("Should the Builder build the 1.7.10 structures?").define(
+			LEGACY_STRUCTURES = builder.comment("Should Herobrine build 1.7.10 structures?").define(
 					"legacyStructures", false);
 			builder.comment("\n## Possession ###\n");
 			MOB_POSSESSION = builder.comment("Should mobs get possessed?").define("mobPossession", true);
-			CONVERT_BACK = builder.comment("Should possessed animals convert back?").define("convertBack", true);
+			CONVERT_BACK = builder.comment("Should possessed animals convert back?").define("revertPossession", true);
 			REMAIN_POSSESSED = builder.comment("Time in ticks mobs will remain possessed #Default: 1/2 minecraft day")
-					.defineInRange("remainPossessed", 12000, 0, Integer.MAX_VALUE);
+					.defineInRange("remainPossessedTicks", 12000, 0, Integer.MAX_VALUE);
 			builder.comment("\n## Herobrine Spawn Rate ###\n");
-
-			TICK_DELAY = builder.comment(
-					"Minimum time in ticks the mod will wait to try to execute herobrine spawn logic").defineInRange(
-					"tickDelay", 600, 0, Integer.MAX_VALUE);
-			SPAWN_DELAY = builder.comment("Time in ticks herobrine will wait to try to spawn again").defineInRange(
-					"spawnDelay", 3600, 0, Integer.MAX_VALUE);
+			
+			SPAWN_COOLDOWN = builder.comment("Time in ticks herobrine will wait to try to spawn again").defineInRange(
+					"spawnCooldown", 3600, 0, Integer.MAX_VALUE);
 			SPAWN_CHANCE = builder.comment("The chance out of a hundred that herobrine will spawn").defineInRange(
 					"spawnChance", 10, 0, 100);
 			SPAWN_BUILDER = builder.comment("Should spawn herobrine builder?").define("spawnBuilder", false);

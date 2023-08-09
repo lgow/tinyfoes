@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.PigRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +29,6 @@ public class PosPigRender extends PigRenderer {
 
 	@Override
 	public ResourceLocation getTextureLocation(Pig pEntity) {
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/pig/pig.png");
+		return new ModResourceLocation("textures/entity/pig/pig.png");
 	}
 }

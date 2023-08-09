@@ -35,10 +35,8 @@ public class PosZombieVillager extends ZombieVillager  implements PossessedMob {
 	}
 
 	protected void registerGoals() {
+		this.registerPosMobGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1, true));
-		this.goalSelector.addGoal(2, new StarePlayerGoal(this, 40));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 	}
 
 	@Override

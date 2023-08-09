@@ -14,53 +14,101 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModSavedData extends SavedData {
-	private static final String DATA_NAME = Main.MOD_ID;
-
 	private final Map<String, SpawnerData> data = new HashMap<>();
+	private boolean defeatedHerobrine, herobrineIsDead, resurrectedHerobrine;
+	private int herobrineRestTimer;
 
 	public ModSavedData() { }
 
 	public static ModSavedData get(MinecraftServer server) {
 		ServerLevel level = server.getLevel(Level.OVERWORLD);
-		return level.getDataStorage().computeIfAbsent(tag -> new ModSavedData().read(tag), ModSavedData::new,
-				DATA_NAME);
+		return level.getDataStorage().computeIfAbsent(nbt -> new ModSavedData().read(nbt), ModSavedData::new,
+				Main.MOD_ID);
 	}
 
 	public SpawnerData getSpawnerData(String key) {
 		return this.data.computeIfAbsent(key, s -> new SpawnerData(this));
 	}
 
-	public ModSavedData read(CompoundTag tag) {
-		if (tag.contains("HerobrineSpawnDelay", Tag.TAG_INT)) {
-			this.getSpawnerData("Herobrine").setSpawnDelay(tag.getInt("HerobrineSpawnDelay"));
+	public boolean getDefeatedHerobrine() {
+		return defeatedHerobrine;
+	}
+
+	public void setDefeatedHerobrine(boolean b) {
+		defeatedHerobrine = b;
+		setDirty();
+	}
+
+	public int getHerobrineRestTimer() {
+		return herobrineRestTimer;
+	}
+
+	public void setHerobrineRestTimer(int b) {
+		herobrineRestTimer = b;
+		setDirty();
+	}
+
+	public boolean herobrineIsDead() {
+		return herobrineIsDead;
+	}
+
+	public void setHerobrineIsDead(boolean b) {
+		herobrineIsDead = b;
+		setDirty();
+	}
+
+	public boolean getResurrectedHerobrine() {
+		return resurrectedHerobrine;
+	}
+
+	public void setResurrectedHerobrine(boolean b) {
+		resurrectedHerobrine = b;
+		setDirty();
+	}
+
+	public boolean getHerobrineIsDeadOrResting() {
+		return herobrineIsDead || herobrineRestTimer > 0;
+	}
+
+	public ModSavedData read(CompoundTag nbt) {
+		if (nbt.contains("HerobrineSpawnDelay", Tag.TAG_INT)) {
+			this.getSpawnerData("Herobrine").setSpawnDelay(nbt.getInt("HerobrineSpawnDelay"));
 		}
-		if (tag.contains("HerobrineSpawnChance", Tag.TAG_INT)) {
-			this.getSpawnerData("Herobrine").setSpawnChance(tag.getInt("HerobrineSpawnChance"));
+		if (nbt.contains("HerobrineSpawnChance", Tag.TAG_INT)) {
+			this.getSpawnerData("Herobrine").setSpawnChance(nbt.getInt("HerobrineSpawnChance"));
 		}
-		if (tag.contains("Data", Tag.TAG_LIST)) {
+		if (nbt.contains("Data", Tag.TAG_LIST)) {
 			this.data.clear();
-			ListTag list = tag.getList("Data", Tag.TAG_COMPOUND);
-			list.forEach(nbt -> {
-				CompoundTag nbtTag = (CompoundTag) nbt;
+			ListTag list = nbt.getList("Data", Tag.TAG_COMPOUND);
+			list.forEach(tag -> {
+				CompoundTag nbtTag = (CompoundTag) tag;
 				String key = nbtTag.getString("Key");
 				SpawnerData data = new SpawnerData(this);
 				data.read(nbtTag);
 				this.data.put(key, data);
 			});
 		}
+		defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
+		herobrineRestTimer = nbt.getInt("HerobrineRestTimer");
+		herobrineIsDead = nbt.getBoolean("HerobrineIsDead");
+		resurrectedHerobrine = nbt.getBoolean("ResurrectedHerobrine");
 		return this;
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag tag) {
+	public CompoundTag save(CompoundTag nbt) {
 		ListTag list = new ListTag();
-		this.data.forEach((s, goblinData) -> {
-			CompoundTag goblinTag = new CompoundTag();
-			goblinData.write(goblinTag);
-			goblinTag.putString("Key", s);
-			list.add(goblinTag);
+		this.data.forEach((s, data) -> {
+			CompoundTag key = new CompoundTag();
+			data.write(key);
+			key.putString("Key", s);
+			list.add(key);
 		});
-		tag.put("Data", list);
-		return tag;
+		nbt.put("Data", list);
+		nbt.putBoolean("DefeatedHerobrine", defeatedHerobrine);
+		nbt.putInt("HerobrineRestTimer", herobrineRestTimer);
+		nbt.putBoolean("HerobrineIsDead", herobrineIsDead);
+		nbt.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
+		return nbt;
 	}
 }

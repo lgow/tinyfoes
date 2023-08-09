@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.RabbitEyesLayer;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RabbitRenderer;
@@ -22,6 +22,6 @@ public class PosRabbitRender extends RabbitRenderer {
 		if (ChatFormatting.stripFormatting(pEntity.getName().getString()).equals("Toast")) { rabbitType = "toast"; }
 		else if (pEntity.getVariant() == Rabbit.Variant.EVIL) { rabbitType = "caerbannog"; }
 		else { rabbitType = pEntity.getVariant().getSerializedName(); }
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/rabbit/" + rabbitType + ".png");
+		return new ModResourceLocation("textures/entity/rabbit/" + rabbitType + ".png");
 	}
 }

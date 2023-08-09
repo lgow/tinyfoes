@@ -2,7 +2,9 @@ package com.lgow.endofherobrine.capability;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
+@AutoRegisterCapability
 public class Wrath {
 
 	private int value;
@@ -27,7 +29,6 @@ public class Wrath {
 
 	public void copyFrom(Wrath source, ServerPlayer serverPlayer) {
 		this.value = source.value;
-		addValue(source.getValue(), serverPlayer);
 		this.syncValue(serverPlayer);
 	}
 

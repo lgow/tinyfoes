@@ -13,24 +13,23 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
+	private static final AttributeModifier SPEED_MODIFIER = new AttributeModifier(UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Pig speed boost", 10D, AttributeModifier.Operation.MULTIPLY_BASE);
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
 	@Nullable private UUID persistentAngerTarget;
-
 	private int remainingPersistentAngerTime;
 
 	public PosPig(EntityType<? extends PosPig> type, Level level) { super(type, level); }
@@ -46,7 +45,6 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	@Override
 	protected void registerGoals() {
 		this.registerPosAnimalGoals(this, 1.25D);
-		this.goalSelector.addGoal(4, new TemptGoal(this, 20, Ingredient.of(Items.CARROT_ON_A_STICK), false));
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			Pig pig = (Pig) this.convertBack(this, EntityType.PIG, !this.isAngry());
-			if(this.isSaddled()){
+			if (this.isSaddled()) {
 				pig.equipSaddle(null);
 			}
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
@@ -84,6 +82,26 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 			pigman.setGuaranteedDrop(EquipmentSlot.MAINHAND);
 		}
 		this.convertTo(EntityInit.PIGMAN.get(), true);
+	}
+
+	@Nullable
+	public LivingEntity getControllingPassenger() {
+		if (this.isSaddled()) {
+			Entity entity = this.getFirstPassenger();
+			if (entity instanceof Player) {
+				Player player = (Player) entity;
+				AttributeInstance attributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				attributeinstance.removeModifier(SPEED_MODIFIER);
+				this.setMaxUpStep(1.0F);
+				if (player.getMainHandItem().is(Items.CARROT_ON_A_STICK) || player.getOffhandItem().is(
+						Items.CARROT_ON_A_STICK)) {
+					attributeinstance.addTransientModifier(SPEED_MODIFIER);
+					this.setMaxUpStep(1.5F);
+					return player;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override

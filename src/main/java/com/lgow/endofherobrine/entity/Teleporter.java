@@ -39,7 +39,7 @@ public interface Teleporter {
 		BlockState blockstate = teleporter.level().getBlockState(mutablePos);
 		boolean safePos = blockstate.blocksMotion() ||(!avoidWater && blockstate.getFluidState().is(FluidTags.WATER));
 		boolean isLurking = target == null || this.willHaveSightOfTarget(teleporter, mutablePos, target);
-		boolean avoidFluid = avoidWater ? blockstate.getFluidState().isEmpty() : blockstate.getFluidState().is(FluidTags.LAVA);
+		boolean avoidFluid = avoidWater ? !blockstate.getFluidState().isEmpty() : blockstate.getFluidState().is(FluidTags.LAVA);
 		if(safePos && !avoidFluid && isLurking) {
 			boolean canTeleport = this.randomTeleport(teleporter, x, y, z, avoidWater);
 			if (canTeleport && !teleporter.isSilent()) {

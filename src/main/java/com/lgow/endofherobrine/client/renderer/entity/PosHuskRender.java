@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HuskRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +18,6 @@ public class PosHuskRender extends HuskRenderer {
 
 	@Override
 	public ResourceLocation getTextureLocation(Zombie pEntity) {
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/zombie/husk.png");
+		return new ModResourceLocation("textures/entity/zombie/husk.png");
 	}
 }

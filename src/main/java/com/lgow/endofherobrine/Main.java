@@ -4,6 +4,7 @@ import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
 import com.lgow.endofherobrine.entity.herobrine.boss.HerobrineBoss;
 import com.lgow.endofherobrine.entity.possessed.*;
 import com.lgow.endofherobrine.entity.possessed.animal.*;
+import com.lgow.endofherobrine.event.CapabilityEvents;
 import com.lgow.endofherobrine.event.PossessionEvents;
 import com.lgow.endofherobrine.event.RandomEvents;
 import com.lgow.endofherobrine.event.WrathHandler;
@@ -11,9 +12,14 @@ import com.lgow.endofherobrine.registries.ModRegistries;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.lgow.endofherobrine.entity.EntityInit.*;
 
@@ -30,6 +36,7 @@ public class Main {
 		MinecraftForge.EVENT_BUS.register(new PossessionEvents());
 		MinecraftForge.EVENT_BUS.register(new RandomEvents());
 		MinecraftForge.EVENT_BUS.register(new WrathHandler());
+		MinecraftForge.EVENT_BUS.register(new CapabilityEvents());
 
 	}
 

@@ -2,13 +2,13 @@ package com.lgow.endofherobrine.client.layer;
 
 import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.entity.possessed.animal.PosVillager;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.VillagerHeadModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.VillagerProfessionLayer;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -31,7 +31,7 @@ public class UncrossedVillagerArmsLayer <T extends PosVillager & VillagerDataHol
 			M m = this.getParentModel();
 			ResourceLocation type = this.getResourceLocation("type",
 					BuiltInRegistries.VILLAGER_TYPE.getKey(pLivingEntity.getVillagerData().getType()));
-			renderColoredCutoutModel(m, new ResourceLocation(Main.MOD_ID, "textures/entity/villager/arms/villager.png"),
+			renderColoredCutoutModel(m, new ModResourceLocation("textures/entity/villager/arms/villager.png"),
 					pMatrixStack, pBuffer, pPackedLight, pLivingEntity, 1.0F, 1.0F, 1.0F);
 			renderColoredCutoutModel(m, type, pMatrixStack, pBuffer, pPackedLight, pLivingEntity, 1.0F, 1.0F, 1.0F);
 			if (villagerprofession != VillagerProfession.NONE && !pLivingEntity.isBaby()) {

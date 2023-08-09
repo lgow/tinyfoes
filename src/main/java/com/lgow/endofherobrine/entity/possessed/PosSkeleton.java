@@ -17,7 +17,7 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class PosSkeleton extends Skeleton {
+public class PosSkeleton extends Skeleton implements PossessedMob {
 	public PosSkeleton(EntityType<? extends PosSkeleton> type, Level level) { super(type, level); }
 
 	public static AttributeSupplier.Builder setCustomAttributes() {
@@ -33,10 +33,8 @@ public class PosSkeleton extends Skeleton {
 
 	@Override
 	protected void registerGoals() {
+		this.registerPosMobGoals(this, true);
 		this.goalSelector.addGoal(0, new RangedBowAttackGoal<>(this, 1.0D, 15, 30.0F));
-		this.goalSelector.addGoal(2, new StarePlayerGoal(this, 40));
-		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 	}
 
 	@Override

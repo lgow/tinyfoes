@@ -2,6 +2,7 @@ package com.lgow.endofherobrine.entity.herobrine.boss;
 
 import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
 import com.lgow.endofherobrine.item.ItemInit;
+import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -46,13 +47,10 @@ import java.util.function.Predicate;
 public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob {
 	private static final EntityDataAccessor<Integer> DATA_ID_INV = SynchedEntityData.defineId(HerobrineBoss.class,
 			EntityDataSerializers.INT);
-
 	private static final EntityDataAccessor<Boolean> IS_ENRAGED = SynchedEntityData.defineId(HerobrineBoss.class,
 			EntityDataSerializers.BOOLEAN);
-
 	private static final Predicate<LivingEntity> LIVING_ENTITY_SELECTOR = (livingEntity) ->
 			livingEntity.getMobType() != MobType.UNDEAD && livingEntity.attackable();
-
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(),
 			BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 
@@ -66,17 +64,17 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 
 	@Deprecated
 	public static boolean canDestroy(BlockState pState) {
-		return ! pState.isAir() && ! pState.is(BlockTags.WITHER_IMMUNE);
-	}
-
-	@Override
-	public boolean isInvulnerableTo(DamageSource pSource) {
-		return !(pSource.getEntity() instanceof Player);
+		return !pState.isAir() && !pState.is(BlockTags.WITHER_IMMUNE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
 		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.6F)
 				.add(Attributes.FLYING_SPEED, 0.6F).add(Attributes.FOLLOW_RANGE, 40.0D).add(Attributes.ARMOR, 4.0D);
+	}
+
+	@Override
+	public boolean isInvulnerableTo(DamageSource pSource) {
+		return !(pSource.getEntity() instanceof Player);
 	}
 
 	@Override
@@ -99,7 +97,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		pCompound.putInt("Invul", this.getInvulnerableTicks());
-		pCompound.putBoolean("IsEnraged", this.getEnraged());
+		pCompound.putBoolean("IsEnraged", this.isEnraged());
 	}
 
 	@Override
@@ -111,9 +109,10 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 
 	@Override
 	protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
-		if (!this.getEnraged()) {
+		if (!this.isEnraged()) {
 			super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
-		} else{
+		}
+		else {
 			ItemEntity itementity = this.spawnAtLocation(ItemInit.HEROBRINE_HEAD_ITEM.get());
 			if (itementity != null) {
 				itementity.setExtendedLifetime();
@@ -137,7 +136,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			this.bossEvent.setProgress(1.0F - (float) k1 / 220.0F);
 			if (k1 <= 0) {
 				this.level().explode(this, this.getX(), this.getY(), this.getZ(), 7f, Level.ExplosionInteraction.MOB);
-				if (! this.isSilent()) {
+				if (!this.isSilent()) {
 					this.level().globalLevelEvent(1023, this.blockPosition(), 0);
 				}
 			}
@@ -155,7 +154,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 		}
 	}
 
-	private boolean getEnraged() { return this.entityData.get(IS_ENRAGED); }
+	private boolean isEnraged() { return this.entityData.get(IS_ENRAGED); }
 
 	public void setEnraged(boolean isEnraged) {
 		this.entityData.set(IS_ENRAGED, isEnraged);
@@ -169,7 +168,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			this.setYRot((float) Mth.atan2(vec3.z, vec3.x) * (180F / (float) Math.PI) - 90.0F);
 		}
 		super.aiStep();
-		for (int l = 0; l < 3; ++ l) {
+		for (int l = 0; l < 3; ++l) {
 			double d8 = this.getHeadX(l);
 			double d10 = this.getHeadY(l);
 			double d2 = this.getHeadZ(l);
@@ -178,7 +177,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 					0.0D, 0.0D, 0.0D);
 		}
 		if (this.getInvulnerableTicks() > 0) {
-			for (int i1 = 0; i1 < 3; ++ i1) {
+			for (int i1 = 0; i1 < 3; ++i1) {
 				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(),
 						this.getY() + (double) (this.random.nextFloat() * 3.3F),
 						this.getZ() + this.random.nextGaussian(), 0.7F, 0.7F, 0.9F);
@@ -224,7 +223,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 	}
 
 	private void performRangedAttack(int pHead, double pX, double pY, double pZ, boolean pIsDangerous) {
-		if (! this.isSilent()) {
+		if (!this.isSilent()) {
 			this.level().levelEvent(null, 1024, this.blockPosition(), 0);
 		}
 		double d0 = this.getHeadX(pHead);
@@ -257,13 +256,13 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 		if (this.isInvulnerableTo(pSource)) {
 			return false;
 		}
-		else if (!pSource.is(DamageTypeTags.IS_DROWNING) && ! (pSource.getEntity() instanceof HerobrineBoss)) {
+		else if (!pSource.is(DamageTypeTags.IS_DROWNING) && !(pSource.getEntity() instanceof HerobrineBoss)) {
 			if (this.getInvulnerableTicks() > 0 && !pSource.is(DamageTypes.OUTSIDE_BORDER)) {
 				return false;
 			}
 			else {
 				Entity entity1 = pSource.getEntity();
-				if (! (entity1 instanceof Player) && entity1 instanceof LivingEntity
+				if (!(entity1 instanceof Player) && entity1 instanceof LivingEntity
 						&& ((LivingEntity) entity1).getMobType() == this.getMobType()) {
 					return false;
 				}
@@ -312,6 +311,20 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 	public void stopSeenByPlayer(ServerPlayer pPlayer) {
 		super.stopSeenByPlayer(pPlayer);
 		this.bossEvent.removePlayer(pPlayer);
+	}
+
+	@Override
+	protected void dropAllDeathLoot(DamageSource pDamageSource) {
+		if(!level().isClientSide()){
+			ModSavedData data = ModSavedData.get(this.level().getServer());
+			if(!this.isEnraged()) {
+				data.setDefeatedHerobrine(true);
+				data.setHerobrineRestTimer(120000);
+			}else{
+				data.setHerobrineIsDead(true);
+			}
+		}
+		super.dropAllDeathLoot(pDamageSource);
 	}
 
 	class ChargeUpGoal extends Goal {

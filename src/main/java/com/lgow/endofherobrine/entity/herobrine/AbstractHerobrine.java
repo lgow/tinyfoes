@@ -14,7 +14,6 @@ import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -28,11 +27,13 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,9 +43,7 @@ import java.util.UUID;
 public abstract class AbstractHerobrine extends PathfinderMob implements Teleporter {
 	private static final EntityDataAccessor<Optional<UUID>> PLAYER_UUID = SynchedEntityData.defineId(
 			AbstractHerobrine.class, EntityDataSerializers.OPTIONAL_UUID);
-
 	protected int teleportCooldown;
-
 	@Nullable private Player targetPlayer;
 
 	protected AbstractHerobrine(EntityType<? extends PathfinderMob> type, Level level) {
@@ -56,6 +55,23 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	public static AttributeSupplier.Builder setCustomAttributes() {
 		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20D).add(Attributes.MOVEMENT_SPEED, 0.6D)
 				.add(Attributes.FOLLOW_RANGE, 256D).add(Attributes.ATTACK_DAMAGE, 0.1D);
+	}
+
+	@Nullable
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+		this.spawnPositoning(blockPosition());
+		this.setCustomName(Component.literal("Herobrine"));
+		LogUtils.getLogger().info(this.getType().toShortString().toUpperCase() + " spawned at " + this.getOnPos());
+		return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1F, true));
+		this.goalSelector.addGoal(1, new StarePlayerGoal(this, Float.MAX_VALUE, true));
+		this.goalSelector.addGoal(2, new FloatGoal(this));
 	}
 
 	public Player getNearestPlayer() {
@@ -71,7 +87,7 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		if(hasPlayerUUID()){
+		if (hasPlayerUUID()) {
 			tag.putUUID("PlayerUUID", this.getPlayerUUID());
 		}
 	}
@@ -82,7 +98,8 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 		UUID uuid;
 		if (tag.hasUUID("PlayerUUID")) {
 			uuid = tag.getUUID("PlayerUUID");
-		} else {
+		}
+		else {
 			String s = tag.getString("PlayerUUID");
 			uuid = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s);
 		}
@@ -90,7 +107,6 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 			this.setPlayerUUID(uuid);
 		}
 	}
-
 
 	@Override
 	public boolean canBeCollidedWith() { return false; }
@@ -128,53 +144,31 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	public void setTargetPlayer(@Nullable Player pTarget) { this.targetPlayer = pTarget; }
 
-
 	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1F, true));
-		this.goalSelector.addGoal(1, new StarePlayerGoal(this, Float.MAX_VALUE));
-		this.goalSelector.addGoal(2, new FloatGoal(this));
+	public boolean hasLineOfSight(Entity pEntity) {
+		if (pEntity.level() != this.level()) {
+			return false;
+		}
+		else {
+			Vec3 vec3 = new Vec3(this.getX(), this.getEyeY(), this.getZ());
+			Vec3 vec31 = new Vec3(pEntity.getX(), pEntity.getEyeY(), pEntity.getZ());
+			return this.level().clip(
+					new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType()
+					== HitResult.Type.MISS;
+		}
 	}
 
-	@Nullable
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-		this.spawnPositoning(blockPosition());
-		this.setCustomName(Component.literal("Herobrine"));
-		LogUtils.getLogger().info(this.getType().toShortString().toUpperCase() + " spawned at " + this.getOnPos());
-		return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-	}
-
-	public boolean isLookingAt(Player pPlayer) {
-		Vec3 vec3 = this.getViewVector(1.0F).normalize();
-		Vec3 vec31 = new Vec3(pPlayer.getX() - this.getX(), pPlayer.getEyeY() - this.getEyeY(),
-				pPlayer.getZ() - this.getZ());
-		double d0 = vec31.length();
-		vec31 = vec31.normalize();
-		double d1 = vec3.dot(vec31);
-		return d1 > 1.0D - 0.025D / d0 && pPlayer.hasLineOfSight(this);
-	}
-
-	public boolean isLookingAtAnyPlayers() {
-		boolean isLookinAtAnyPlayers = false;
-		if (!this.level().isClientSide) {
-			for (Player player : this.level().getServer().getPlayerList().getPlayers()) {
-				isLookinAtAnyPlayers = isLookinAtAnyPlayers || this.isLookingAt(player);
-				if (this.isLookingAt(player)) { this.setTargetPlayer(player); }
+	public boolean canSeeAnyPlayers() {
+		if (this.level().isClientSide) {
+			return false;
+		}
+		for (Player player : this.getServer().getPlayerList().getPlayers()) {
+			if (this.hasLineOfSight(player)) {
+				this.setTargetPlayer(player);
+				return true;
 			}
 		}
-		return isLookinAtAnyPlayers;
-	}
-
-	public boolean canSeePlayers() {
-		boolean canSeeplayers = false;
-		if (!this.level().isClientSide) {
-			for (Player player : this.level().getServer().getPlayerList().getPlayers()) {
-				canSeeplayers = canSeeplayers || this.hasLineOfSight(player);
-			}
-		}
-		return canSeeplayers;
+		return false;
 	}
 
 	public void destroyBlocksInAABB(AABB area) {
@@ -219,9 +213,18 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 			double x = player.getX() + (this.random.nextBoolean() ? randX : -randX);
 			double y = player.getY() + this.random.nextInt(16);
 			double z = player.getZ() + (this.random.nextBoolean() ? randZ : -randZ);
-			return this.attemptTeleport(this, x, y, z, player,
-					!player.level().getBiome(player.getOnPos()).is(BiomeTags.IS_OCEAN));
+			return this.attemptTeleport(this, x, y, z, player, !this.level().getBiome(player.blockPosition()).is(BiomeTags.IS_OCEAN));
 		}
 		return false;
+	}
+
+	@Override
+	public int getMaxHeadYRot() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public int getMaxHeadXRot() {
+		return Integer.MAX_VALUE;
 	}
 }

@@ -1,12 +1,11 @@
 package com.lgow.endofherobrine.entity.herobrine;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.block.BlockInit;
 import com.lgow.endofherobrine.config.ModConfigs;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -47,7 +46,7 @@ public class Builder extends AbstractHerobrine {
 
 	@Override
 	public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-		if (!this.canSeePlayers()) { this.tpToWatchPlayer(this.getNearestPlayer()); }
+		if (!this.canSeeAnyPlayers()) { this.tpToWatchPlayer(this.getNearestPlayer()); }
 		this.teleportCooldown = 5;
 		return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
 	}
@@ -59,7 +58,7 @@ public class Builder extends AbstractHerobrine {
 			StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(Rotation.getRandom(random))
 					.setMirror(Mirror.NONE);
 			StructureTemplate structure = server.getStructureManager().getOrCreate(
-					new ResourceLocation(Main.MOD_ID, directory + resLoc));
+					new ModResourceLocation(directory + resLoc));
 			for (BlockState state : server.getBlockStates(AABB.of(structure.getBoundingBox(settings, pos))).toList()) {
 				if (state.getBlock() instanceof BaseEntityBlock || state.getBlock() instanceof BedBlock
 						|| state.getTags().toList().contains(BlockInit.NO_OVERRIDE)) {
@@ -83,7 +82,7 @@ public class Builder extends AbstractHerobrine {
 	}
 
 	private void build() {
-		if (this.canSeePlayers() && this.getNearestPlayer() != null) {
+		if (this.canSeeAnyPlayers() && this.getNearestPlayer() != null) {
 			if (this.level().canSeeSky(blockPosition()) && this.distanceTo(getNearestPlayer()) >= 20) {
 				if (this.random.nextInt(5) != 0) {
 					this.selectStructure(LETTERS, 0);

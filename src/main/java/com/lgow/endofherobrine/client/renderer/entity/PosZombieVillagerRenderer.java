@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.renderer.entity;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.client.layer.WhiteEyesLayer;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.model.ZombieVillagerModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -24,6 +24,6 @@ public class PosZombieVillagerRenderer extends HumanoidMobRenderer<ZombieVillage
 
 	@Override
 	public ResourceLocation getTextureLocation(ZombieVillager zombieVillager) {
-		return new ResourceLocation(Main.MOD_ID, "textures/entity/zombie_villager/zombie_villager.png");
+		return new ModResourceLocation("textures/entity/zombie_villager/zombie_villager.png");
 	}
 }

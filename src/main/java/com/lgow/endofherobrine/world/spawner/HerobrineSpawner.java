@@ -31,17 +31,17 @@ public class HerobrineSpawner {
 
 	private int tickDelay, currentSpawnDelay, currentSpawnChance;
 
-	private final int spawnDelay, spawnChance;
+	private final int spawnCooldown, spawnChance;
 
 	public HerobrineSpawner(MinecraftServer server, String key) {
 		this.data = ModSavedData.get(server).getSpawnerData(key);
 		this.tickDelay = 600;
 		this.currentSpawnDelay = this.data.getSpawnDelay();
 		this.currentSpawnChance = this.data.getSpawnChance();
-		this.spawnDelay = ModConfigs.SPAWN_DELAY.get();
+		this.spawnCooldown = ModConfigs.SPAWN_COOLDOWN.get();
 		this.spawnChance = ModConfigs.SPAWN_CHANCE.get();
 		if (this.currentSpawnDelay == 0 && this.currentSpawnChance == 0) {
-			this.currentSpawnDelay = this.spawnDelay;
+			this.currentSpawnDelay = this.spawnCooldown;
 			this.currentSpawnChance = this.spawnChance;
 			this.data.setSpawnDelay(this.currentSpawnDelay);
 			this.data.setSpawnChance(this.currentSpawnChance);
@@ -49,15 +49,15 @@ public class HerobrineSpawner {
 	}
 
 	public void tick(ServerLevel level) {
-		if (this.spawnChance != 0 && WrathHandler.getHerobrineHostility(level) > 0 && ModUtil.noHerobrineExists(
+		if (this.spawnChance != 0 && WrathHandler.getHerobrinesWrath(level) > 0 && ModUtil.noHerobrineExists(
 				level)) {
 			if (--this.tickDelay <= 0) {
-				int delay = Math.max(this.spawnDelay / 20, 1);
+				int delay = Math.max(this.spawnCooldown / 20, 1);
 				this.tickDelay = delay;
 				this.currentSpawnDelay -= delay;
 				this.data.setSpawnDelay(this.currentSpawnDelay);
 				if (this.currentSpawnDelay <= 0) {
-					this.currentSpawnDelay = this.spawnDelay;
+					this.currentSpawnDelay = this.spawnCooldown;
 					if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
 						int spawnChance = this.currentSpawnChance;
 						this.currentSpawnChance = Mth.clamp(this.currentSpawnChance + this.spawnChance,

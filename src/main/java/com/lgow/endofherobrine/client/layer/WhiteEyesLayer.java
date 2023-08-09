@@ -1,7 +1,7 @@
 package com.lgow.endofherobrine.client.layer;
 
-import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.config.ModConfigs;
+import com.lgow.endofherobrine.util.ModResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,10 +41,10 @@ public class WhiteEyesLayer <T extends PathfinderMob, M extends EntityModel<T>> 
 	//returns if eye render type glows or not
 	public RenderType getRenderType(T entity) {
 		if (ModConfigs.EYE_GLOW.get()) {
-			return RenderType.eyes(new ResourceLocation(Main.MOD_ID, getEyeTexture(entity)));
+			return RenderType.eyes(new ModResourceLocation(getEyeTexture(entity)));
 		}
 		else {
-			return RenderType.entityCutoutNoCull(new ResourceLocation(Main.MOD_ID, getEyeTexture(entity)));
+			return RenderType.entityCutoutNoCull(new ModResourceLocation(getEyeTexture(entity)));
 		}
 	}
 
