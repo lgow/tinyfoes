@@ -1,10 +1,13 @@
 {
   "variants": {
-    "lit=false": {
+    "state=inactive": {
       "model": "endofherobrine:block/netherrack_totem"
     },
-    "lit=true": {
-      "model": "endofherobrine:block/netherrack_totem_lit"
+    "state=active": {
+      "model": "endofherobrine:block/netherrack_totem_active"
+    },
+    "state=overcharged": {
+      "model": "endofherobrine:block/netherrack_totem_overcharged"
     }
   }
 }

@@ -2,6 +2,7 @@ package com.lgow.endofherobrine.block;
 
 import com.lgow.endofherobrine.entity.EntityInit;
 import com.lgow.endofherobrine.entity.herobrine.boss.HerobrineBoss;
+import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,8 +24,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
@@ -35,16 +35,15 @@ import java.util.Random;
 import static net.minecraft.world.level.block.Blocks.*;
 
 public class TotemBlock extends Block {
-	private static final BooleanProperty LIT = BlockStateProperties.LIT;
+	private static final EnumProperty<TotemStates> STATE = EnumProperty.create("state", TotemStates.class);
 	public final Block baseBlock;
 	private final boolean isBlackstone;
 
 	//Sets the default properties
 	public TotemBlock(Block baseBlock) {
-		super(Properties.copy(baseBlock)
-				.lightLevel((blockState) -> blockState.getValue(BlockStateProperties.LIT) ? 7 : 0)
-				.pushReaction(PushReaction.BLOCK));
-		this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+		super(Properties.copy(baseBlock).lightLevel((blockState) -> blockState.getValue(STATE)
+				.equals(TotemStates.INACTIVE) ? 0 : 7).pushReaction(PushReaction.BLOCK));
+		this.registerDefaultState(this.stateDefinition.any().setValue(STATE, TotemStates.INACTIVE));
 		this.baseBlock = baseBlock;
 		this.isBlackstone = this.baseBlock.equals(BLACKSTONE);
 	}
@@ -53,14 +52,26 @@ public class TotemBlock extends Block {
 	private boolean isInTotem(BlockPos pos, ServerLevel level) {
 		Block totemBase = isBlackstone ? DIAMOND_BLOCK : GOLD_BLOCK;
 		return level.canSeeSky(pos.above(2)) && level.getBlockState(pos.above()).is(this.baseBlock)
-				&& level.getBlockState(pos.below()).is(this.baseBlock) && level.getBlockState(pos.below(2)).is(this.baseBlock);
+				&& level.getBlockState(pos.below()).is(totemBase) && level.getBlockState(pos.below(2)).is(totemBase);
 	}
 
 	//checks if the block is in its respective totem shape
 	private boolean isInAltar(BlockPos pos, ServerLevel level) {
-		return level.canSeeSky(pos.above(2)) && level.getBlockState(pos.above()).is(this.baseBlock)
-				&& level.getBlockState(pos.below()).is(this.baseBlock) && level.getBlockState(pos.below(2)).is(
-				this.baseBlock);
+		BlockPos below = pos.below();
+		return !isBlackstone && level.canSeeSky(pos.above()) && level.getBlockState(below).is(SOUL_SOIL)
+				&& level.getBlockState(pos.above()).is(FIRE) //
+				&& level.getBlockState(pos.east().north()).is(REDSTONE_TORCH) //
+				&& level.getBlockState(pos.north().west()).is(REDSTONE_TORCH) //
+				&& level.getBlockState(pos.west().south()).is(REDSTONE_TORCH) //
+				&& level.getBlockState(pos.south().east()).is(REDSTONE_TORCH) && level.getBlockState(below.east()).is(
+				GOLD_BLOCK) //
+				&& level.getBlockState(below.east().north()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.north()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.north().west()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.west()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.west().south()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.south()).is(GOLD_BLOCK) //
+				&& level.getBlockState(below.south().east()).is(GOLD_BLOCK);
 	}
 
 	//summons a lightning bolt, updates the block property to lit and summons herobrine
@@ -68,21 +79,36 @@ public class TotemBlock extends Block {
 		LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level);
 		lightningBolt.setPos(pos.getX(), pos.above(2).getY(), pos.getZ());
 		level.addFreshEntity(lightningBolt);
-		level.setBlock(pos, state.cycle(LIT), 2);
+		level.setBlock(pos, state.setValue(STATE, TotemStates.ACTIVE), 2);
 		this.checkSpawn(level, pos);
 	}
 
-	//activates the netherrack totem
+	//summons a lightning bolt, updates the block property to lit and summons herobrine
+	private void overcharge(ServerLevel level, BlockPos pos, BlockState state) {
+		level.setBlock(pos, state.setValue(STATE, TotemStates.OVERCHARGED), 2);
+		ModSavedData.get(level.getServer()).setResurrectedHerobrine(true);
+//		ModSavedData.get(level.getServer()).setHerobrineIsDead(false);
+//		ModSavedData.get(level.getServer()).setHerobrineRestTimer(0);
+	}
+
+	//netherrack totem activation conditions
 	private boolean canActivateNetherrackTotem(BlockState state, ServerLevel serverLevel, BlockPos pos) {
-		return this.isInTotem(pos, serverLevel) && !state.getValue(LIT) && !isBlackstone;
+		return !isBlackstone && state.getValue(STATE).equals(TotemStates.INACTIVE) && this.isInTotem(pos, serverLevel)
+				&& !ModSavedData.get(serverLevel.getServer()).hasDefeatedHerobrine();
+	}
+
+	//netherrack totem activation conditions
+	private boolean canActivateBlackstoneTotem(BlockState state, ServerLevel serverLevel, BlockPos pos) {
+		ModSavedData levelData = ModSavedData.get(serverLevel.getServer());
+		return state.getValue(STATE).equals(TotemStates.INACTIVE) && this.isInTotem(pos, serverLevel);
+//				&& levelData.hasDefeatedHerobrine() && !levelData.isHerobrineDeadOrResting();
 	}
 
 	private void checkSpawn(ServerLevel server, BlockPos pPos) {
 		if (pPos.getY() >= server.getMinBuildHeight()) {
-			server.setWeatherParameters(0, 100, false, false);
 			HerobrineBoss herobrineBoss = EntityInit.HEROBRINE_BOSS.get().create(server);
 			if (isBlackstone) {
-				herobrineBoss.makeInvulnerable();
+//				herobrineBoss.makeInvulnerable();
 				herobrineBoss.setEnraged(true);
 			}
 			herobrineBoss.moveTo(pPos.getX() + 0.5D, pPos.above(3).getY(), pPos.getZ() + 0.5D, 0.0F, 0.0F);
@@ -96,7 +122,7 @@ public class TotemBlock extends Block {
 
 	//sends a message to all players
 	private void broasdcastMessage(ServerLevel server, String component, int bound) {
-		if (!isBlackstone) {
+		if (!isBlackstone && !ModSavedData.get(server.getServer()).isHerobrineDeadOrResting()) {
 			server.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<Herobrine> ")
 					.append(Component.translatable("totem." + component + new Random().nextInt(bound))), false);
 		}
@@ -104,8 +130,13 @@ public class TotemBlock extends Block {
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos pos, BlockPos facingPos) {
-		if (accessor instanceof ServerLevel serverLevel && this.canActivateNetherrackTotem(state, serverLevel, pos)) {
-			this.activate(serverLevel, pos, state);
+		if (accessor instanceof ServerLevel serverLevel) {
+			if (this.canActivateNetherrackTotem(state, serverLevel, pos)) {
+				this.activate(serverLevel, pos, state);
+			}
+			else if (isInAltar(pos, serverLevel)) {
+				this.overcharge(serverLevel, pos, state);
+			}
 		}
 		return super.updateShape(state, facing, facingState, accessor, pos, facingPos);
 	}
@@ -114,15 +145,12 @@ public class TotemBlock extends Block {
 	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if (pLevel instanceof ServerLevel server && isBlackstone) {
 			ItemStack itemstack = pPlayer.getItemInHand(pHand);
-			if (itemstack.is(Items.NETHER_STAR) && !pState.getValue(LIT)) {
+			if (itemstack.is(Items.NETHER_STAR) && canActivateBlackstoneTotem(pState, server, pPos)) {
 				if (!pPlayer.isCreative()) { itemstack.shrink(1); }
 				server.playSound(null, pPlayer.blockPosition(), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS,
 						1.0F, (float) (0.8F + (Math.random() * 0.2D)));
 				this.activate(server, pPos, pState);
 				return InteractionResult.SUCCESS;
-			}
-			else {
-				return InteractionResult.PASS;
 			}
 		}
 		return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
@@ -133,7 +161,9 @@ public class TotemBlock extends Block {
 		if (pLevel instanceof ServerLevel server) {
 			if (this.canActivateNetherrackTotem(pState, server, pPos)) {
 				this.activate(server, pPos, pState);
-				return;
+			}
+			else if (isInAltar(pPos, server)) {
+				this.overcharge(server, pPos, pState);
 			}
 			this.broasdcastMessage(server, "placed", 2);
 		}
@@ -142,20 +172,22 @@ public class TotemBlock extends Block {
 
 	@Override
 	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		if (level instanceof ServerLevel server && !state.getValue(LIT)) {
+		if (level instanceof ServerLevel server && state.getValue(STATE).equals(TotemStates.INACTIVE)) {
 			if (!isBlackstone) {
-				server.setWeatherParameters(0, 6000, true, true);
+				if(server.isRaining()){
+					server.setWeatherParameters(0, 6000, true, true);
+				}
+				level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS,
+						1.0F, (float) (0.8F + (Math.random() * 0.2D)));
 				this.broasdcastMessage(server, "broken", 3);
 			}
-			level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS, 1.0F,
-					(float) (0.8F + (Math.random() * 0.2D)));
 		}
 		return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(LIT);
+		builder.add(STATE);
 	}
 }
 

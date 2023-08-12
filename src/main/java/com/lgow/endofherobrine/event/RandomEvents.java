@@ -4,14 +4,19 @@ import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.entity.EntityInit;
 import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
 import com.lgow.endofherobrine.entity.herobrine.Lurker;
+import com.lgow.endofherobrine.util.ModUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.Container;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.AbstractChestBlock;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -56,16 +61,35 @@ public class RandomEvents {
 									.getEntitiesOfClass(AbstractHerobrine.class, player.getBoundingBox().inflate(256)).get(0)),
 							1F);
 				}
+				else {
+					switch (ModUtil.random.nextInt(1)) {
+						case 0: {
+							player.setSecondsOnFire((int) (player.getHealth() - 2));
+						}
+					}
+				}
 			}
 		}
 	}
+
 	@SubscribeEvent
 	public void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
 		BlockState state = event.getLevel().getBlockState(event.getPos());
 		Block block = state.getBlock();
-		if (block instanceof AbstractFurnaceBlock|| block instanceof AbstractChestBlock<?>) {
+		if (this.randomEventsTimer <= 0 && event.getLevel() instanceof ServerLevel serverLevel && probability(
+				serverLevel, 0.05F) && block instanceof AbstractFurnaceBlock
+				|| block instanceof AbstractChestBlock<?>) {
 			this.randomEventsTimer = 600;
-			event.getLevel().setBlockAndUpdate(event.getPos(), state.rotate(event.getLevel(), event.getPos(), Rotation.CLOCKWISE_180));
+			event.getLevel().setBlockAndUpdate(event.getPos(),
+					state.rotate(event.getLevel(), event.getPos(), Rotation.CLOCKWISE_180));
+		}
+	}
+
+	@SubscribeEvent
+	public void onBlockPlaceScore(BlockEvent.EntityPlaceEvent event) {
+		if (this.randomEventsTimer <= 0 && event.getLevel() instanceof ServerLevel serverLevel && probability(
+				serverLevel, 0.05F) && event.getEntity() instanceof ServerPlayer) {
+			event.getLevel().destroyBlock(event.getPos(), true);
 		}
 	}
 

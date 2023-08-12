@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "minecraft:block/netherrack",
-    "side": "endofherobrine:block/netherrack_totem_lit",
+    "side": "endofherobrine:block/netherrack_totem_overcharged",
     "particle": "minecraft:block/netherrack"
   }
 }

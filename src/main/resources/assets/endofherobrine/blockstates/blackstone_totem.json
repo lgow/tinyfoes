@@ -1,10 +1,10 @@
 {
   "variants": {
-    "lit=false": {
+    "state=inactive": {
       "model": "endofherobrine:block/blackstone_totem"
     },
-    "lit=true": {
-      "model": "endofherobrine:block/blackstone_totem_lit"
+    "state=active": {
+      "model": "endofherobrine:block/blackstone_totem_active"
     }
   }
 }

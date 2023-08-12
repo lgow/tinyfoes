@@ -85,13 +85,7 @@ public class Lurker extends AbstractHerobrine {
 		}
 	}
 
-	private void teleportAway() {
-		this.level().broadcastEntityEvent(this, (byte) 46);
-		if (!this.isSilent()) {
-			this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-		}
-		this.discard();
-	}
+
 
 	private void lurkPlayer() {
 		if (this.teleportCooldown <= 0 && this.lastLurkedTimer > 60 && this.tpToWatchPlayer(this.getNearestPlayer())) {

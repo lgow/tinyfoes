@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
@@ -48,20 +49,24 @@ public class WrathHandler {
 	//returns herobrine's wrath
 	public static int getHerobrinesWrath(ServerLevel level) {
 		ModSavedData data = ModSavedData.get(level.getServer());
-		if (data.getHerobrineIsDeadOrResting()) {
+		if (data.hasResurrectedHerobrine()) {
+			return 100;
+		}
+		if (data.isHerobrineDeadOrResting()) {
 			return 0;
 		}
-		int maxWrath = data.getResurrectedHerobrine() ? 100 : (data.getDefeatedHerobrine() ? 80 : 40);
+		int maxWrath = data.hasDefeatedHerobrine() ? 70 : 40;
 		return Math.min(getTotalDestruction(level) / 40, maxWrath);
 	}
 
 	//has a weighted chance of returning true
 	static boolean probability(ServerLevel level, float weight) {
-		return RandomSource.create().nextInt(100) <= getHerobrinesWrath(level) * weight;
+		return ModSavedData.get(level.getServer()).hasResurrectedHerobrine() || RandomSource.create().nextInt(100)
+				<= getHerobrinesWrath(level) * weight;
 	}
 
 	private void increasePlayerDestruction(ServerPlayer player, int value) {
-		if (!ModSavedData.get(player.getServer()).getHerobrineIsDeadOrResting()) {
+		if (!ModSavedData.get(player.getServer()).isHerobrineDeadOrResting()) {
 			player.getCapability(CapabilityProvider.WRATH).ifPresent(wrath -> wrath.addValue(value, player));
 		}
 	}
@@ -95,7 +100,7 @@ public class WrathHandler {
 
 	//Sets Total anger % on a scoreboard & grants player achievement
 	@SubscribeEvent
-	public void onTick(TickEvent.LevelTickEvent event) {
+	public void onTickScoreboards(TickEvent.LevelTickEvent event) {
 		if (event.level instanceof ServerLevel server) {
 			for (ServerPlayer player : server.getServer().getPlayerList().getPlayers()) {
 				Score score = getScore(server, player.getName().getString());
@@ -107,13 +112,6 @@ public class WrathHandler {
 				else {
 					score.setScore(0);
 				}
-				if (score.getScore() >= 1) {
-					Advancement advancement = server.getServer().getAdvancements().getAdvancement(
-							new ModResourceLocation("story/root"));
-					for (String s : player.getAdvancements().getOrStartProgress(advancement).getRemainingCriteria()) {
-						player.getAdvancements().award(advancement, s);
-					}
-				}
 			}
 			getScore(server, "Wrath %").setScore(getHerobrinesWrath(server));
 			getScore(server, "Total").setScore(getTotalDestruction(server));
@@ -121,7 +119,23 @@ public class WrathHandler {
 	}
 
 	@SubscribeEvent
-	public void onServerTick(TickEvent.ServerTickEvent event) {
+	public void wrathAdvancement(TickEvent.PlayerTickEvent event) {
+		if (event.player instanceof ServerPlayer serverPlayer) {
+			serverPlayer.getCapability(CapabilityProvider.WRATH).ifPresent(wrath -> {
+				if (wrath.getValue() >= 1) {
+					Advancement advancement = serverPlayer.getServer().getAdvancements().getAdvancement(
+							new ModResourceLocation("story/root"));
+					for (String s : serverPlayer.getAdvancements().getOrStartProgress(advancement)
+							.getRemainingCriteria()) {
+						serverPlayer.getAdvancements().award(advancement, s);
+					}
+				}
+			});
+		}
+	}
+
+	@SubscribeEvent
+	public void decreaseHerobrineRestTimer(TickEvent.ServerTickEvent event) {
 		ModSavedData data = ModSavedData.get(event.getServer());
 		if (data.getHerobrineRestTimer() > 0) {
 			data.setHerobrineRestTimer(data.getHerobrineRestTimer() - 1);
@@ -129,13 +143,26 @@ public class WrathHandler {
 	}
 
 	@SubscribeEvent
-	public void onLoad(LevelEvent.Load event) {
-		// team colors
+	public void reformatScoreboardObjective(LevelEvent.Load event) {
 		if (event.getLevel() instanceof ServerLevel server) {
 			if (server.getScoreboard().getObjective("Destruction") == null) {
 				server.getScoreboard().addObjective("Destruction", ObjectiveCriteria.DUMMY,
 						Component.literal("Destruction").withStyle(ChatFormatting.AQUA),
 						ObjectiveCriteria.RenderType.INTEGER);
+			}
+			else {
+				server.getScoreboard().getObjective("Destruction").setDisplayName(
+						Component.literal("Destruction").withStyle(ChatFormatting.AQUA));
+			}
+			if (server.getScoreboard().getPlayerTeam("Wrath %") == null) {
+				PlayerTeam wrathTeam = server.getScoreboard().addPlayerTeam("Wrath %");
+				wrathTeam.setColor(ChatFormatting.RED);
+				wrathTeam.getPlayers().add("Wrath %");
+			}
+			if (server.getScoreboard().getPlayerTeam("Total") == null) {
+				PlayerTeam totalTeam = server.getScoreboard().addPlayerTeam("Total");
+				totalTeam.setColor(ChatFormatting.YELLOW);
+				totalTeam.getPlayers().add("Total");
 			}
 		}
 	}

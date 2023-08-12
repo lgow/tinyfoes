@@ -14,6 +14,8 @@ public class ModConfigs {
 
 	public static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, MOB_POSSESSION, CONVERT_BACK, SPAWN_BUILDER;
 
+	public static ForgeConfigSpec.ValueSpec POS_MOB_BLACKLIST, HEROBRINE_VARIANT_BLACKLIST, EVENT_BLACKLIST;
+
 	static {
 		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
 		CLIENT_SPEC = specPair.getRight();

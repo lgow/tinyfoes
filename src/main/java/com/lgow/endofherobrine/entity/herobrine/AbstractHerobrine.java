@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -22,7 +23,6 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
@@ -71,11 +71,6 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1F, true));
 		this.goalSelector.addGoal(1, new StarePlayerGoal(this, Float.MAX_VALUE, true));
-		this.goalSelector.addGoal(2, new FloatGoal(this));
-	}
-
-	public Player getNearestPlayer() {
-		return this.level().getNearestPlayer(TargetingConditions.forNonCombat().ignoreLineOfSight(), this);
 	}
 
 	@Override
@@ -131,14 +126,6 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	@Override
 	protected float getStandingEyeHeight(Pose pose, EntityDimensions dim) { return 1.725F; }
 
-	public boolean hasPlayerUUID() { return this.getPlayerUUID() != null; }
-
-	public UUID getPlayerUUID() { return this.entityData.get(PLAYER_UUID).orElse(null); }
-
-	public void setPlayerUUID(UUID uuid) { this.entityData.set(PLAYER_UUID, Optional.ofNullable(uuid)); }
-
-	public Player getPlayerByUUID() { return this.level().getPlayerByUUID(getPlayerUUID()); }
-
 	@Nullable
 	public Player getTargetPlayer() { return this.targetPlayer; }
 
@@ -157,6 +144,34 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 					== HitResult.Type.MISS;
 		}
 	}
+
+	@Override
+	public int getMaxHeadYRot() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public int getMaxHeadXRot() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	protected void customServerAiStep() {
+		if(this.isInWater()){
+			this.moveTo(position().add(0,1,0));
+			this.setDeltaMovement(Vec3.ZERO);
+		}
+		this.setDeltaMovement(this.getDeltaMovement().multiply(1,0,1));
+		super.customServerAiStep();
+	}
+
+	public boolean hasPlayerUUID() { return this.getPlayerUUID() != null; }
+
+	public UUID getPlayerUUID() { return this.entityData.get(PLAYER_UUID).orElse(null); }
+
+	public void setPlayerUUID(UUID uuid) { this.entityData.set(PLAYER_UUID, Optional.ofNullable(uuid)); }
+
+	public Player getPlayerByUUID() { return this.level().getPlayerByUUID(getPlayerUUID()); }
 
 	public boolean canSeeAnyPlayers() {
 		if (this.level().isClientSide) {
@@ -195,6 +210,19 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 		}
 	}
 
+	protected boolean tpToWatchPlayer(Player player) {
+		if (!this.level().isClientSide && this.isAlive() && player != null) {
+			double randX = this.random.nextIntBetweenInclusive(15, 40);
+			double randZ = this.random.nextIntBetweenInclusive(15, 40);
+			double x = player.getX() + (this.random.nextBoolean() ? randX : -randX);
+			double y = player.getY() + this.random.nextInt(16);
+			double z = player.getZ() + (this.random.nextBoolean() ? randZ : -randZ);
+			return this.attemptTeleport(this, x, y, z, player,
+					!this.level().getBiome(player.blockPosition()).is(BiomeTags.IS_OCEAN));
+		}
+		return false;
+	}
+
 	public void spawnPositoning(BlockPos pos) {
 		BlockState blockState = level().getBlockState(pos.above());
 		boolean blocksMotion = blockState.blocksMotion();
@@ -206,25 +234,15 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 		}
 	}
 
-	protected boolean tpToWatchPlayer(Player player) {
-		if (!this.level().isClientSide && this.isAlive() && player != null) {
-			double randX = this.random.nextIntBetweenInclusive(15, 40);
-			double randZ = this.random.nextIntBetweenInclusive(15, 40);
-			double x = player.getX() + (this.random.nextBoolean() ? randX : -randX);
-			double y = player.getY() + this.random.nextInt(16);
-			double z = player.getZ() + (this.random.nextBoolean() ? randZ : -randZ);
-			return this.attemptTeleport(this, x, y, z, player, !this.level().getBiome(player.blockPosition()).is(BiomeTags.IS_OCEAN));
+	protected void teleportAway() {
+		this.level().broadcastEntityEvent(this, (byte) 46);
+		if (!this.isSilent()) {
+			this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 		}
-		return false;
+		this.discard();
 	}
 
-	@Override
-	public int getMaxHeadYRot() {
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public int getMaxHeadXRot() {
-		return Integer.MAX_VALUE;
+	public Player getNearestPlayer() {
+		return this.level().getNearestPlayer(TargetingConditions.forNonCombat().ignoreLineOfSight(), this);
 	}
 }

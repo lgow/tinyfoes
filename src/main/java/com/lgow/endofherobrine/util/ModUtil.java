@@ -26,6 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static net.minecraft.world.entity.EntityType.HUSK;
 import static net.minecraft.world.entity.EntityType.RABBIT;
@@ -34,6 +35,7 @@ import static net.minecraft.world.entity.EntityType.VILLAGER;
 import static net.minecraft.world.entity.EntityType.ZOMBIE_VILLAGER;
 
 public class ModUtil {
+	public static Random random = new Random();
 	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> mobList = Map.of(
 			EntityType.CHICKEN, EntityInit.CHICKEN.get(), EntityType.COW, EntityInit.COW.get(), EntityType.PIG,
 			EntityInit.PIG.get(), EntityType.RABBIT, EntityInit.RABBIT.get(), EntityType.SHEEP, EntityInit.SHEEP.get(),

@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "minecraft:block/blackstone_top",
-    "side": "endofherobrine:block/blackstone_totem_lit",
+    "side": "endofherobrine:block/blackstone_totem_active",
     "particle": "minecraft:block/blackstone"
   }
 }

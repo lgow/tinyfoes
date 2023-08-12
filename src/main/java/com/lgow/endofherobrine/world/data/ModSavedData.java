@@ -14,8 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModSavedData extends SavedData {
-	private final Map<String, SpawnerData> data = new HashMap<>();
+	private final Map<String, SpawnerData> spawnerDataMap = new HashMap<>();
 	private boolean defeatedHerobrine, herobrineIsDead, resurrectedHerobrine;
+	private String builtLetters = "";
 	private int herobrineRestTimer;
 
 	public ModSavedData() { }
@@ -27,10 +28,10 @@ public class ModSavedData extends SavedData {
 	}
 
 	public SpawnerData getSpawnerData(String key) {
-		return this.data.computeIfAbsent(key, s -> new SpawnerData(this));
+		return this.spawnerDataMap.computeIfAbsent(key, s -> new SpawnerData(this));
 	}
 
-	public boolean getDefeatedHerobrine() {
+	public boolean hasDefeatedHerobrine() {
 		return defeatedHerobrine;
 	}
 
@@ -48,16 +49,12 @@ public class ModSavedData extends SavedData {
 		setDirty();
 	}
 
-	public boolean herobrineIsDead() {
-		return herobrineIsDead;
-	}
-
 	public void setHerobrineIsDead(boolean b) {
 		herobrineIsDead = b;
 		setDirty();
 	}
 
-	public boolean getResurrectedHerobrine() {
+	public boolean hasResurrectedHerobrine() {
 		return resurrectedHerobrine;
 	}
 
@@ -66,7 +63,7 @@ public class ModSavedData extends SavedData {
 		setDirty();
 	}
 
-	public boolean getHerobrineIsDeadOrResting() {
+	public boolean isHerobrineDeadOrResting() {
 		return herobrineIsDead || herobrineRestTimer > 0;
 	}
 
@@ -77,38 +74,61 @@ public class ModSavedData extends SavedData {
 		if (nbt.contains("HerobrineSpawnChance", Tag.TAG_INT)) {
 			this.getSpawnerData("Herobrine").setSpawnChance(nbt.getInt("HerobrineSpawnChance"));
 		}
-		if (nbt.contains("Data", Tag.TAG_LIST)) {
-			this.data.clear();
-			ListTag list = nbt.getList("Data", Tag.TAG_COMPOUND);
+		if (nbt.contains("SpawnData", Tag.TAG_LIST)) {
+			this.spawnerDataMap.clear();
+			ListTag list = nbt.getList("SpawnData", Tag.TAG_COMPOUND);
 			list.forEach(tag -> {
 				CompoundTag nbtTag = (CompoundTag) tag;
 				String key = nbtTag.getString("Key");
 				SpawnerData data = new SpawnerData(this);
 				data.read(nbtTag);
-				this.data.put(key, data);
+				this.spawnerDataMap.put(key, data);
 			});
 		}
-		defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
-		herobrineRestTimer = nbt.getInt("HerobrineRestTimer");
-		herobrineIsDead = nbt.getBoolean("HerobrineIsDead");
-		resurrectedHerobrine = nbt.getBoolean("ResurrectedHerobrine");
+
+		if (nbt.contains("DefeatedHerobrine", Tag.TAG_BYTE)) defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
+		if (nbt.contains("HerobrineRestTimer", Tag.TAG_INT))herobrineRestTimer = nbt.getInt("HerobrineRestTimer");
+		if (nbt.contains("HerobrineIsDead", Tag.TAG_BYTE))herobrineIsDead = nbt.getBoolean("HerobrineIsDead");
+		if (nbt.contains("ResurrectedHerobrine", Tag.TAG_BYTE))resurrectedHerobrine = nbt.getBoolean("ResurrectedHerobrine");
+		if (nbt.contains("BuiltLetters", Tag.TAG_STRING))builtLetters = nbt.getString("BuiltLetters");
 		return this;
 	}
 
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
-		ListTag list = new ListTag();
-		this.data.forEach((s, data) -> {
+		// Create "SpawnData" section
+		ListTag spawnDataList = new ListTag();
+		this.spawnerDataMap.forEach((s, data) -> {
 			CompoundTag key = new CompoundTag();
 			data.write(key);
 			key.putString("Key", s);
-			list.add(key);
+			spawnDataList.add(key);
 		});
-		nbt.put("Data", list);
-		nbt.putBoolean("DefeatedHerobrine", defeatedHerobrine);
-		nbt.putInt("HerobrineRestTimer", herobrineRestTimer);
-		nbt.putBoolean("HerobrineIsDead", herobrineIsDead);
-		nbt.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
+
+		nbt.put("SpawnData", spawnDataList);
+
+		// Create "Herobrine" section
+		CompoundTag herobrineTag = new CompoundTag();
+		herobrineTag.putInt("HerobrineRestTimer", herobrineRestTimer);
+		herobrineTag.putBoolean("DefeatedHerobrine", defeatedHerobrine);
+		herobrineTag.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
+		herobrineTag.putBoolean("HerobrineIsDead", herobrineIsDead);
+
+		nbt.put("Herobrine", herobrineTag);
+
+		// Create "Builder" section
+		CompoundTag builderTag = new CompoundTag();
+		builderTag.putString("BuiltLetters", builtLetters);
+
+		nbt.put("Builder", builderTag);
 		return nbt;
+	}
+
+	public String getBuiltLetters() {
+		return builtLetters;
+	}
+
+	public void concatBuiltLetters(String builtLetters) {
+		this.builtLetters = builtLetters;
 	}
 }

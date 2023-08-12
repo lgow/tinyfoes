@@ -18,6 +18,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,6 +37,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.WitherSkull;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -53,6 +55,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			livingEntity.getMobType() != MobType.UNDEAD && livingEntity.attackable();
 	private final ServerBossEvent bossEvent = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(),
 			BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+	private boolean hasbeencriiticalHit;
 
 	public HerobrineBoss(EntityType<? extends HerobrineBoss> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
@@ -158,6 +161,20 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 
 	public void setEnraged(boolean isEnraged) {
 		this.entityData.set(IS_ENRAGED, isEnraged);
+		if (isEnraged) {
+			this.forceAddEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1, false, false), null);
+			this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0, false, false));
+			this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0, false, false));
+			this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3, false, false));
+			this.equipItemIfPossible(Items.NETHERITE_HELMET.getDefaultInstance());
+			this.equipItemIfPossible(Items.NETHERITE_CHESTPLATE.getDefaultInstance());
+			this.equipItemIfPossible(Items.NETHERITE_LEGGINGS.getDefaultInstance());
+			this.equipItemIfPossible(Items.NETHERITE_BOOTS.getDefaultInstance());
+		}
+		else {
+			this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1, false, false));
+			this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 0, false, false));
+		}
 	}
 
 	@Override
@@ -256,17 +273,30 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 		if (this.isInvulnerableTo(pSource)) {
 			return false;
 		}
-		else if (!pSource.is(DamageTypeTags.IS_DROWNING) && !(pSource.getEntity() instanceof HerobrineBoss)) {
-			if (this.getInvulnerableTicks() > 0 && !pSource.is(DamageTypes.OUTSIDE_BORDER)) {
-				return false;
+		else if (!this.isEnraged() && this.getHealth() < pAmount && this.getHealth() > 1.0F) {
+			boolean b = super.hurt(pSource, Math.max(this.getHealth() - 1.0F, 0.0F));
+			if (hasbeencriiticalHit) {
+				this.sendSystemMessage(Component.literal("I'll be back"));
+				this.teleportAway();
 			}
 			else {
-				Entity entity1 = pSource.getEntity();
-				if (!(entity1 instanceof Player) && entity1 instanceof LivingEntity
-						&& ((LivingEntity) entity1).getMobType() == this.getMobType()) {
+				hasbeencriiticalHit = true;
+			}
+			return b;
+		}
+		else {
+			if (!pSource.is(DamageTypeTags.IS_DROWNING) && !(pSource.getEntity() instanceof HerobrineBoss)) {
+				if (this.getInvulnerableTicks() > 0 && !pSource.is(DamageTypes.OUTSIDE_BORDER)) {
 					return false;
 				}
-				return super.hurt(pSource, pAmount);
+				else {
+					Entity entity1 = pSource.getEntity();
+					if (!(entity1 instanceof Player) && entity1 instanceof LivingEntity
+							&& ((LivingEntity) entity1).getMobType() == this.getMobType()) {
+						return false;
+					}
+					return super.hurt(pSource, pAmount);
+				}
 			}
 		}
 		return false;
@@ -315,12 +345,13 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 
 	@Override
 	protected void dropAllDeathLoot(DamageSource pDamageSource) {
-		if(!level().isClientSide()){
+		if (!level().isClientSide()) {
 			ModSavedData data = ModSavedData.get(this.level().getServer());
-			if(!this.isEnraged()) {
+			if (!this.isEnraged()) {
 				data.setDefeatedHerobrine(true);
-				data.setHerobrineRestTimer(120000);
-			}else{
+				data.setHerobrineRestTimer(12000);
+			}
+			else {
 				data.setHerobrineIsDead(true);
 			}
 		}
