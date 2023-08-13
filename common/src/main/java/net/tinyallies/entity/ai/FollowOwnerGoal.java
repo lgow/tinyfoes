@@ -35,7 +35,7 @@ public class FollowOwnerGoal extends Goal {
 		if (this.mob instanceof BabyMonster baby) {
 			this.baby = baby;
 		}
-		this.level = pTamable.level();
+		this.level = pTamable.level;
 		this.speedModifier = pSpeedModifier;
 		this.navigation = pTamable.getNavigation();
 		this.startDistance = pStartDistance;
@@ -108,12 +108,12 @@ public class FollowOwnerGoal extends Goal {
 				return;
 			}
 			else {
-				if (this.mob instanceof EnderBoy && this.mob.level().isRaining()) {
+				if (this.mob instanceof EnderBoy && this.mob.level.isRaining()) {
 					return;
 				}
 				if (this.baby.isUndead()) {
 					ItemStack helmet = this.mob.getItemBySlot(EquipmentSlot.HEAD);
-					if (helmet.isEmpty() && this.mob.level().isDay()) {
+					if (helmet.isEmpty() && this.mob.level.isDay()) {
 						return;
 					}
 					else if (!helmet.isEmpty()
@@ -171,12 +171,12 @@ public class FollowOwnerGoal extends Goal {
 		else if (!this.canFly && blockstate.getBlock() instanceof LeavesBlock) {
 			return false;
 		}
-		else if (this.mob instanceof EnderBoy && this.mob.level().isRainingAt(pPos)) {
+		else if (this.mob instanceof EnderBoy && this.mob.level.isRainingAt(pPos)) {
 			return false;
 		}
 		else if (this.baby.isUndead()) {
 			ItemStack helmet = this.mob.getItemBySlot(EquipmentSlot.HEAD);
-			if (helmet.isEmpty() && this.mob.level().isDay()) {
+			if (helmet.isEmpty() && this.mob.level.isDay()) {
 				return false;
 			}
 			if (!helmet.isEmpty() && (helmet.getMaxDamage() - helmet.getDamageValue()) <= helmet.getMaxDamage() / 3) {

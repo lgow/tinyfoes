@@ -25,7 +25,7 @@ public class ZombyRenderer extends AbstractZombieRenderer<Zomby, ZombieModel<Zom
 				new ZombieModel<>(pContext.bakeLayer(pInnerArmor)), new ZombieModel<>(pContext.bakeLayer(pOuterArmor)));
 		this.layers.clear();
 		this.addLayer(new HumanoidArmorLayer<>(this, new ZombyModel(pContext.bakeLayer(pInnerArmor)),
-				new ZombyModel(pContext.bakeLayer(pOuterArmor)), pContext.getModelManager()));
+				new ZombyModel(pContext.bakeLayer(pOuterArmor))));
 		this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), 1.0F, 1.0F, 1.0F,
 				pContext.getItemInHandRenderer()));
 		//		this.addLayer(new ElytraLayer<>(this, pContext.getModelSet()));

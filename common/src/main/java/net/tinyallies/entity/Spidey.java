@@ -34,7 +34,7 @@ public class Spidey extends Spider implements NeutralMob, BabyMonster {
 			Spidey.class, EntityDataSerializers.OPTIONAL_UUID);
 	private static EntityDimensions STANDING = EntityDimensions.scalable(0.9F, 0.45F);
 	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
-			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.9F, 0.35F)).build();
+			Pose.STANDING, STANDING).put(Pose.CROUCHING, EntityDimensions.scalable(0.9F, 0.35F)).build();
 	private final AvoidEntityGoal<Player> avoidPlayersGoal = new AvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D,
 			1.33D);
 	private final LookForParentGoal followParentGoal = new LookForParentGoal(this, 1.0F, this.getParentClass());
@@ -88,7 +88,7 @@ public class Spidey extends Spider implements NeutralMob, BabyMonster {
 
 	@Override
 	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
-		return pPose == Pose.SITTING ? 0.29F : 0.34F;
+		return pPose == Pose.CROUCHING ? 0.29F : 0.34F;
 	}
 
 	public boolean isFood(ItemStack pStack) {
@@ -136,7 +136,7 @@ public class Spidey extends Spider implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level(), pCompound);
+		readPersistentAngerSaveData(this.level, pCompound);
 	}
 
 	@Override

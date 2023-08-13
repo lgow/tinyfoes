@@ -22,7 +22,7 @@ public class SkellyRenderer extends HumanoidMobRenderer<Skelly, SkeletonModel<Sk
 		super(pContext, new SkellyModel(pContext.bakeLayer(p_174383_)), 0.25F);
 		this.layers.clear();
 		this.addLayer(new HumanoidArmorLayer<>(this, new SkellyModel(pContext.bakeLayer(pInnerModelLayer)),
-				new SkellyModel(pContext.bakeLayer(pOuterModelLayer)), pContext.getModelManager()));
+				new SkellyModel(pContext.bakeLayer(pOuterModelLayer))));
 		this.addLayer(new CustomHeadLayer<>(this, pContext.getModelSet(), 1.0F, 1.0F, 1.0F,
 				pContext.getItemInHandRenderer()));
 		//		this.addLayer(new ElytraLayer<>(this, pContext.getModelSet()));

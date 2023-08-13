@@ -2,7 +2,7 @@ package net.tinyallies.client.renderer.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -25,7 +25,7 @@ public class BlobRenderer extends EntityRenderer<BabyfierBlob> {
 	@Override
 	public void render(BabyfierBlob pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
 		pPoseStack.pushPose();
-		pPoseStack.mulPose(Axis.YP.rotationDegrees(90.0F - pEntity.getYRot()));
+		pPoseStack.mulPose(Vector3f.YP.rotationDegrees(90.0F - pEntity.getYRot()));
 		pPoseStack.translate(0.0, -0.6, 0.0);
 		pPoseStack.scale(0.5F, 0.5F, 0.5F);
 		this.model.setupAnim(pEntity, 0, 0.0F, 0.0F, pEntity.getYRot(), pEntity.getXRot());

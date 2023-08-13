@@ -3,7 +3,7 @@ package net.tinyallies.entity;
 import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -17,8 +17,7 @@ import java.util.function.Supplier;
 import static net.minecraft.world.entity.MobCategory.MONSTER;
 
 public class ModEntities {
-	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyAlliesCommon.REGISTRIES.get(
-			Registries.ENTITY_TYPE);
+	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyAlliesCommon.REGISTRIES.get(Registry.ENTITY_TYPE);
 	public static final RegistrySupplier<EntityType<Creepy>> CREEPY = registerBaby("creeper", Creepy::new, MONSTER,
 			0.33F, 0.85F);
 	public static final RegistrySupplier<EntityType<Skelly>> SKELLY = registerBaby("skeleton", Skelly::new, MONSTER,

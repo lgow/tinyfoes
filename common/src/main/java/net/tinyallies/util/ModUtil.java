@@ -3,6 +3,7 @@ package net.tinyallies.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -22,22 +23,26 @@ public class ModUtil {
 			Map.entry(EntityType.SPIDER, ModEntities.SPIDEY.get()),
 			Map.entry(EntityType.ZOMBIE, ModEntities.ZOMBY.get()));
 
-	public static void babifyMob(Mob entityIn) {
-		if (babyficationList.containsKey(entityIn.getType())) {
-			Mob baby = entityIn.convertTo(babyficationList.get(entityIn.getType()), true);
-			baby.setHealth(entityIn.getHealth());
-			if (baby instanceof Creepy creeper) {
-				creeper.setPowered(((Creeper) entityIn).isPowered());
-				creeper.setSwellDir(((Creeper) entityIn).getSwellDir());
+	public static Mob babifyMob(Mob mob) {
+		EntityType<?> type = mob.getType();
+		Mob baby = null;
+		if (babyficationList.containsKey(type)) {
+			baby = mob.convertTo(babyficationList.get(mob.getType()), true);
+			baby.setPos(mob.getPosition(0));
+			baby.setHealth(mob.getHealth());
+			if (type.equals(EntityType.CREEPER)) {
+				((Creepy)baby).setPowered(((Creeper) mob).isPowered());
+				((Creepy)baby).setSwellDir(((Creeper) mob).getSwellDir());
 			}
-			else if (baby instanceof EnderBoy enderman) {
-				enderman.setCarriedBlock(((EnderMan) entityIn).getCarriedBlock());
-				enderman.setTarget(entityIn.getTarget());
+			else if (type.equals(EntityType.ENDERMAN)) {
+				((EnderBoy)baby).setCarriedBlock(((EnderMan) mob).getCarriedBlock());
+				baby.setTarget(mob.getTarget());
 			}
 		}
 		else {
-			entityIn.setBaby(true);
+			mob.setBaby(true);
 		}
+		return baby;
 	}
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {

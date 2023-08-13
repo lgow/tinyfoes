@@ -26,7 +26,7 @@ public class LookForParentGoal extends Goal {
 	}
 
 	public boolean canUse() {
-		List<? extends Mob> list = this.mob.level().getEntitiesOfClass(parentClass,
+		List<? extends Mob> list = this.mob.level.getEntitiesOfClass(parentClass,
 				this.mob.getBoundingBox().inflate(8.0D, 4.0D, 8.0D));
 		Mob newParent = null;
 		double d0 = Double.MAX_VALUE;

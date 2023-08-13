@@ -21,8 +21,8 @@ public class BabyfierBlob extends ThrowableProjectile {
 
 	@Override
 	protected void onHit(HitResult pResult) {
-		if (!this.level().isClientSide) {
-			this.level().broadcastEntityEvent(this, (byte) 3);
+		if (!this.level.isClientSide) {
+			this.level.broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
 		super.onHit(pResult);
@@ -30,7 +30,7 @@ public class BabyfierBlob extends ThrowableProjectile {
 
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
-		if (!level().isClientSide && pResult.getEntity() instanceof Mob mob) {
+		if (!level.isClientSide && pResult.getEntity() instanceof Mob mob) {
 			ModUtil.babifyMob(mob);
 		}
 		super.onHitEntity(pResult);

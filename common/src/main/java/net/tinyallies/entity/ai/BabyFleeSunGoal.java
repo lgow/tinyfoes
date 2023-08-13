@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.tinyallies.entity.BabyMonster;
 
 public class BabyFleeSunGoal extends FleeSunGoal {
-	private final Level level = this.mob.level();
+	private final Level level = this.mob.level;
 	private final BabyMonster baby = (BabyMonster) this.mob;
 	private final LivingEntity owner1 = baby.getOwner();
 

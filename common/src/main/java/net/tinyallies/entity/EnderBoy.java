@@ -35,7 +35,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 			EnderBoy.class, EntityDataSerializers.OPTIONAL_UUID);
 	private static final EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.4F);
 	private static final Map<Pose, EntityDimensions> POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
-			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
+			Pose.STANDING, STANDING).put(Pose.CROUCHING, EntityDimensions.scalable(0.33F, 0.75F)).build();
 	private final AvoidEntityGoal<Player> avoidPlayersGoal = new AvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D,
 			1.33D);
 	private final LookForParentGoal followParentGoal = new LookForParentGoal(this, 1.0F, this.getParentClass());
@@ -79,7 +79,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 
 	@Override
 	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
-		return pPose == Pose.SITTING ? 0.56F : 1.33F;
+		return pPose == Pose.CROUCHING ? 0.56F : 1.33F;
 	}
 
 	public EntityDimensions getDimensions(Pose pPose) {
@@ -132,7 +132,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
-		if (!this.level().isClientSide && this.isTamed() && this.isOwnedBy(pPlayer) && pPlayer.isCrouching()) {
+		if (!this.level.isClientSide && this.isTamed() && this.isOwnedBy(pPlayer) && pPlayer.isCrouching()) {
 			if (itemstack.isEmpty()) {
 				this.spawnAtLocation(this.getCarriedBlock().getBlock());
 				this.setCarriedBlock(null);
@@ -167,7 +167,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level(), pCompound);
+		readPersistentAngerSaveData(this.level, pCompound);
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 	}
 
 	public static class FleeRainGoal extends FleeSunGoal {
-		private final Level level = this.mob.level();
+		private final Level level = this.mob.level;
 		private final EnderBoy baby = (EnderBoy) this.mob;
 		private double wantedX, wantedY, wantedZ;
 
@@ -328,12 +328,12 @@ public class EnderBoy extends EnderMan implements NeutralMob, BabyMonster {
 
 		@Override
 		public boolean canUse() {
-			return !this.mob.level().isRaining() && super.canUse();
+			return !this.mob.level.isRaining() && super.canUse();
 		}
 
 		@Override
 		public boolean canContinueToUse() {
-			return !this.mob.level().isRaining() && super.canContinueToUse();
+			return !this.mob.level.isRaining() && super.canContinueToUse();
 		}
 	}
 }

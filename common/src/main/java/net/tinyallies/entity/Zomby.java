@@ -28,7 +28,7 @@ import java.util.UUID;
 public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 	private static EntityDimensions STANDING = EntityDimensions.scalable(0.33F, 1.05F);
 	private static final Map<Pose, EntityDimensions> BABY_POSES = ImmutableMap.<Pose, EntityDimensions> builder().put(
-			Pose.STANDING, STANDING).put(Pose.SITTING, EntityDimensions.scalable(0.33F, 0.75F)).build();
+			Pose.STANDING, STANDING).put(Pose.CROUCHING, EntityDimensions.scalable(0.33F, 0.75F)).build();
 	private final AvoidEntityGoal<Player> avoidPlayersGoal = new AvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D,
 			1.33D);
 	private final LookForParentGoal followParentGoal = new LookForParentGoal(this, 1.0F, this.getParentClass());
@@ -72,7 +72,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 
 	@Override
 	protected float getStandingEyeHeight(Pose pPose, EntityDimensions pDimensions) {
-		return pPose == Pose.SITTING ? 0.6F : 0.93F;
+		return pPose == Pose.CROUCHING ? 0.6F : 0.93F;
 	}
 
 	public EntityDimensions getDimensions(Pose pPose) {
@@ -116,7 +116,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
 		ItemStack itemstack = pPlayer.getItemInHand(pHand);
 		Item item = itemstack.getItem();
-		if (!this.level().isClientSide && this.isTamed() && this.isOwnedBy(pPlayer)) {
+		if (!this.level.isClientSide && this.isTamed() && this.isOwnedBy(pPlayer)) {
 			if (pPlayer.isCrouching()) {
 				if (item instanceof ArmorItem || item instanceof SwordItem) {
 					EquipmentSlot slot = getEquipmentSlotForItem(itemstack);
@@ -125,7 +125,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 					}
 					this.setItemSlotAndDropWhenKilled(slot, itemstack.copy());
 					if (!pPlayer.getAbilities().instabuild) { pPlayer.getInventory().removeItem(itemstack); }
-					this.playSound(slot.isArmor() ? SoundEvents.ARMOR_EQUIP_GENERIC : SoundEvents.ITEM_FRAME_ADD_ITEM);
+					this.playSound(slot.getType().equals(EquipmentSlot.Type.ARMOR) ? SoundEvents.ARMOR_EQUIP_GENERIC : SoundEvents.ITEM_FRAME_ADD_ITEM);
 					return InteractionResult.SUCCESS;
 				}
 				else if (itemstack.isEmpty()) {
@@ -158,7 +158,7 @@ public class Zomby extends Zombie implements NeutralMob, BabyMonster {
 		readBabySaveData(pCompound, this);
 		orderedToSit = pCompound.getBoolean("Sitting");
 		setInSittingPose(orderedToSit);
-		readPersistentAngerSaveData(this.level(), pCompound);
+		readPersistentAngerSaveData(this.level, pCompound);
 	}
 
 	@Override

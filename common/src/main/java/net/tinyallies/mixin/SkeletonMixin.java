@@ -4,10 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
@@ -40,11 +37,11 @@ public class SkeletonMixin extends Monster {
 	protected InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
 		ItemStack itemStack = player.getItemInHand(interactionHand);
 		if (itemStack.is(this.getPickResult().getItem())) {
-			if (!this.level().isClientSide) {
-				Mob mob = ModEntities.SKELLY.get().create(level());
+			if (!this.level.isClientSide) {
+				Mob mob = ModUtil.babifyMob((Mob) this.getType().create(level));
 				mob.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BOW));
 				mob.setPos(this.position());
-				this.level().addFreshEntity(mob);
+				this.level.addFreshEntity(mob);
 			}
 			return InteractionResult.SUCCESS;
 		}
