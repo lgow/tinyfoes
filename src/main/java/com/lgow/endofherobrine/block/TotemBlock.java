@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -87,8 +88,6 @@ public class TotemBlock extends Block {
 	private void overcharge(ServerLevel level, BlockPos pos, BlockState state) {
 		level.setBlock(pos, state.setValue(STATE, TotemStates.OVERCHARGED), 2);
 		ModSavedData.get(level.getServer()).setResurrectedHerobrine(true);
-//		ModSavedData.get(level.getServer()).setHerobrineIsDead(false);
-//		ModSavedData.get(level.getServer()).setHerobrineRestTimer(0);
 	}
 
 	//netherrack totem activation conditions
@@ -100,15 +99,15 @@ public class TotemBlock extends Block {
 	//netherrack totem activation conditions
 	private boolean canActivateBlackstoneTotem(BlockState state, ServerLevel serverLevel, BlockPos pos) {
 		ModSavedData levelData = ModSavedData.get(serverLevel.getServer());
-		return state.getValue(STATE).equals(TotemStates.INACTIVE) && this.isInTotem(pos, serverLevel);
-//				&& levelData.hasDefeatedHerobrine() && !levelData.isHerobrineDeadOrResting();
+		return state.getValue(STATE).equals(TotemStates.INACTIVE) && this.isInTotem(pos, serverLevel)
+				&& levelData.hasDefeatedHerobrine() && !levelData.isHerobrineDeadOrResting();
 	}
 
 	private void checkSpawn(ServerLevel server, BlockPos pPos) {
 		if (pPos.getY() >= server.getMinBuildHeight()) {
 			HerobrineBoss herobrineBoss = EntityInit.HEROBRINE_BOSS.get().create(server);
 			if (isBlackstone) {
-//				herobrineBoss.makeInvulnerable();
+				//				herobrineBoss.makeInvulnerable();
 				herobrineBoss.setEnraged(true);
 			}
 			herobrineBoss.moveTo(pPos.getX() + 0.5D, pPos.above(3).getY(), pPos.getZ() + 0.5D, 0.0F, 0.0F);
@@ -129,16 +128,32 @@ public class TotemBlock extends Block {
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos pos, BlockPos facingPos) {
-		if (accessor instanceof ServerLevel serverLevel) {
-			if (this.canActivateNetherrackTotem(state, serverLevel, pos)) {
-				this.activate(serverLevel, pos, state);
+	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+		if (pLevel instanceof ServerLevel server) {
+			if (this.canActivateNetherrackTotem(pState, server, pPos)) {
+				this.activate(server, pPos, pState);
 			}
-			else if (isInAltar(pos, serverLevel)) {
-				this.overcharge(serverLevel, pos, state);
+			else if (isInAltar(pPos, server)) {
+				this.overcharge(server, pPos, pState);
+			}
+			this.broasdcastMessage(server, "placed", 2);
+		}
+		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+	}
+
+	@Override
+	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+		if (level instanceof ServerLevel server && state.getValue(STATE).equals(TotemStates.INACTIVE)) {
+			if (!isBlackstone) {
+				if (server.isRaining()) {
+					server.setWeatherParameters(0, 6000, true, true);
+				}
+				level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS,
+						1.0F, (float) (0.8F + (Math.random() * 0.2D)));
+				this.broasdcastMessage(server, "broken", 3);
 			}
 		}
-		return super.updateShape(state, facing, facingState, accessor, pos, facingPos);
+		return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
 	}
 
 	@Override
@@ -157,37 +172,40 @@ public class TotemBlock extends Block {
 	}
 
 	@Override
-	public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-		if (pLevel instanceof ServerLevel server) {
-			if (this.canActivateNetherrackTotem(pState, server, pPos)) {
-				this.activate(server, pPos, pState);
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos pos, BlockPos facingPos) {
+		if (accessor instanceof ServerLevel serverLevel) {
+			if (this.canActivateNetherrackTotem(state, serverLevel, pos)) {
+				this.activate(serverLevel, pos, state);
 			}
-			else if (isInAltar(pPos, server)) {
-				this.overcharge(server, pPos, pState);
+			else if (isInAltar(pos, serverLevel)) {
+				this.overcharge(serverLevel, pos, state);
 			}
-			this.broasdcastMessage(server, "placed", 2);
 		}
-		super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
+		return super.updateShape(state, facing, facingState, accessor, pos, facingPos);
 	}
 
 	@Override
-	public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		if (level instanceof ServerLevel server && state.getValue(STATE).equals(TotemStates.INACTIVE)) {
-			if (!isBlackstone) {
-				if(server.isRaining()){
-					server.setWeatherParameters(0, 6000, true, true);
-				}
-				level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS,
-						1.0F, (float) (0.8F + (Math.random() * 0.2D)));
-				this.broasdcastMessage(server, "broken", 3);
+	public void updateIndirectNeighbourShapes(BlockState pState, LevelAccessor pLevel, BlockPos pPos, int pFlags, int pRecursionLeft) {
+		if (pLevel instanceof ServerLevel serverLevel) {
+			if (isInAltar(pPos, serverLevel)) {
+				this.overcharge(serverLevel, pPos, pState);
 			}
 		}
-		return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+		super.updateIndirectNeighbourShapes(pState, pLevel, pPos, pFlags, pRecursionLeft);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(STATE);
 	}
+//
+//	@Override
+//	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+//		if (!pState.getValue(STATE).equals(TotemStates.INACTIVE) && !this.isInTotem(pPos, pLevel) && !this.isInAltar(
+//				pPos, pLevel)) {
+//			pState.setValue(STATE,TotemStates.INACTIVE);
+//		}
+//		super.tick(pState, pLevel, pPos, pRandom);
+//	}
 }
 

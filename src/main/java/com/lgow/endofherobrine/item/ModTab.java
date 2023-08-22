@@ -30,6 +30,7 @@ public class ModTab {
 			event.accept(ItemInit.HUSK_SPAWN_EGG.get());
 			event.accept(ItemInit.PIG_SPAWN_EGG.get());
 			event.accept(ItemInit.PIGMAN_SPAWN_EGG.get());
+			event.accept(ItemInit.RABBIT_SPAWN_EGG.get());
 			event.accept(ItemInit.SHEEP_SPAWN_EGG.get());
 			event.accept(ItemInit.SILVERFISH_SPAWN_EGG.get());
 			event.accept(ItemInit.SKELETON_SPAWN_EGG.get());
@@ -58,6 +59,7 @@ public class ModTab {
 			event.accept(ItemInit.HUSK_SPAWN_EGG.get());
 			event.accept(ItemInit.PIG_SPAWN_EGG.get());
 			event.accept(ItemInit.PIGMAN_SPAWN_EGG.get());
+			event.accept(ItemInit.RABBIT_SPAWN_EGG.get());
 			event.accept(ItemInit.SHEEP_SPAWN_EGG.get());
 			event.accept(ItemInit.SILVERFISH_SPAWN_EGG.get());
 			event.accept(ItemInit.SKELETON_SPAWN_EGG.get());

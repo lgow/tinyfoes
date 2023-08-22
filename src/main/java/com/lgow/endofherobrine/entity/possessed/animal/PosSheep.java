@@ -34,12 +34,9 @@ import java.util.UUID;
 
 public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
-	private static final EntityDataAccessor<Integer> NUM = SynchedEntityData.defineId(PosSheep.class,
+	private static final EntityDataAccessor<Integer> CLONE_NUMBER = SynchedEntityData.defineId(PosSheep.class,
 			EntityDataSerializers.INT);
-
 	@Nullable private UUID persistentAngerTarget;
-
 	private int remainingPersistentAngerTime;
 
 	public PosSheep(EntityType<? extends PosSheep> type, Level level) { super(type, level); }
@@ -49,9 +46,9 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 				.add(Attributes.FOLLOW_RANGE, 40).add(Attributes.ATTACK_DAMAGE, 3D);
 	}
 
-	public int getNum() { return this.entityData.get(NUM); }
+	public int getCloneNumber() { return this.entityData.get(CLONE_NUMBER); }
 
-	public void setNum(int num) { this.entityData.set(NUM, num); }
+	public void setCloneNumber(int num) { this.entityData.set(CLONE_NUMBER, num); }
 
 	@Override
 	protected void registerGoals() {
@@ -64,18 +61,24 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	@Override
 	public void aiStep() {
 		super.aiStep();
-		if (! this.level().isClientSide) {
-			Sheep sheep = (Sheep) this.convertBack(this, EntityType.SHEEP, ! this.isAngry() && this.getNum() != 0);
-			sheep.setColor(this.getColor());
-			sheep.setSheared(this.isSheared());
+		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+			if (this.getCloneNumber() == 0) {
+				Sheep sheep = (Sheep) this.convertBack(this, EntityType.SHEEP, !this.isAngry());
+				sheep.setColor(this.getColor());
+				sheep.setSheared(this.isSheared());
+			}
+			else if (this.tickCount > (2400 / this.getCloneNumber()) + random.nextInt(200)) {
+				this.level().broadcastEntityEvent(this, (byte) 60);
+				this.discard();
+			}
 		}
 	}
 
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.getEntityData().define(NUM, 0);
+		this.getEntityData().define(CLONE_NUMBER, 0);
 	}
 
 	@Override
@@ -84,14 +87,14 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.putInt("Num", this.getNum());
+		tag.putInt("CloneNumber", this.getCloneNumber());
 		this.addPersistentAngerSaveData(tag);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.setNum(tag.getInt("Num"));
+		this.setCloneNumber(tag.getInt("CloneNumber"));
 		this.readPersistentAngerSaveData(this.level(), tag);
 	}
 
@@ -111,19 +114,24 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	}
 
 	@Override
-	public boolean shouldDropExperience() { return super.shouldDropExperience() && this.getNum() == 0; }
+	public boolean shouldDropExperience() { return super.shouldDropExperience() && this.getCloneNumber() == 0; }
 
 	@Override
-	protected boolean shouldDropLoot() { return super.shouldDropLoot() && this.getNum() == 0; }
+	protected boolean shouldDropLoot() { return super.shouldDropLoot() && this.getCloneNumber() == 0; }
 
 	@Override
 	public void dropAllDeathLoot(DamageSource source) {
-		if (this.getNum() <= 3 && (source.getEntity() instanceof Player || this.lastHurtByPlayer != null)) {
+		if (this.getCloneNumber() <= 3 && (source.getEntity() instanceof Player || this.lastHurtByPlayer != null)) {
 			for (int i = 0; i < 2; i++) {
 				createSheep();
 			}
 		}
 		super.dropAllDeathLoot(source);
+	}
+
+	@Override
+	public boolean readyForShearing() {
+		return this.getCloneNumber() == 0 && super.readyForShearing();
 	}
 
 	@Override
@@ -136,7 +144,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 		sheep.setBaby(this.isBaby());
 		sheep.setCustomName(this.getCustomName());
 		sheep.copyPosition(this);
-		sheep.setNum(this.getNum() + 1);
+		sheep.setCloneNumber(this.getCloneNumber() + 1);
 		level().addFreshEntity(sheep);
 	}
 

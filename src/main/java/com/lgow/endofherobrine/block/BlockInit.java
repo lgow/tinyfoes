@@ -5,11 +5,16 @@ import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -19,7 +24,7 @@ import static com.lgow.endofherobrine.registries.ModRegistries.MOD_ITEMS;
 public class BlockInit {
 	public static final RegistryObject<Block> CURSED_SKULL, HEROBRINE_SKULL, CURSED_WALL_SKULL, HEROBRINE_WALL_SKULL;
 
-	public static final RegistryObject<BlockItem> GLOWING_OBSIDIAN, NETHERRACK_TOTEM, BLACKSTONE_TOTEM;
+	public static final RegistryObject<BlockItem> GLOWING_OBSIDIAN, NETHERRACK_TOTEM, BLACKSTONE_TOTEM, PATIMUSS_DOOR;
 
 	public static final TagKey<Block> NO_OVERRIDE = BlockTags.create(
 			new ModResourceLocation("prevent_builder_override"));
@@ -34,6 +39,8 @@ public class BlockInit {
 		GLOWING_OBSIDIAN = registerBlockItem("glowing_obsidian", GlowingObsidianBlock::new);
 		NETHERRACK_TOTEM = registerBlockItem("netherrack_totem", () -> new TotemBlock(Blocks.NETHERRACK));
 		BLACKSTONE_TOTEM = registerBlockItem("blackstone_totem", () -> new TotemBlock(Blocks.BLACKSTONE));
+		PATIMUSS_DOOR = registerBlockItem("patimuss_door", ()-> new DoorBlock(BlockBehaviour.Properties.of().mapColor(
+				DyeColor.CYAN).noOcclusion().pushReaction(PushReaction.DESTROY), BlockSetType.OAK));
 		//InfestedBlocks
 		registerInfestedBlock("cracked_stone_bricks", Blocks.CRACKED_STONE_BRICKS);
 		registerInfestedBlock("mossy_cobblestone", Blocks.MOSSY_COBBLESTONE);

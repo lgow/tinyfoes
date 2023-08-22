@@ -277,6 +277,9 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 			boolean b = super.hurt(pSource, Math.max(this.getHealth() - 1.0F, 0.0F));
 			if (hasbeencriiticalHit) {
 				this.sendSystemMessage(Component.literal("I'll be back"));
+				ModSavedData data = ModSavedData.get(this.level().getServer());
+				data.setDefeatedHerobrine(true);
+				data.setHerobrineRestTimer(12000);
 				this.teleportAway();
 			}
 			else {
@@ -346,14 +349,7 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 	@Override
 	protected void dropAllDeathLoot(DamageSource pDamageSource) {
 		if (!level().isClientSide()) {
-			ModSavedData data = ModSavedData.get(this.level().getServer());
-			if (!this.isEnraged()) {
-				data.setDefeatedHerobrine(true);
-				data.setHerobrineRestTimer(12000);
-			}
-			else {
-				data.setHerobrineIsDead(true);
-			}
+			ModSavedData.get(this.level().getServer()).setHerobrineIsDead(true);
 		}
 		super.dropAllDeathLoot(pDamageSource);
 	}

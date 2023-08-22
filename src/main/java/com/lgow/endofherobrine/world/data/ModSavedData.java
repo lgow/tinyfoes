@@ -85,7 +85,6 @@ public class ModSavedData extends SavedData {
 				this.spawnerDataMap.put(key, data);
 			});
 		}
-
 		if (nbt.contains("DefeatedHerobrine", Tag.TAG_BYTE)) defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
 		if (nbt.contains("HerobrineRestTimer", Tag.TAG_INT))herobrineRestTimer = nbt.getInt("HerobrineRestTimer");
 		if (nbt.contains("HerobrineIsDead", Tag.TAG_BYTE))herobrineIsDead = nbt.getBoolean("HerobrineIsDead");

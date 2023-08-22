@@ -5,6 +5,9 @@
     },
     "state=active": {
       "model": "endofherobrine:block/blackstone_totem_active"
+    },
+    "state=overcharged": {
+      "model":"endofherobrine:block/blackstone_totem"
     }
   }
 }

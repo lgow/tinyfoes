@@ -11,11 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.AbstractChestBlock;
-import net.minecraft.world.level.block.AbstractFurnaceBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -78,7 +76,7 @@ public class RandomEvents {
 		Block block = state.getBlock();
 		if (this.randomEventsTimer <= 0 && event.getLevel() instanceof ServerLevel serverLevel && probability(
 				serverLevel, 0.05F) && block instanceof AbstractFurnaceBlock
-				|| block instanceof AbstractChestBlock<?>) {
+				|| (block instanceof AbstractChestBlock<?>)) {
 			this.randomEventsTimer = 600;
 			event.getLevel().setBlockAndUpdate(event.getPos(),
 					state.rotate(event.getLevel(), event.getPos(), Rotation.CLOCKWISE_180));

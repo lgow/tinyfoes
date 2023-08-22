@@ -29,6 +29,7 @@
   "block.endofherobrine.mossy_stone_bricks": "Mossy Stone Bricks",
   "block.endofherobrine.mossy_cobblestone": "Mossy Cobblestone",
   "block.endofherobrine.netherrack_totem": "Netherrack Totem",
+  "block.endofherobrine.patimuss_door": "Patimuss' Door",
 
   "enchantment.endofherobrine.blessing" : "Notch's Blessing",
 
@@ -51,22 +52,24 @@
   "entity.endofherobrine.zombie_villager": "Possessed Zombie Villager",
 
   "painting.endofherobrine.blackstone.title": "Blackstone Totem",
-  "painting.endofherobrine.blackstone.author": "lgow",
+  "painting.endofherobrine.blackstone.author": "lgow & Quizzly_",
   "painting.endofherobrine.netherrack.title": "Netherrack Totem",
-  "painting.endofherobrine.netherrack.author": "lgow",
+  "painting.endofherobrine.netherrack.author": "lgow & Quizzly_",
   "painting.endofherobrine.lurker.title": "Lurker",
-  "painting.endofherobrine.lurker.author": "lgow",
+  "painting.endofherobrine.lurker.author": "lgow & Quizzly_",
   "painting.endofherobrine.altar.title": "Altar",
-  "painting.endofherobrine.altar.author": "lgow",
+  "painting.endofherobrine.altar.author": "lgow & Quizzly_",
   "painting.endofherobrine.fight.title": "Fight",
-  "painting.endofherobrine.fight.author": "lgow",
+  "painting.endofherobrine.fight.author": "lgow & Quizzly_",
   "painting.endofherobrine.crying_blood.title": "Crying Blood",
   "painting.endofherobrine.crying_blood.author": "lgow",
+  "painting.endofherobrine.copeland.title": "Copeland",
+  "painting.endofherobrine.copeland.author": "lgow",
 
   "item.endofherobrine.builder_spawn_egg": "Builder Spawn Egg",
   "item.endofherobrine.lurker_spawn_egg": "Lurker Spawn Egg",
   "item.endofherobrine.nightmare_spawn_egg": "Nightmare Spawn Egg",
-  "item.endofherobrine.doppelganger_spawn_egg": "Doppleganger Spawn Egg",
+  "item.endofherobrine.doppelganger_spawn_egg": "Doppelganger Spawn Egg",
 
   "item.endofherobrine.chicken_spawn_egg": "Possessed Chicken Spawn Egg",
   "item.endofherobrine.cow_spawn_egg": "Possessed Cow Spawn Egg",

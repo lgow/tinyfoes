@@ -3,6 +3,7 @@ package com.lgow.endofherobrine.item;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.StandingAndWallBlockItem;
@@ -19,7 +20,6 @@ public class ItemInit {
 	public static final RegistryObject<ForgeSpawnEggItem> BUILDER_SPAWN_EGG, LURKER_SPAWN_EGG, CHICKEN_SPAWN_EGG, COW_SPAWN_EGG, HUSK_SPAWN_EGG, PIG_SPAWN_EGG, PIGMAN_SPAWN_EGG, RABBIT_SPAWN_EGG, SHEEP_SPAWN_EGG, SILVERFISH_SPAWN_EGG, SKELETON_SPAWN_EGG, STRAY_SPAWN_EGG, VILLAGER_SPAWN_EGG, ZOMBIE_SPAWN_EGG, ZOMBIE_SPAWN_VILLAGER_EGG;
 
 	public static final RegistryObject<StandingAndWallBlockItem> CURSED_HEAD_ITEM, HEROBRINE_HEAD_ITEM;
-
 	static {
 		CURSED_HEAD_ITEM = MOD_ITEMS.register("cursed_head",
 				() -> new StandingAndWallBlockItem(CURSED_SKULL.get(), CURSED_WALL_SKULL.get(),

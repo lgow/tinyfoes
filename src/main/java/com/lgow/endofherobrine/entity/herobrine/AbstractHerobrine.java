@@ -18,6 +18,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -126,6 +127,11 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	@Override
 	protected float getStandingEyeHeight(Pose pose, EntityDimensions dim) { return 1.725F; }
 
+	@Override
+	public InteractionResult checkAndHandleImportantInteractions(Player pPlayer, InteractionHand pHand) {
+		return InteractionResult.PASS;
+	}
+
 	@Nullable
 	public Player getTargetPlayer() { return this.targetPlayer; }
 
@@ -157,11 +163,11 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 
 	@Override
 	protected void customServerAiStep() {
-		if(this.isInWater()){
-			this.moveTo(position().add(0,1,0));
+		if (this.isInWater()) {
+			this.moveTo(position().add(0, 1, 0));
 			this.setDeltaMovement(Vec3.ZERO);
 		}
-		this.setDeltaMovement(this.getDeltaMovement().multiply(1,0,1));
+		this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0, 1));
 		super.customServerAiStep();
 	}
 

@@ -1,6 +1,7 @@
 package com.lgow.endofherobrine.client.renderer;
 
 import com.lgow.endofherobrine.Main;
+import com.lgow.endofherobrine.block.BlockInit;
 import com.lgow.endofherobrine.block.ModSkullBlock;
 import com.lgow.endofherobrine.client.model.DopModel;
 import com.lgow.endofherobrine.client.model.PosPigmanModel;
@@ -11,6 +12,8 @@ import com.lgow.endofherobrine.tileentities.BlockEntityInit;
 import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.model.SkullModel;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
