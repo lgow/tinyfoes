@@ -3,7 +3,6 @@ package com.lgow.endofherobrine.item;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.StandingAndWallBlockItem;
@@ -30,19 +29,20 @@ public class ItemInit {
 		//SPAWN EGGS
 		BUILDER_SPAWN_EGG = registerSpawnEgg("builder", BUILDER, 44975);
 		LURKER_SPAWN_EGG = registerSpawnEgg("lurker", LURKER, 44975);
-		CHICKEN_SPAWN_EGG = registerSpawnEgg("chicken", CHICKEN, 10489616);
-		COW_SPAWN_EGG = registerSpawnEgg("cow", COW, 4470310);
-		HUSK_SPAWN_EGG = registerSpawnEgg("husk", HUSK, 12691306);
-		PIG_SPAWN_EGG = registerSpawnEgg("pig", PIG, 15771042);
+//		DOPPELGANGER_SPAWN_EGG = registerSpawnEgg("doppelganger", DOPPLEGANGER, 44975);
+		CHICKEN_SPAWN_EGG = registerSpawnEgg("chicken", P_CHICKEN, 10489616);
+		COW_SPAWN_EGG = registerSpawnEgg("cow", P_COW, 4470310);
+		HUSK_SPAWN_EGG = registerSpawnEgg("husk", P_HUSK, 12691306);
+		PIG_SPAWN_EGG = registerSpawnEgg("pig", P_PIG, 15771042);
 		PIGMAN_SPAWN_EGG = registerSpawnEgg("pigman", PIGMAN, 15373203);
-		RABBIT_SPAWN_EGG = registerSpawnEgg("rabbit", RABBIT, 10051392);
-		SHEEP_SPAWN_EGG = registerSpawnEgg("sheep", SHEEP, 15198183);
-		SILVERFISH_SPAWN_EGG = registerSpawnEgg("silverfish", SILVERFISH, 7237230);
-		SKELETON_SPAWN_EGG = registerSpawnEgg("skeleton", SKELETON, 12698049);
-		STRAY_SPAWN_EGG = registerSpawnEgg("stray", STRAY, 14543594);
-		VILLAGER_SPAWN_EGG = registerSpawnEgg("villager", VILLAGER, 12422002);
-		ZOMBIE_SPAWN_EGG = registerSpawnEgg("zombie", ZOMBIE, 3232308);
-		ZOMBIE_SPAWN_VILLAGER_EGG = registerSpawnEgg("zombie_villager", ZOMBIE_VILLAGER, 7969893);
+		RABBIT_SPAWN_EGG = registerSpawnEgg("rabbit", P_RABBIT, 10051392);
+		SHEEP_SPAWN_EGG = registerSpawnEgg("sheep", P_SHEEP, 15198183);
+		SILVERFISH_SPAWN_EGG = registerSpawnEgg("silverfish", P_SILVERFISH, 7237230);
+		SKELETON_SPAWN_EGG = registerSpawnEgg("skeleton", P_SKELETON, 12698049);
+		STRAY_SPAWN_EGG = registerSpawnEgg("stray", P_STRAY, 14543594);
+		VILLAGER_SPAWN_EGG = registerSpawnEgg("villager", P_VILlAGER, 12422002);
+		ZOMBIE_SPAWN_EGG = registerSpawnEgg("zombie", P_ZOMBIE, 3232308);
+		ZOMBIE_SPAWN_VILLAGER_EGG = registerSpawnEgg("zombie_villager", P_ZOMBIE_VILLAGER, 7969893);
 	}
 
 	private static RegistryObject<ForgeSpawnEggItem> registerSpawnEgg(String name, Supplier<? extends EntityType<? extends Mob>> entityType, int color) {

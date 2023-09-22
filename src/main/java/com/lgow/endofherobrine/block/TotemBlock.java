@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -103,6 +102,11 @@ public class TotemBlock extends Block {
 				&& levelData.hasDefeatedHerobrine() && !levelData.isHerobrineDeadOrResting();
 	}
 
+	private boolean canActivateAltar(BlockState state, ServerLevel serverLevel, BlockPos pos) {
+		return !isBlackstone && state.getValue(STATE).equals(TotemStates.INACTIVE) && this.isInAltar(pos, serverLevel)
+				&& ModSavedData.get(serverLevel.getServer()).herobrineIsDead();
+	}
+
 	private void checkSpawn(ServerLevel server, BlockPos pPos) {
 		if (pPos.getY() >= server.getMinBuildHeight()) {
 			HerobrineBoss herobrineBoss = EntityInit.HEROBRINE_BOSS.get().create(server);
@@ -177,7 +181,7 @@ public class TotemBlock extends Block {
 			if (this.canActivateNetherrackTotem(state, serverLevel, pos)) {
 				this.activate(serverLevel, pos, state);
 			}
-			else if (isInAltar(pos, serverLevel)) {
+			else if (canActivateAltar(state, serverLevel, pos)) {
 				this.overcharge(serverLevel, pos, state);
 			}
 		}
@@ -187,7 +191,7 @@ public class TotemBlock extends Block {
 	@Override
 	public void updateIndirectNeighbourShapes(BlockState pState, LevelAccessor pLevel, BlockPos pPos, int pFlags, int pRecursionLeft) {
 		if (pLevel instanceof ServerLevel serverLevel) {
-			if (isInAltar(pPos, serverLevel)) {
+			if (canActivateAltar(pState, serverLevel, pPos)) {
 				this.overcharge(serverLevel, pPos, pState);
 			}
 		}
@@ -198,14 +202,6 @@ public class TotemBlock extends Block {
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(STATE);
 	}
-//
-//	@Override
-//	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-//		if (!pState.getValue(STATE).equals(TotemStates.INACTIVE) && !this.isInTotem(pPos, pLevel) && !this.isInAltar(
-//				pPos, pLevel)) {
-//			pState.setValue(STATE,TotemStates.INACTIVE);
-//		}
-//		super.tick(pState, pLevel, pPos, pRandom);
-//	}
+
 }
 

@@ -54,6 +54,10 @@ public class ModSavedData extends SavedData {
 		setDirty();
 	}
 
+	public void setBuiltLetters(String builtLetters) {
+		this.builtLetters.concat(", " + builtLetters);
+	}
+
 	public boolean hasResurrectedHerobrine() {
 		return resurrectedHerobrine;
 	}
@@ -61,6 +65,9 @@ public class ModSavedData extends SavedData {
 	public void setResurrectedHerobrine(boolean b) {
 		resurrectedHerobrine = b;
 		setDirty();
+	}
+	public boolean herobrineIsDead() {
+		return herobrineIsDead;
 	}
 
 	public boolean isHerobrineDeadOrResting() {

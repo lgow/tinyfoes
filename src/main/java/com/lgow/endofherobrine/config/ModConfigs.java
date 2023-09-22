@@ -10,11 +10,9 @@ public class ModConfigs {
 
 	public static final ForgeConfigSpec CLIENT_SPEC, COMMON_SPEC;
 
-	public static ForgeConfigSpec.IntValue REMAIN_POSSESSED, SPAWN_COOLDOWN, SPAWN_CHANCE;
+	public static ForgeConfigSpec.IntValue REMAIN_POSSESSED_TICKS, SPAWN_COOLDOWN, SPAWN_CHANCE;
 
-	public static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, MOB_POSSESSION, CONVERT_BACK, SPAWN_BUILDER;
-
-	public static ForgeConfigSpec.ValueSpec POS_MOB_BLACKLIST, HEROBRINE_VARIANT_BLACKLIST, EVENT_BLACKLIST;
+	public static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, DO_MOB_POSSESSION, REVERT_POSSESSION, SPAWN_BUILDER;
 
 	static {
 		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
@@ -43,9 +41,9 @@ public class ModConfigs {
 			LEGACY_STRUCTURES = builder.comment("Should Herobrine build 1.7.10 structures?").define(
 					"legacyStructures", false);
 			builder.comment("\n## Possession ###\n");
-			MOB_POSSESSION = builder.comment("Should mobs get possessed?").define("mobPossession", true);
-			CONVERT_BACK = builder.comment("Should possessed animals convert back?").define("revertPossession", true);
-			REMAIN_POSSESSED = builder.comment("Time in ticks mobs will remain possessed #Default: 1/2 minecraft day")
+			DO_MOB_POSSESSION = builder.comment("Should mobs get possessed?").define("doMobPossession", true);
+			REVERT_POSSESSION = builder.comment("Should possessed animals convert back?").define("revertPossession", true);
+			REMAIN_POSSESSED_TICKS = builder.comment("Time in ticks mobs will remain possessed #Default: 1/2 minecraft day")
 					.defineInRange("remainPossessedTicks", 12000, 0, Integer.MAX_VALUE);
 			builder.comment("\n## Herobrine Spawn Rate ###\n");
 			

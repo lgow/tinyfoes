@@ -1,7 +1,6 @@
 package com.lgow.endofherobrine.client.renderer;
 
 import com.lgow.endofherobrine.Main;
-import com.lgow.endofherobrine.block.BlockInit;
 import com.lgow.endofherobrine.block.ModSkullBlock;
 import com.lgow.endofherobrine.client.model.DopModel;
 import com.lgow.endofherobrine.client.model.PosPigmanModel;
@@ -12,8 +11,6 @@ import com.lgow.endofherobrine.tileentities.BlockEntityInit;
 import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.model.SkullModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -33,19 +30,19 @@ public class RenderSetup {
 		EntityRenderers.register(HEROBRINE_BOSS.get(), HerobrineRender::new);
 		EntityRenderers.register(BUILDER.get(), BuilderRender::new);
 		EntityRenderers.register(LURKER.get(), HerobrineRender::new);
-		EntityRenderers.register(CHICKEN.get(), PosChickenRender::new);
-		EntityRenderers.register(COW.get(), PosCowRender::new);
-		EntityRenderers.register(HUSK.get(), PosHuskRender::new);
-		EntityRenderers.register(PIG.get(), PosPigRender::new);
+		EntityRenderers.register(P_CHICKEN.get(), PosChickenRender::new);
+		EntityRenderers.register(P_COW.get(), PosCowRender::new);
+		EntityRenderers.register(P_HUSK.get(), PosHuskRender::new);
+		EntityRenderers.register(P_PIG.get(), PosPigRender::new);
 		EntityRenderers.register(PIGMAN.get(), PosPigmanRender::new);
-		EntityRenderers.register(RABBIT.get(), PosRabbitRender::new);
-		EntityRenderers.register(SHEEP.get(), PosSheepRender::new);
-		EntityRenderers.register(SKELETON.get(), PosSkeletonRender::new);
-		EntityRenderers.register(SILVERFISH.get(), PosSilverfishRender::new);
-		EntityRenderers.register(STRAY.get(), PosStrayRender::new);
-		EntityRenderers.register(VILLAGER.get(), PosVillagerRenderer::new);
-		EntityRenderers.register(ZOMBIE.get(), PosZombieRender::new);
-		EntityRenderers.register(ZOMBIE_VILLAGER.get(), PosZombieVillagerRenderer::new);
+		EntityRenderers.register(P_RABBIT.get(), PosRabbitRender::new);
+		EntityRenderers.register(P_SHEEP.get(), PosSheepRender::new);
+		EntityRenderers.register(P_SKELETON.get(), PosSkeletonRender::new);
+		EntityRenderers.register(P_SILVERFISH.get(), PosSilverfishRender::new);
+		EntityRenderers.register(P_STRAY.get(), PosStrayRender::new);
+		EntityRenderers.register(P_VILlAGER.get(), PosVillagerRenderer::new);
+		EntityRenderers.register(P_ZOMBIE.get(), PosZombieRender::new);
+		EntityRenderers.register(P_ZOMBIE_VILLAGER.get(), PosZombieVillagerRenderer::new);
 		BlockEntityRenderers.register(BlockEntityInit.SKULL.get(), SkullBlockRenderer::new);
 	}
 

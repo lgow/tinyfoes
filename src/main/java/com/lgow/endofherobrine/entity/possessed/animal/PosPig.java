@@ -51,10 +51,6 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			Pig pig = (Pig) this.convertBack(this, EntityType.PIG, !this.isAngry());
-			if (this.isSaddled()) {
-				pig.equipSaddle(null);
-			}
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
@@ -105,7 +101,7 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	}
 
 	@Override
-	public Pig getBreedOffspring(ServerLevel server, AgeableMob mob) { return EntityInit.PIG.get().create(server); }
+	public Pig getBreedOffspring(ServerLevel server, AgeableMob mob) { return EntityInit.P_PIG.get().create(server); }
 
 	@Override
 	protected void actuallyHurt(DamageSource source, float amount) {

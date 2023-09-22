@@ -1,6 +1,6 @@
 package com.lgow.endofherobrine.util;
 
-import com.lgow.endofherobrine.entity.EntityInit;
+import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
 import com.lgow.endofherobrine.entity.possessed.PosZombieVillager;
 import com.lgow.endofherobrine.entity.possessed.animal.PosPig;
@@ -28,23 +28,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static net.minecraft.world.entity.EntityType.HUSK;
-import static net.minecraft.world.entity.EntityType.RABBIT;
-import static net.minecraft.world.entity.EntityType.SHEEP;
-import static net.minecraft.world.entity.EntityType.VILLAGER;
-import static net.minecraft.world.entity.EntityType.ZOMBIE_VILLAGER;
+import static com.lgow.endofherobrine.entity.EntityInit.*;
+import static net.minecraft.world.entity.EntityType.*;
 
 public class ModUtil {
 	public static Random random = new Random();
-	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> mobList = Map.of(
-			EntityType.CHICKEN, EntityInit.CHICKEN.get(), EntityType.COW, EntityInit.COW.get(), EntityType.PIG,
-			EntityInit.PIG.get(), EntityType.RABBIT, EntityInit.RABBIT.get(), EntityType.SHEEP, EntityInit.SHEEP.get(),
-			EntityType.VILLAGER, EntityInit.VILLAGER.get());
-
-	private static final Map<EntityType<? extends Monster>, EntityType<? extends Monster>> monsterList = Map.of(EntityType.HUSK,
-			EntityInit.HUSK.get(), EntityType.SILVERFISH, EntityInit.SILVERFISH.get(), EntityType.SKELETON,
-			EntityInit.SKELETON.get(), EntityType.STRAY, EntityInit.STRAY.get(), EntityType.ZOMBIE,
-			EntityInit.ZOMBIE.get(), EntityType.ZOMBIE_VILLAGER, EntityInit.ZOMBIE_VILLAGER.get());
+	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> mobList = Map.of(CHICKEN,
+			P_CHICKEN.get(), COW, P_COW.get(), PIG, P_PIG.get(), RABBIT, P_RABBIT.get(), SHEEP, P_SHEEP.get(), VILLAGER,
+			P_VILlAGER.get());
+	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> invertedMobList = Map.of(
+			P_CHICKEN.get(), CHICKEN, P_COW.get(), COW, P_PIG.get(), PIG, P_RABBIT.get(), RABBIT, P_SHEEP.get(), SHEEP,
+			P_VILlAGER.get(), VILLAGER);
+	private static final Map<EntityType<? extends Monster>, EntityType<? extends Monster>> monsterList = Map.of(HUSK,
+			P_HUSK.get(), SILVERFISH, P_SILVERFISH.get(), SKELETON, P_SKELETON.get(), STRAY, P_STRAY.get(), ZOMBIE,
+			P_ZOMBIE.get(), ZOMBIE_VILLAGER, P_ZOMBIE_VILLAGER.get());
 
 	//Spawns herobrine relative to a position and direction
 	public static void spawnHerobrine(AbstractHerobrine herobrine, ServerLevel server, Direction dir, Vec3 pos, double offs) {
@@ -57,45 +54,77 @@ public class ModUtil {
 		server.addFreshEntity(herobrine);
 	}
 
-	 public static void possessMob(Mob mob, ServerLevel level, boolean isAngry, boolean affectMonsters) {
-		 EntityType<?> type = mob.getType();
-		if (mobList.containsKey(type)) {
-			Mob posMob = mob.convertTo(mobList.get(mob.getType()), true);
-			posMob.setHealth(mob.getHealth());
-			if (type.equals(EntityType.PIG) && ((Pig) mob).isSaddled()) {
-				((PosPig) posMob).equipSaddle(null);
-			}
-			else if (type.equals(RABBIT)) {
-				((PosRabbit)posMob).setVariant(((Rabbit) mob).getVariant());
-			}
-			else if (type.equals(SHEEP)) {
-				((PosSheep)posMob).setColor(((Sheep) mob).getColor());
-				((PosSheep)posMob).setSheared(((Sheep) mob).isSheared());
-			}
-			else if (type.equals(VILLAGER)) {
-				((PosVillager) posMob).setVillagerData(((Villager) mob).getVillagerData());
-			}
-			if (isAngry) {
-				level.playSound(null, mob.blockPosition(), SoundEvents.GHAST_HURT, SoundSource.HOSTILE, 1.0F,
-						1.0F);
-				mob.setLastHurtByMob(mob.getLastHurtByMob());
+	public static void possessMob(Mob mob, ServerLevel level, boolean isAngry, boolean affectMonsters) {
+		EntityType<?> type = mob.getType();
+		if (ModConfigs.DO_MOB_POSSESSION.get() && !mob.getType().getTags().toList().contains(DONT_POSSESS)) {
+			if (mobList.containsKey(type)) {
+				Mob posMob = mob.convertTo(mobList.get(mob.getType()), true);
+				if (type.equals(PIG)) {
+					if (((Pig) mob).isSaddled()) {
+						((PosPig) posMob).equipSaddle(null);
+					}
+				}
+				else if (type.equals(RABBIT)) {
+					((PosRabbit) posMob).setVariant(((Rabbit) mob).getVariant());
+				}
+				else if (type.equals(SHEEP)) {
+					((PosSheep) posMob).setColor(((Sheep) mob).getColor());
+					((PosSheep) posMob).setSheared(((Sheep) mob).isSheared());
+				}
+				else if (type.equals(VILLAGER)) {
+					((PosVillager) posMob).setVillagerData(((Villager) mob).getVillagerData());
+					((PosVillager) posMob).setOffers(((Villager) mob).getOffers());
+					((PosVillager) posMob).setVillagerXp(((Villager) mob).getVillagerXp());
+				}
+				if (isAngry) {
+					level.playSound(null, mob.blockPosition(), SoundEvents.GHAST_HURT, SoundSource.HOSTILE, 1.0F, 1.0F);
+					mob.setLastHurtByMob(mob.getLastHurtByMob());
+				}
 			}
 		}
 		if (affectMonsters && monsterList.containsKey(mob.getType())) {
 			Mob posMob = mob.convertTo(monsterList.get(type), true);
 			if (type.equals(ZOMBIE_VILLAGER)) {
 				((PosZombieVillager) posMob).setVillagerData(((ZombieVillager) mob).getVillagerData());
-			}else if (type.equals(HUSK)){
-				posMob.setNoAi(false);
+				if (((ZombieVillager) mob).tradeOffers != null) {
+					((PosZombieVillager) posMob).setTradeOffers(((ZombieVillager) mob).tradeOffers);
+				}
 			}
 		}
 	}
 
-	public static boolean noHerobrineExists(Level level) {
+	public static void revertPossession(Mob posMob, boolean canConvert) {
+		EntityType<?> type = posMob.getType();
+		if (invertedMobList.containsKey(type)) {
+			if (posMob.isAlive() && ((ModConfigs.REVERT_POSSESSION.get()
+					&& posMob.tickCount > ModConfigs.REMAIN_POSSESSED_TICKS.get() && canConvert))) {
+				Mob mob = posMob.convertTo(invertedMobList.get(posMob.getType()), true);
+				if (type.equals(P_PIG.get())) {
+					if (((PosPig) posMob).isSaddled()) {
+						((Pig) posMob).equipSaddle(null);
+					}
+				}
+				else if (type.equals(P_RABBIT.get())) {
+					((Rabbit) mob).setVariant(((PosRabbit) posMob).getVariant());
+				}
+				else if (type.equals(P_SHEEP.get())) {
+					((Sheep) mob).setColor(((PosSheep) posMob).getColor());
+					((Sheep) mob).setSheared(((PosSheep) posMob).isSheared());
+				}
+				else if (type.equals(P_VILlAGER.get())) {
+					((Villager) mob).setVillagerData(((PosVillager) posMob).getVillagerData());
+					((Villager) mob).setOffers(((PosVillager) posMob).getOffers());
+					((Villager) mob).setVillagerXp(((PosVillager) posMob).getVillagerXp());
+				}
+			}
+		}
+	}
+
+	public static boolean herobrineExists(Level level) {
 		List<AbstractHerobrine> list = new ArrayList<>();
 		for (ServerPlayer serverplayer : level.getServer().getPlayerList().getPlayers()) {
 			list.addAll(level.getEntitiesOfClass(AbstractHerobrine.class, serverplayer.getBoundingBox().inflate(256)));
 		}
-		return list.isEmpty();
+		return !list.isEmpty();
 	}
 }

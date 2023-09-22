@@ -12,14 +12,9 @@ import com.lgow.endofherobrine.registries.ModRegistries;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.lgow.endofherobrine.entity.EntityInit.*;
 
@@ -48,18 +43,18 @@ public class Main {
 		event.put(HEROBRINE_BOSS.get(), HerobrineBoss.createAttributes().build());
 		event.put(BUILDER.get(), AbstractHerobrine.setCustomAttributes().build());
 		event.put(LURKER.get(), AbstractHerobrine.setCustomAttributes().build());
-		event.put(CHICKEN.get(), PosChicken.setCustomAttributes().build());
-		event.put(COW.get(), PosCow.setCustomAttributes().build());
-		event.put(HUSK.get(), PosHusk.setCustomAttributes().build());
-		event.put(PIG.get(), PosPig.setCustomAttributes().build());
+		event.put(P_CHICKEN.get(), PosChicken.setCustomAttributes().build());
+		event.put(P_COW.get(), PosCow.setCustomAttributes().build());
+		event.put(P_HUSK.get(), PosHusk.setCustomAttributes().build());
+		event.put(P_PIG.get(), PosPig.setCustomAttributes().build());
 		event.put(PIGMAN.get(), PosPigman.setCustomAttributes().build());
-		event.put(RABBIT.get(), PosRabbit.setCustomAttributes().build());
-		event.put(SHEEP.get(), PosSheep.setCustomAttributes().build());
-		event.put(SILVERFISH.get(), PosSilverfish.setCustomAttributes().build());
-		event.put(SKELETON.get(), PosSkeleton.setCustomAttributes().build());
-		event.put(STRAY.get(), PosStray.setCustomAttributes().build());
-		event.put(VILLAGER.get(), PosZombieVillager.setCustomAttributes().build());
-		event.put(ZOMBIE.get(), PosZombie.setCustomAttributes().build());
-		event.put(ZOMBIE_VILLAGER.get(), PosZombieVillager.setCustomAttributes().build());
+		event.put(P_RABBIT.get(), PosRabbit.setCustomAttributes().build());
+		event.put(P_SHEEP.get(), PosSheep.setCustomAttributes().build());
+		event.put(P_SILVERFISH.get(), PosSilverfish.setCustomAttributes().build());
+		event.put(P_SKELETON.get(), PosSkeleton.setCustomAttributes().build());
+		event.put(P_STRAY.get(), PosStray.setCustomAttributes().build());
+		event.put(P_VILlAGER.get(), PosZombieVillager.setCustomAttributes().build());
+		event.put(P_ZOMBIE.get(), PosZombie.setCustomAttributes().build());
+		event.put(P_ZOMBIE_VILLAGER.get(), PosZombieVillager.setCustomAttributes().build());
 	}
 }

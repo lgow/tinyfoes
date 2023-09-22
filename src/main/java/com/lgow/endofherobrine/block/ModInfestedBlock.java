@@ -15,9 +15,8 @@ public class ModInfestedBlock extends Block {
 		super(pProperties.destroyTime(pHostBlock.defaultDestroyTime() / 2.0F).explosionResistance(0.75F));
 	}
 
-	//Spawns silverfish
 	protected void spawnInfestation(ServerLevel world, BlockPos pos) {
-		PosSilverfish posSilverfish = EntityInit.SILVERFISH.get().create(world);
+		PosSilverfish posSilverfish = EntityInit.P_SILVERFISH.get().create(world);
 		posSilverfish.moveTo((double) pos.getX() + 0.5D, pos.getY(), (double) pos.getZ() + 0.5D, 0.0F, 0.0F);
 		world.addFreshEntity(posSilverfish);
 		posSilverfish.spawnAnim();

@@ -63,16 +63,16 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
-			if (this.getCloneNumber() == 0) {
-				Sheep sheep = (Sheep) this.convertBack(this, EntityType.SHEEP, !this.isAngry());
-				sheep.setColor(this.getColor());
-				sheep.setSheared(this.isSheared());
-			}
-			else if (this.tickCount > (2400 / this.getCloneNumber()) + random.nextInt(200)) {
+			if (this.getCloneNumber() > 0 && this.tickCount > (2400 / this.getCloneNumber()) + random.nextInt(200)) {
 				this.level().broadcastEntityEvent(this, (byte) 60);
 				this.discard();
 			}
 		}
+	}
+
+	@Override
+	public boolean canRevertPossession() {
+		return this.getCloneNumber() == 0 && PossessedAnimal.super.canRevertPossession();
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 
 	@Override
 	public Sheep getBreedOffspring(ServerLevel server, AgeableMob mob) {
-		return EntityInit.SHEEP.get().create(server);
+		return EntityInit.P_SHEEP.get().create(server);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	public MobType getMobType() { return ModMobTypes.POSSESSED; }
 
 	private void createSheep() {
-		PosSheep sheep = EntityInit.SHEEP.get().create(level());
+		PosSheep sheep = EntityInit.P_SHEEP.get().create(level());
 		sheep.setColor(this.getColor());
 		sheep.setSheared(this.isSheared());
 		sheep.setBaby(this.isBaby());

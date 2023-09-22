@@ -24,6 +24,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.lgow.endofherobrine.util.ModUtil.herobrineExists;
+
 public class HerobrineSpawner {
 	private final SpawnerData data;
 
@@ -49,7 +51,7 @@ public class HerobrineSpawner {
 	}
 
 	public void tick(ServerLevel level) {
-		if (this.spawnChance != 0 && WrathHandler.getHerobrinesWrath(level) > 0 && ModUtil.noHerobrineExists(
+		if (this.spawnChance != 0 && WrathHandler.getHerobrinesWrath(level) > 0 && !herobrineExists(
 				level)) {
 			if (--this.tickDelay <= 0) {
 				int delay = Math.max(this.spawnCooldown / 20, 1);

@@ -40,10 +40,8 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 
 	public PosVillager(EntityType<? extends PosVillager> type, Level level) {
 		super(type, level);
-		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
 		this.getNavigation().setCanFloat(true);
-		BuiltInRegistries.VILLAGER_PROFESSION.getRandom(this.random).ifPresent(
-				(holder) -> this.setVillagerData(this.getVillagerData().setProfession(holder.value())));
+		((GroundPathNavigation) this.getNavigation()).setCanOpenDoors(true);
 	}
 
 	public static AttributeSupplier.Builder setCustomAttributes() {
@@ -116,7 +114,7 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 
 	public Villager getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
 		Villager villager = super.getBreedOffspring(pLevel,pOtherParent);
-		PosVillager posVillager = villager.convertTo(EntityInit.VILLAGER.get(), true);
+		PosVillager posVillager = villager.convertTo(EntityInit.P_VILlAGER.get(), true);
 		posVillager.setVillagerData(villager.getVillagerData());
 		return posVillager;
 	}
@@ -132,8 +130,6 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			Villager villager = (Villager) this.convertBack(this, EntityType.VILLAGER, !this.isAngry());
-			villager.setVillagerData(this.getVillagerData());
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}

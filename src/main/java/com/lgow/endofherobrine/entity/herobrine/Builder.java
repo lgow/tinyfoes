@@ -60,8 +60,7 @@ public class Builder extends AbstractHerobrine {
 			StructureTemplate structure = server.getStructureManager().getOrCreate(
 					new ModResourceLocation(directory + resLoc));
 			for (BlockState state : server.getBlockStates(AABB.of(structure.getBoundingBox(settings, pos))).toList()) {
-				if (state.getBlock() instanceof BaseEntityBlock || state.getBlock() instanceof BedBlock
-						|| state.getTags().toList().contains(BlockInit.NO_OVERRIDE)) {
+				if (state.getTags().toList().contains(BlockInit.NO_OVERRIDE)) {
 					canBuild = false;
 				}
 			}

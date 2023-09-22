@@ -49,8 +49,6 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			Rabbit rabbit = (Rabbit) this.convertBack(this, EntityType.RABBIT, !this.isAngry());
-			rabbit.setVariant(this.getVariant());
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
@@ -71,7 +69,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	protected SoundEvent getAmbientSound() { return null; }
 
 	public Rabbit getBreedOffspring(ServerLevel server, AgeableMob mob) {
-		return EntityInit.RABBIT.get().create(server);
+		return EntityInit.P_RABBIT.get().create(server);
 	}
 
 	private void spawnLingeringCloud() {

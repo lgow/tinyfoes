@@ -55,7 +55,6 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			this.convertBack(this, EntityType.CHICKEN, !this.isAngry());
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
@@ -65,7 +64,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	}
 
 	public Chicken getBreedOffspring(ServerLevel server, AgeableMob mob) {
-		return EntityInit.CHICKEN.get().create(server);
+		return EntityInit.P_CHICKEN.get().create(server);
 	}
 
 	@Override

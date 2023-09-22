@@ -51,7 +51,6 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			this.convertBack(this, EntityType.COW, !this.isAngry());
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
 		}
 	}
@@ -67,7 +66,7 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 
 	@Override
 	public Cow getBreedOffspring(ServerLevel server, AgeableMob mob) {
-		return EntityInit.COW.get().create(server);
+		return EntityInit.P_COW.get().create(server);
 	}
 
 	@Override
