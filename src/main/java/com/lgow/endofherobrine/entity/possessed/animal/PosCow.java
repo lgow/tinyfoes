@@ -30,10 +30,8 @@ import java.util.UUID;
 
 public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
 	private @Nullable UUID persistentAngerTarget;
-
-	private int remainingPersistentAngerTime;
+	private int remainingPersistentAngerTime, possessionTimer;
 
 	public PosCow(EntityType<? extends PosCow> type, Level level) { super(type, level); }
 
@@ -73,12 +71,14 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		this.addPersistentAngerSaveData(pCompound);
+		this.addPossessionSavedData(pCompound, possessionTimer);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
 		this.readPersistentAngerSaveData(this.level(), pCompound);
+		this.readPossessionSaveData(pCompound);
 	}
 
 	@Override
@@ -111,5 +111,9 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	@Override
 	public void startPersistentAngerTimer() {
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+	}
+	@Override
+	public void setPossessionTimer(int possessionTimer) {
+		this.possessionTimer = possessionTimer;
 	}
 }

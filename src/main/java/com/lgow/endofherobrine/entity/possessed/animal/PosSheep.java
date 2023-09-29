@@ -37,7 +37,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 	private static final EntityDataAccessor<Integer> CLONE_NUMBER = SynchedEntityData.defineId(PosSheep.class,
 			EntityDataSerializers.INT);
 	@Nullable private UUID persistentAngerTarget;
-	private int remainingPersistentAngerTime;
+private int remainingPersistentAngerTime, possessionTimer;
 
 	public PosSheep(EntityType<? extends PosSheep> type, Level level) { super(type, level); }
 
@@ -89,6 +89,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 		super.addAdditionalSaveData(tag);
 		tag.putInt("CloneNumber", this.getCloneNumber());
 		this.addPersistentAngerSaveData(tag);
+		this.addPossessionSavedData(tag, possessionTimer);
 	}
 
 	@Override
@@ -96,6 +97,7 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 		super.readAdditionalSaveData(tag);
 		this.setCloneNumber(tag.getInt("CloneNumber"));
 		this.readPersistentAngerSaveData(this.level(), tag);
+		this.readPossessionSaveData(tag);
 	}
 
 	@Override
@@ -160,9 +162,10 @@ public class PosSheep extends Sheep implements NeutralMob, PossessedAnimal {
 
 	@Override
 	public void setPersistentAngerTarget(@Nullable UUID pTarget) { this.persistentAngerTarget = pTarget; }
-
 	@Override
 	public void startPersistentAngerTimer() {
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
-	}
-}
+	}@Override
+	public void setPossessionTimer(int possessionTimer) {
+		this.possessionTimer = possessionTimer;
+	}}

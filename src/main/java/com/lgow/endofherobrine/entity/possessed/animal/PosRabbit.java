@@ -25,10 +25,8 @@ import java.util.UUID;
 
 public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
 	@Nullable private UUID persistentAngerTarget;
-
-	private int remainingPersistentAngerTime;
+	private int remainingPersistentAngerTime, possessionTimer;
 
 	public PosRabbit(EntityType<? extends PosRabbit> type, Level level) { super(type, level); }
 
@@ -57,12 +55,14 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		this.addPersistentAngerSaveData(pCompound);
+		this.addPossessionSavedData(pCompound, possessionTimer);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag pCompound) {
 		super.readAdditionalSaveData(pCompound);
 		this.readPersistentAngerSaveData(this.level(), pCompound);
+		this.readPossessionSaveData(pCompound);
 	}
 
 	@Override
@@ -74,13 +74,13 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 
 	private void spawnLingeringCloud() {
 		Collection<MobEffectInstance> collection = this.getActiveEffects();
-		if (! collection.isEmpty()) {
+		if (!collection.isEmpty()) {
 			AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 			areaeffectcloud.setRadius(2.5F);
-			areaeffectcloud.setRadiusOnUse(- 0.5F);
+			areaeffectcloud.setRadiusOnUse(-0.5F);
 			areaeffectcloud.setWaitTime(10);
 			areaeffectcloud.setDuration(areaeffectcloud.getDuration() / 2);
-			areaeffectcloud.setRadiusPerTick(- areaeffectcloud.getRadius() / (float) areaeffectcloud.getDuration());
+			areaeffectcloud.setRadiusPerTick(-areaeffectcloud.getRadius() / (float) areaeffectcloud.getDuration());
 			for (MobEffectInstance mobeffectinstance : collection) {
 				areaeffectcloud.addEffect(new MobEffectInstance(mobeffectinstance));
 			}
@@ -89,7 +89,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	}
 
 	private void explode() {
-		if (! this.level().isClientSide) {
+		if (!this.level().isClientSide) {
 			this.dead = true;
 			this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3f, Level.ExplosionInteraction.MOB);
 			this.discard();
@@ -118,10 +118,12 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 
 	@Override
 	public void setPersistentAngerTarget(@Nullable UUID pTarget) { this.persistentAngerTarget = pTarget; }
-
 	@Override
 	public void startPersistentAngerTimer() {
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
 	}
+	@Override
+	public void setPossessionTimer(int possessionTimer) {
+		this.possessionTimer = possessionTimer;
+	}
 }
-

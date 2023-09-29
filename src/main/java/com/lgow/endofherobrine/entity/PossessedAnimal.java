@@ -4,6 +4,7 @@ import com.lgow.endofherobrine.entity.ai.neutral.DefendPassiveMobsGoal;
 import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalPanicGoal;
 import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalTargetGoal;
 import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalWalkAroundGoal;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -15,6 +16,16 @@ public interface PossessedAnimal extends PossessedMob, NeutralMob {
 	default boolean canRevertPossession() {
 		return !this.isAngry();
 	}
+
+	default void addPossessionSavedData(CompoundTag pCompound, int possessionTimer) {
+		pCompound.putInt("PossessionTimer", possessionTimer);
+	}
+
+	default void readPossessionSaveData(CompoundTag pCompound) {
+		this.setPossessionTimer(pCompound.getInt("PossessionTimer"));
+	}
+
+	void setPossessionTimer(int possessionTimer);
 
 	default void registerPosAnimalGoals(PathfinderMob mob, double speed) {
 		this.registerPosAnimalGoals(mob, speed, speed);

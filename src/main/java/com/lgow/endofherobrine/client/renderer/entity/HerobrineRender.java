@@ -35,8 +35,7 @@ public class HerobrineRender extends LivingEntityRenderer<AbstractHerobrine, Pla
 
 	@Override
 	protected boolean shouldShowName(AbstractHerobrine herobrine) {
-		return (ModConfigs.SHOW_NAMETAG.get() && herobrine.getDisplayName().getString().equals("Herobrine"))
-				&& super.shouldShowName(herobrine);
+		return (ModConfigs.shouldShowHerobrineNametag() && super.shouldShowName(herobrine);
 	}
 
 	@Override

@@ -10,9 +10,9 @@ public class ModConfigs {
 
 	public static final ForgeConfigSpec CLIENT_SPEC, COMMON_SPEC;
 
-	public static ForgeConfigSpec.IntValue REMAIN_POSSESSED_TICKS, SPAWN_COOLDOWN, SPAWN_CHANCE;
+	private static ForgeConfigSpec.IntValue REMAIN_POSSESSED_TICKS, SPAWN_COOLDOWN, SPAWN_CHANCE;
 
-	public static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, DO_MOB_POSSESSION, REVERT_POSSESSION, SPAWN_BUILDER;
+	private static ForgeConfigSpec.BooleanValue EYE_GLOW, SHOW_NAMETAG, LEGACY_STRUCTURES, DO_MOB_POSSESSION, REVERT_POSSESSION, SPAWN_BUILDER;
 
 	static {
 		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
@@ -54,5 +54,41 @@ public class ModConfigs {
 			SPAWN_BUILDER = builder.comment("Should spawn herobrine builder?").define("spawnBuilder", false);
 			builder.pop();
 		}
+	}
+
+	public static ForgeConfigSpec.IntValue getRemainPossessedTicks() {
+		return REMAIN_POSSESSED_TICKS;
+	}
+
+	public static ForgeConfigSpec.IntValue getSpawnCooldown() {
+		return SPAWN_COOLDOWN;
+	}
+
+	public static ForgeConfigSpec.IntValue getSpawnChance() {
+		return SPAWN_CHANCE;
+	}
+
+	public static boolean shouldEyesGlow() {
+		return EYE_GLOW.get();
+	}
+
+	public static boolean shouldShowHerobrineNametag() {
+		return SHOW_NAMETAG.get();
+	}
+
+	public static boolean shouldBuildLegacyStructures() {
+		return LEGACY_STRUCTURES.get();
+	}
+
+	public static boolean shouldDoMobPossession() {
+		return DO_MOB_POSSESSION.get();
+	}
+
+	public static boolean shouldRevertPossession() {
+		return REVERT_POSSESSION.get();
+	}
+
+	public static boolean shouldSpawnBuilder() {
+		return SPAWN_BUILDER.get();
 	}
 }

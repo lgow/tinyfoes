@@ -60,7 +60,7 @@ public class WrathHandler {
 	}
 
 	//has a weighted chance of returning true
-	static boolean probability(ServerLevel level, float weight) {
+	public static boolean probability(ServerLevel level, float weight) {
 		return ModSavedData.get(level.getServer()).hasResurrectedHerobrine() || RandomSource.create().nextInt(100)
 				<= getHerobrinesWrath(level) * weight;
 	}

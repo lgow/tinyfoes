@@ -3,7 +3,7 @@ package com.lgow.endofherobrine.entity.possessed.animal;
 import com.lgow.endofherobrine.entity.EntityInit;
 import com.lgow.endofherobrine.entity.ModMobTypes;
 import com.lgow.endofherobrine.entity.PossessedAnimal;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -33,10 +33,8 @@ import java.util.UUID;
 
 public class PosVillager extends Villager implements NeutralMob, PossessedAnimal {
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
 	@Nullable private UUID persistentAngerTarget;
-
-	private int remainingPersistentAngerTime;
+	private int remainingPersistentAngerTime, possessionTimer;
 
 	public PosVillager(EntityType<? extends PosVillager> type, Level level) {
 		super(type, level);
@@ -61,6 +59,20 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 	}
 
 	@Override
+	public void addAdditionalSaveData(CompoundTag pCompound) {
+		super.addAdditionalSaveData(pCompound);
+		this.addPersistentAngerSaveData(pCompound);
+		this.addPossessionSavedData(pCompound, possessionTimer);
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag pCompound) {
+		super.readAdditionalSaveData(pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
+		this.readPossessionSaveData(pCompound);
+	}
+
+	@Override
 	public void dropAllDeathLoot(DamageSource source) {
 		if (source.getEntity() instanceof Player player) {
 			MobEffectInstance badOmen = player.getEffect(MobEffects.BAD_OMEN);
@@ -73,8 +85,8 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 				--effectLvl;
 			}
 			effectLvl = Mth.clamp(effectLvl, 0, 4);
-			MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.BAD_OMEN, 30000, effectLvl, false, false,
-					true);
+			MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.BAD_OMEN, 30000, effectLvl, false,
+					false, true);
 			if (!this.level().getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
 				player.addEffect(mobeffectinstance);
 			}
@@ -112,8 +124,13 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
 	}
 
+	@Override
+	public void setPossessionTimer(int possessionTimer) {
+		this.possessionTimer = possessionTimer;
+	}
+
 	public Villager getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-		Villager villager = super.getBreedOffspring(pLevel,pOtherParent);
+		Villager villager = super.getBreedOffspring(pLevel, pOtherParent);
 		PosVillager posVillager = villager.convertTo(EntityInit.P_VILlAGER.get(), true);
 		posVillager.setVillagerData(villager.getVillagerData());
 		return posVillager;

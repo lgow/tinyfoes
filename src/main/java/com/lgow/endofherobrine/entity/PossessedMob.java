@@ -1,15 +1,20 @@
 package com.lgow.endofherobrine.entity;
 
 import com.lgow.endofherobrine.entity.ai.StarePlayerGoal;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 
+import java.util.UUID;
+
 public interface PossessedMob {
 	default boolean canRevertPossession() {
 		return true;
 	}
+
+
 
 	default void registerPosMobGoals(PathfinderMob mob, boolean hasCustomAttack) {
 		registerPosMobGoals(mob, hasCustomAttack, 0.0);

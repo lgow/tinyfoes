@@ -30,7 +30,7 @@ import java.util.List;
 public class Builder extends AbstractHerobrine {
 	private final String[] LETTERS = { "b", "e", "h", "i", "n", "o", "r" }, TRAPS = { "lantern" };
 
-	private final String directory = ModConfigs.LEGACY_STRUCTURES.get() ? "legacy/" : "";
+	private final String directory = ModConfigs.shouldBuildLegacyStructures() ? "legacy/" : "";
 
 	private int buildTimer;
 

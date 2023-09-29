@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.lgow.endofherobrine.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "minVersion": "0.8",
+  "mixins": [
+  ],
+  "client": [
+    "PathfinderMobMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -40,7 +40,7 @@ public class WhiteEyesLayer <T extends PathfinderMob, M extends EntityModel<T>> 
 
 	//returns if eye render type glows or not
 	public RenderType getRenderType(T entity) {
-		if (ModConfigs.EYE_GLOW.get()) {
+		if (ModConfigs.shouldEyesGlow()) {
 			return RenderType.eyes(new ModResourceLocation(getEyeTexture(entity)));
 		}
 		else {

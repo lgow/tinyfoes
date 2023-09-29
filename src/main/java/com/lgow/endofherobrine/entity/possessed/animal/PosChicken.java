@@ -1,6 +1,9 @@
 package com.lgow.endofherobrine.entity.possessed.animal;
 
-import com.lgow.endofherobrine.entity.*;
+import com.lgow.endofherobrine.entity.EntityInit;
+import com.lgow.endofherobrine.entity.ModMobTypes;
+import com.lgow.endofherobrine.entity.PossessedAnimal;
+import com.lgow.endofherobrine.entity.Teleporter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -24,10 +27,8 @@ import java.util.UUID;
 
 public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, Teleporter {
 	private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(40, 80);
-
 	private @Nullable UUID persistentAngerTarget;
-
-	private int remainingPersistentAngerTime;
+	private int remainingPersistentAngerTime, possessionTimer;
 
 	public PosChicken(EntityType<? extends PosChicken> type, Level level) {
 		super(type, level);
@@ -68,19 +69,22 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag pCompound) {
-		super.readAdditionalSaveData(pCompound);
-		this.readPersistentAngerSaveData(this.level(), pCompound);
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		this.addPersistentAngerSaveData(pCompound);
+		this.addPossessionSavedData(pCompound, possessionTimer);
 	}
 
+	@Override
+	public void readAdditionalSaveData(CompoundTag pCompound) {
+		super.readAdditionalSaveData(pCompound);
+		this.readPersistentAngerSaveData(this.level(), pCompound);
+		this.readPossessionSaveData(pCompound);
+	}
+
+
 	protected void teleportToDodge() {
-		if (! this.level().isClientSide && this.isAlive()) {
+		if (!this.level().isClientSide && this.isAlive()) {
 			double x = this.getX() + (this.random.nextDouble() - 0.5) * 10.0;
 			double y = this.getY() + (double) this.random.nextInt(12);
 			double z = this.getZ() + (this.random.nextDouble() - 0.5) * 10.0;
@@ -92,7 +96,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (! this.level().isClientSide && source.getEntity() instanceof Player && amount < this.getHealth()) {
+		if (!this.level().isClientSide && source.getEntity() instanceof Player && amount < this.getHealth()) {
 			this.teleportToDodge();
 		}
 		return super.hurt(source, amount);
@@ -114,5 +118,9 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	@Override
 	public void startPersistentAngerTimer() {
 		this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
+	}
+	@Override
+	public void setPossessionTimer(int possessionTimer) {
+		this.possessionTimer = possessionTimer;
 	}
 }

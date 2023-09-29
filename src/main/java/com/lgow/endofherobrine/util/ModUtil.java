@@ -56,7 +56,7 @@ public class ModUtil {
 
 	public static void possessMob(Mob mob, ServerLevel level, boolean isAngry, boolean affectMonsters) {
 		EntityType<?> type = mob.getType();
-		if (ModConfigs.DO_MOB_POSSESSION.get() && !mob.getType().getTags().toList().contains(DONT_POSSESS)) {
+		if (ModConfigs.shouldDoMobPossession() && !mob.getType().getTags().toList().contains(DONT_POSSESS)) {
 			if (mobList.containsKey(type)) {
 				Mob posMob = mob.convertTo(mobList.get(mob.getType()), true);
 				if (type.equals(PIG)) {
@@ -96,8 +96,8 @@ public class ModUtil {
 	public static void revertPossession(Mob posMob, boolean canConvert) {
 		EntityType<?> type = posMob.getType();
 		if (invertedMobList.containsKey(type)) {
-			if (posMob.isAlive() && ((ModConfigs.REVERT_POSSESSION.get()
-					&& posMob.tickCount > ModConfigs.REMAIN_POSSESSED_TICKS.get() && canConvert))) {
+			if (posMob.isAlive() && ((ModConfigs.shouldRevertPossession()
+					&& posMob.tickCount > ModConfigs.getRemainPossessedTicks().get() && canConvert))) {
 				Mob mob = posMob.convertTo(invertedMobList.get(posMob.getType()), true);
 				if (type.equals(P_PIG.get())) {
 					if (((PosPig) posMob).isSaddled()) {

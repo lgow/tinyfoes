@@ -3,9 +3,10 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = "${minecraft}-${endofherobrine}"
+version = "${minecraft}-${new Date().format("yyyy.MM.dd")}"
 group = 'com.lgow.endofherobrine'
 archivesBaseName = 'endofherobrine'
 
@@ -50,6 +51,11 @@ minecraft {
             }
         }
     }
+}
+
+mixin {
+    add sourceSets.main, 'endofherobrine.mixins.refmap.json'
+    config 'endofherobrine.mixins.json'
 }
 
 repositories {}

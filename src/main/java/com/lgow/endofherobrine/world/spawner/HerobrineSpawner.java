@@ -4,7 +4,6 @@ import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.entity.EntityInit;
 import com.lgow.endofherobrine.entity.herobrine.AbstractHerobrine;
 import com.lgow.endofherobrine.event.WrathHandler;
-import com.lgow.endofherobrine.util.ModUtil;
 import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
@@ -40,8 +39,8 @@ public class HerobrineSpawner {
 		this.tickDelay = 600;
 		this.currentSpawnDelay = this.data.getSpawnDelay();
 		this.currentSpawnChance = this.data.getSpawnChance();
-		this.spawnCooldown = ModConfigs.SPAWN_COOLDOWN.get();
-		this.spawnChance = ModConfigs.SPAWN_CHANCE.get();
+		this.spawnCooldown = ModConfigs.getSpawnCooldown().get();
+		this.spawnChance = ModConfigs.getSpawnChance().get();
 		if (this.currentSpawnDelay == 0 && this.currentSpawnChance == 0) {
 			this.currentSpawnDelay = this.spawnCooldown;
 			this.currentSpawnChance = this.spawnChance;
@@ -92,7 +91,7 @@ public class HerobrineSpawner {
 				if (this.random.nextInt(7) != 0) {
 					herobrine = EntityInit.LURKER.get().spawn(level, blockPos, MobSpawnType.EVENT);
 				}
-				else if (!ModConfigs.SPAWN_BUILDER.get()) {
+				else if (!ModConfigs.shouldSpawnBuilder()) {
 					herobrine = EntityInit.BUILDER.get().spawn(level, blockPos, MobSpawnType.EVENT);
 				}
 				return herobrine != null;
