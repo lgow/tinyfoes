@@ -3,6 +3,7 @@ package com.lgow.endofherobrine.entity.herobrine;
 import com.lgow.endofherobrine.block.BlockInit;
 import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.util.ModResourceLocation;
+import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,7 +29,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class Builder extends AbstractHerobrine {
-	private final String[] LETTERS = { "b", "e", "h", "i", "n", "o", "r" }, TRAPS = { "lantern" };
+	private final String[] TRAPS = { "lantern" };
+	private final String string = "herobrine";
 
 	private final String directory = ModConfigs.shouldBuildLegacyStructures() ? "legacy/" : "";
 
@@ -75,6 +77,10 @@ public class Builder extends AbstractHerobrine {
 		}
 	}
 
+	private String getLetterToBuild(int lastLetterIndex){
+		return this.getName().getString().toLowerCase().substring(lastLetterIndex, lastLetterIndex + 1);
+	}
+
 	private void selectStructure(String[] structures, int yOffset) {
 		int rand = random.nextInt(structures.length);
 		this.placeStructure(structures[rand], yOffset);
@@ -82,9 +88,10 @@ public class Builder extends AbstractHerobrine {
 
 	private void build() {
 		if (this.canSeeAnyPlayers() && this.getNearestPlayer() != null) {
-			if (this.level().canSeeSky(blockPosition()) && this.distanceTo(getNearestPlayer()) >= 20) {
+			if (this.level().canSeeSky(blockPosition()) && this.distanceTo(getNearestPlayer()) >= 10) {
 				if (this.random.nextInt(5) != 0) {
-					this.selectStructure(LETTERS, 0);
+					this.placeStructure(getLetterToBuild(ModSavedData.get(this.getServer()).getLastLetterIndex()), 0);
+					ModSavedData.get(this.getServer()).updateLastLetterIndex();
 				}
 				else {
 					this.selectStructure(TRAPS, -1);

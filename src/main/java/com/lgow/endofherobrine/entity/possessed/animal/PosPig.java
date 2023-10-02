@@ -40,7 +40,7 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/pig"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/pig"); }
 
 	@Override
 	protected void registerGoals() {
@@ -52,6 +52,7 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+this.possessionTimer++;
 		}
 	}
 
@@ -139,5 +140,10 @@ public class PosPig extends Pig implements NeutralMob, PossessedAnimal {
 	@Override
 	public void setPossessionTimer(int possessionTimer) {
 		this.possessionTimer = possessionTimer;
+	}
+
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
 	}
 }

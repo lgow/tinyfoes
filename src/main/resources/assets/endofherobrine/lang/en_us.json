@@ -37,6 +37,7 @@
   "entity.endofherobrine.builder" : "Builder",
   "entity.endofherobrine.lurker" : "Lurker",
 
+  "entity.endofherobrine.armor_stand": "Possessed Armor Stand",
   "entity.endofherobrine.chicken": "Possessed Chicken",
   "entity.endofherobrine.cow": "Possessed Cow" ,
   "entity.endofherobrine.pig" : "Possessed Pig",

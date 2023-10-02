@@ -25,6 +25,8 @@ public class EntityInit {
 	public static final RegistryObject<EntityType<Builder>> BUILDER = registerHerobrine("builder", Builder::new);
 	public static final RegistryObject<EntityType<Lurker>> LURKER = registerHerobrine("lurker", Lurker::new);
 	//	public static final RegistryObject<EntityTyPlayerpe<Doppleganger>> DOPPELGANGER = registerHerobrine("doppelgnger", Doppleganger::new);
+	public static final RegistryObject<EntityType<PosArmorStand>> P_ARMOR_STAND = registerPossessed("armor_stand", PosArmorStand::new,
+			CREATURE, 0.5F, 1.95F);
 	public static final RegistryObject<EntityType<PosChicken>> P_CHICKEN = registerPossessed("chicken", PosChicken::new,
 			CREATURE, 0.4F, 0.7F);
 	public static final RegistryObject<EntityType<PosCow>> P_COW = registerPossessed("cow", PosCow::new, CREATURE, 0.9F,

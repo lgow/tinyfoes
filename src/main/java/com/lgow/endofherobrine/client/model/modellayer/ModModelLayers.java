@@ -7,12 +7,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModModelLayers {
-	public static final ModelLayerLocation VILLAGER, PIGMAN, DOPPELGANGER;
+	public static final ModelLayerLocation VILLAGER, PIGMAN, DOPPELGANGER, ARMOR_STAND;
 
 	static {
 		VILLAGER = new ModelLayerLocation(new ModResourceLocation("villager"), "main");
 		PIGMAN = new ModelLayerLocation(new ModResourceLocation("pigman"), "main");
 		DOPPELGANGER = new ModelLayerLocation(new ModResourceLocation("doppleganger"), "main");
-
+		ARMOR_STAND = new ModelLayerLocation(new ModResourceLocation("armor_stand"), "main");
 	}
 }

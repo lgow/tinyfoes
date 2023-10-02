@@ -33,22 +33,34 @@ public interface Teleporter {
 
 	default boolean attemptTeleport(LivingEntity teleporter, double x, double y, double z, LivingEntity target, boolean avoidWater) {
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(x, y, z);
-		while (this.checkSafePos(teleporter,mutablePos, avoidWater)) {
+
+		while (this.checkSafePos(teleporter, mutablePos, avoidWater)) {
 			mutablePos.move(Direction.DOWN);
 		}
+
 		BlockState blockstate = teleporter.level().getBlockState(mutablePos);
-		boolean safePos = blockstate.blocksMotion() ||(!avoidWater && blockstate.getFluidState().is(FluidTags.WATER));
+		boolean safePos = blockstate.blocksMotion() || (!avoidWater && blockstate.getFluidState().is(FluidTags.WATER));
+
+		// Add a check to avoid teleporting to water if avoidWater is true
+		if (avoidWater && blockstate.getFluidState().is(FluidTags.WATER)) {
+			return false;
+		}
+
 		boolean isLurking = target == null || this.willHaveSightOfTarget(teleporter, mutablePos, target);
 		boolean avoidFluid = avoidWater ? !blockstate.getFluidState().isEmpty() : blockstate.getFluidState().is(FluidTags.LAVA);
-		if(safePos && !avoidFluid && isLurking) {
+
+		if (safePos && !avoidFluid && isLurking) {
 			boolean canTeleport = this.randomTeleport(teleporter, x, y, z, avoidWater);
+
 			if (canTeleport && !teleporter.isSilent()) {
 				teleporter.level().playSound(null, teleporter.xo, teleporter.yo, teleporter.zo, SoundEvents.ENDERMAN_TELEPORT,
 						teleporter.getSoundSource(), 1.0F, 1.0F);
 				teleporter.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
+
 			return canTeleport;
 		}
+
 		return false;
 	}
 

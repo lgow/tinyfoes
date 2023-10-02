@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 import static com.lgow.endofherobrine.registries.ModRegistries.MOD_ITEMS;
 
 public class BlockInit {
-	public static final RegistryObject<Block> CURSED_SKULL, HEROBRINE_SKULL, CURSED_WALL_SKULL, HEROBRINE_WALL_SKULL;
+	public static final RegistryObject<Block> CURSED_SKULL, HEROBRINE_SKULL, CURSED_WALL_SKULL, HEROBRINE_WALL_SKULL, ARMOR_STAND_BASE;
 
 	public static final RegistryObject<BlockItem> GLOWING_OBSIDIAN, NETHERRACK_TOTEM, BLACKSTONE_TOTEM, PATIMUSS_DOOR;
 
@@ -46,6 +46,7 @@ public class BlockInit {
 		registerInfestedBlock("mossy_cobblestone", Blocks.MOSSY_COBBLESTONE);
 		registerInfestedBlock("mossy_stone_bricks", Blocks.MOSSY_STONE_BRICKS);
 		registerBlock("glowstone", () -> new ModInfestedBlock(Blocks.GLOWSTONE, BlockBehaviour.Properties.copy(Blocks.PLAYER_HEAD).lightLevel((blockState) -> 15).sound(SoundType.GLASS)));
+		ARMOR_STAND_BASE = registerBlock("armor_stand_base", ()-> new ArmorStandBaseBlock(BlockBehaviour.Properties.of().noCollission()));
 	}
 
 	private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> blockSupplier) {

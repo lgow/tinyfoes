@@ -45,7 +45,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/chicken"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/chicken"); }
 
 	@Override
 	protected void registerGoals() {
@@ -57,6 +57,7 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+this.possessionTimer++;
 		}
 	}
 
@@ -122,5 +123,10 @@ public class PosChicken extends Chicken implements NeutralMob, PossessedAnimal, 
 	@Override
 	public void setPossessionTimer(int possessionTimer) {
 		this.possessionTimer = possessionTimer;
+	}
+
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
 	}
 }

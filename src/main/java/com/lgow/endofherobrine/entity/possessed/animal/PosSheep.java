@@ -63,6 +63,7 @@ private int remainingPersistentAngerTime, possessionTimer;
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+this.possessionTimer++;
 			if (this.getCloneNumber() > 0 && this.tickCount > (2400 / this.getCloneNumber()) + random.nextInt(200)) {
 				this.level().broadcastEntityEvent(this, (byte) 60);
 				this.discard();
@@ -82,7 +83,7 @@ private int remainingPersistentAngerTime, possessionTimer;
 	}
 
 	@Override
-	public ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/sheep"); }
+	public ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/sheep"); }
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
@@ -168,4 +169,9 @@ private int remainingPersistentAngerTime, possessionTimer;
 	}@Override
 	public void setPossessionTimer(int possessionTimer) {
 		this.possessionTimer = possessionTimer;
+	}
+
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
 	}}

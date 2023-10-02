@@ -38,12 +38,12 @@ public class PosPigman extends Zombie implements PossessedMob {
 
 	@Override
 	protected ResourceLocation getDefaultLootTable() {
-		return new ResourceLocation("minecraft", "entities/zombiefied_piglin");
+		return new ResourceLocation("entities/zombiefied_piglin");
 	}
 
 	@Override
 	protected void registerGoals() {
-		this.registerPosMobGoals(this, true);
+		this.registerPosMonsterGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1.5, true));
 		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}

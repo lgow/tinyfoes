@@ -46,6 +46,7 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 			AbstractHerobrine.class, EntityDataSerializers.OPTIONAL_UUID);
 	protected int teleportCooldown;
 	@Nullable private Player targetPlayer;
+	private boolean shouldFoat;
 
 	protected AbstractHerobrine(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
@@ -165,9 +166,11 @@ public abstract class AbstractHerobrine extends PathfinderMob implements Telepor
 	protected void customServerAiStep() {
 		if (this.isInWater()) {
 			this.moveTo(position().add(0, 1, 0));
+			shouldFoat = true;
+		}
+		if(shouldFoat){
 			this.setDeltaMovement(Vec3.ZERO);
 		}
-		this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0, 1));
 		super.customServerAiStep();
 	}
 

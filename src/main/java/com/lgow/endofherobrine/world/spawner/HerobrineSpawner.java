@@ -39,8 +39,8 @@ public class HerobrineSpawner {
 		this.tickDelay = 600;
 		this.currentSpawnDelay = this.data.getSpawnDelay();
 		this.currentSpawnChance = this.data.getSpawnChance();
-		this.spawnCooldown = ModConfigs.getSpawnCooldown().get();
-		this.spawnChance = ModConfigs.getSpawnChance().get();
+		this.spawnCooldown = ModConfigs.getSpawnCooldown();
+		this.spawnChance = ModConfigs.getSpawnChance();
 		if (this.currentSpawnDelay == 0 && this.currentSpawnChance == 0) {
 			this.currentSpawnDelay = this.spawnCooldown;
 			this.currentSpawnChance = this.spawnChance;

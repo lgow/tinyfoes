@@ -16,8 +16,8 @@ import java.util.Map;
 public class ModSavedData extends SavedData {
 	private final Map<String, SpawnerData> spawnerDataMap = new HashMap<>();
 	private boolean defeatedHerobrine, herobrineIsDead, resurrectedHerobrine;
-	private String builtLetters = "";
-	private int herobrineRestTimer;
+	private String builtSigns = "";
+	private int herobrineRestTimer, lastLetterIndex;
 
 	public ModSavedData() { }
 
@@ -54,10 +54,6 @@ public class ModSavedData extends SavedData {
 		setDirty();
 	}
 
-	public void setBuiltLetters(String builtLetters) {
-		this.builtLetters.concat(", " + builtLetters);
-	}
-
 	public boolean hasResurrectedHerobrine() {
 		return resurrectedHerobrine;
 	}
@@ -66,6 +62,7 @@ public class ModSavedData extends SavedData {
 		resurrectedHerobrine = b;
 		setDirty();
 	}
+
 	public boolean herobrineIsDead() {
 		return herobrineIsDead;
 	}
@@ -92,17 +89,21 @@ public class ModSavedData extends SavedData {
 				this.spawnerDataMap.put(key, data);
 			});
 		}
-		if (nbt.contains("DefeatedHerobrine", Tag.TAG_BYTE)) defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
-		if (nbt.contains("HerobrineRestTimer", Tag.TAG_INT))herobrineRestTimer = nbt.getInt("HerobrineRestTimer");
-		if (nbt.contains("HerobrineIsDead", Tag.TAG_BYTE))herobrineIsDead = nbt.getBoolean("HerobrineIsDead");
-		if (nbt.contains("ResurrectedHerobrine", Tag.TAG_BYTE))resurrectedHerobrine = nbt.getBoolean("ResurrectedHerobrine");
-		if (nbt.contains("BuiltLetters", Tag.TAG_STRING))builtLetters = nbt.getString("BuiltLetters");
+		if (nbt.contains("DefeatedHerobrine", Tag.TAG_BYTE)) {
+			defeatedHerobrine = nbt.getBoolean("DefeatedHerobrine");
+		}
+		if (nbt.contains("HerobrineRestTimer", Tag.TAG_INT)) { herobrineRestTimer = nbt.getInt("HerobrineRestTimer"); }
+		if (nbt.contains("HerobrineIsDead", Tag.TAG_BYTE)) { herobrineIsDead = nbt.getBoolean("HerobrineIsDead"); }
+		if (nbt.contains("ResurrectedHerobrine", Tag.TAG_BYTE)) {
+			resurrectedHerobrine = nbt.getBoolean("ResurrectedHerobrine");
+		}
+		if (nbt.contains("LastLetterIndex", Tag.TAG_INT)) { lastLetterIndex = nbt.getInt("LastLetterIndex"); }
 		return this;
 	}
 
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
-		// Create "SpawnData" section
+		// SpawnData section
 		ListTag spawnDataList = new ListTag();
 		this.spawnerDataMap.forEach((s, data) -> {
 			CompoundTag key = new CompoundTag();
@@ -110,31 +111,39 @@ public class ModSavedData extends SavedData {
 			key.putString("Key", s);
 			spawnDataList.add(key);
 		});
-
 		nbt.put("SpawnData", spawnDataList);
-
-		// Create "Herobrine" section
+		// Herobrine section
 		CompoundTag herobrineTag = new CompoundTag();
 		herobrineTag.putInt("HerobrineRestTimer", herobrineRestTimer);
 		herobrineTag.putBoolean("DefeatedHerobrine", defeatedHerobrine);
 		herobrineTag.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
 		herobrineTag.putBoolean("HerobrineIsDead", herobrineIsDead);
-
 		nbt.put("Herobrine", herobrineTag);
-
-		// Create "Builder" section
+		// Builder section
 		CompoundTag builderTag = new CompoundTag();
-		builderTag.putString("BuiltLetters", builtLetters);
-
+		builderTag.putInt("LastLetterIndex", lastLetterIndex);
 		nbt.put("Builder", builderTag);
 		return nbt;
 	}
 
-	public String getBuiltLetters() {
-		return builtLetters;
+	public String getBuiltSigns() {
+		return builtSigns;
 	}
 
-	public void concatBuiltLetters(String builtLetters) {
-		this.builtLetters = builtLetters;
+	public void concatBuiltSigns(String builtSigns) {
+		this.builtSigns.concat(", " + builtSigns);
+	}
+
+	public int getLastLetterIndex() {
+		return this.lastLetterIndex;
+	}
+
+	public void updateLastLetterIndex() {
+		if (this.lastLetterIndex >= 8) {
+			this.lastLetterIndex = 0;
+		}
+		else {
+			this.lastLetterIndex++;
+		}
 	}
 }

@@ -18,7 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Silverfish;
@@ -41,7 +41,7 @@ public class PosSilverfish extends Silverfish implements Teleporter, PossessedMo
 
 	@Override
 	protected ResourceLocation getDefaultLootTable() {
-		return new ResourceLocation("minecraft", "entities/silverfish");
+		return new ResourceLocation("entities/silverfish");
 	}
 
 	@Override
@@ -58,10 +58,13 @@ public class PosSilverfish extends Silverfish implements Teleporter, PossessedMo
 
 	@Override
 	protected void registerGoals() {
-		this.registerPosMobGoals(this, true);
+		this.registerPosMonsterGoals(this, false);
 		this.summonPosSilverfish = new SummonPosSilverfishGoal(this);
+		this.goalSelector.addGoal(0, new MeleeAttackGoal(this, 1.0F, true));
+		this.goalSelector.addGoal(2, new FloatGoal(this));
 		this.goalSelector.addGoal(3, this.summonPosSilverfish);
-	}
+		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));}
 
 	@Override
 	protected SoundEvent getAmbientSound() { return null; }

@@ -2,7 +2,6 @@ package com.lgow.endofherobrine.entity.possessed;
 
 import com.lgow.endofherobrine.entity.ModMobTypes;
 import com.lgow.endofherobrine.entity.PossessedMob;
-import com.lgow.endofherobrine.entity.ai.StarePlayerGoal;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Husk;
@@ -44,11 +42,11 @@ public class PosHusk extends Husk implements PossessedMob {
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/husk"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/husk"); }
 
 	@Override
 	protected void registerGoals() {
-		this.registerPosMobGoals(this, true);
+		this.registerPosMonsterGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1, true));
 		this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}

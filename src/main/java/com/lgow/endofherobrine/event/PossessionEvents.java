@@ -33,9 +33,7 @@ public class PossessionEvents {
 	public void onMobTick(LivingEvent.LivingTickEvent event) {
 		if (event.getEntity().level() instanceof ServerLevel serverLevel) {
 			if (event.getEntity() instanceof PossessedMob posMob) {
-				if (!ModConfigs.shouldDoMobPossession()) {
 					ModUtil.revertPossession(((Mob) posMob), posMob.canRevertPossession());
-				}
 			}
 			else if (event.getEntity() instanceof Mob mob && ModSavedData.get(serverLevel.getServer())
 					.hasResurrectedHerobrine()) {

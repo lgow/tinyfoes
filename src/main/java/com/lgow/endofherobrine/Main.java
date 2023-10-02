@@ -9,18 +9,22 @@ import com.lgow.endofherobrine.event.PossessionEvents;
 import com.lgow.endofherobrine.event.RandomEvents;
 import com.lgow.endofherobrine.event.WrathHandler;
 import com.lgow.endofherobrine.registries.ModRegistries;
+import com.mojang.logging.LogUtils;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
 
 import static com.lgow.endofherobrine.entity.EntityInit.*;
 
 @Mod(Main.MOD_ID)
 public class Main {
 	public static final String MOD_ID = "endofherobrine";
+	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public Main() {
 		final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -43,6 +47,7 @@ public class Main {
 		event.put(HEROBRINE_BOSS.get(), HerobrineBoss.createAttributes().build());
 		event.put(BUILDER.get(), AbstractHerobrine.setCustomAttributes().build());
 		event.put(LURKER.get(), AbstractHerobrine.setCustomAttributes().build());
+		event.put(P_ARMOR_STAND.get(), Zombie.createAttributes().build());
 		event.put(P_CHICKEN.get(), PosChicken.setCustomAttributes().build());
 		event.put(P_COW.get(), PosCow.setCustomAttributes().build());
 		event.put(P_HUSK.get(), PosHusk.setCustomAttributes().build());

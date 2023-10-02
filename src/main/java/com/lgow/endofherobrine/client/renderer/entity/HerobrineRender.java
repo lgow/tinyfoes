@@ -24,8 +24,8 @@ public class HerobrineRender extends LivingEntityRenderer<AbstractHerobrine, Pla
 		super(context, new PlayerModel<>(context.bakeLayer(ModelLayers.PLAYER), false), 0);
 		this.addLayer(new WhiteEyesLayer<>(this, "biped_eyes.png", true));
 		this.addLayer(new HumanoidArmorLayer<>(this,
-				new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
-				new HumanoidArmorModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
+				new HumanoidArmorModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)),
+				new HumanoidArmorModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class HerobrineRender extends LivingEntityRenderer<AbstractHerobrine, Pla
 
 	@Override
 	protected boolean shouldShowName(AbstractHerobrine herobrine) {
-		return (ModConfigs.shouldShowHerobrineNametag() && super.shouldShowName(herobrine);
+		return (ModConfigs.shouldShowHerobrineNametag() && super.shouldShowName(herobrine));
 	}
 
 	@Override

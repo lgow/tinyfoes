@@ -49,7 +49,7 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide) {
-			this.updatePersistentAnger((ServerLevel) this.level(), true);
+			this.updatePersistentAnger((ServerLevel) this.level(), true);this.possessionTimer++;
 		}
 	}
 
@@ -93,7 +93,7 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	public MobType getMobType() { return ModMobTypes.POSSESSED; }
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/cow"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/cow"); }
 
 	@Override
 	public int getRemainingPersistentAngerTime() { return this.remainingPersistentAngerTime; }
@@ -115,5 +115,10 @@ public class PosCow extends Cow implements NeutralMob, PossessedAnimal {
 	@Override
 	public void setPossessionTimer(int possessionTimer) {
 		this.possessionTimer = possessionTimer;
+	}
+
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
 	}
 }

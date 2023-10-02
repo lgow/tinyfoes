@@ -1,5 +1,6 @@
 package com.lgow.endofherobrine.entity;
 
+import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.entity.ai.neutral.DefendPassiveMobsGoal;
 import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalPanicGoal;
 import com.lgow.endofherobrine.entity.ai.neutral.PosAnimalTargetGoal;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 public interface PossessedAnimal extends PossessedMob, NeutralMob {
 	@Override
 	default boolean canRevertPossession() {
-		return !this.isAngry();
+		return getPossessionTimer() >= ModConfigs.getRemainPossessedTicks() && !this.isAngry();
 	}
 
 	default void addPossessionSavedData(CompoundTag pCompound, int possessionTimer) {
@@ -26,6 +27,8 @@ public interface PossessedAnimal extends PossessedMob, NeutralMob {
 	}
 
 	void setPossessionTimer(int possessionTimer);
+
+	int getPossessionTimer();
 
 	default void registerPosAnimalGoals(PathfinderMob mob, double speed) {
 		this.registerPosAnimalGoals(mob, speed, speed);

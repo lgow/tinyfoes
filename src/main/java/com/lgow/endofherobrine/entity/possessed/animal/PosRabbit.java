@@ -36,7 +36,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/rabbit"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/rabbit"); }
 
 	@Override
 	protected void registerGoals() {
@@ -48,6 +48,7 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+this.possessionTimer++;
 		}
 	}
 
@@ -125,5 +126,10 @@ public class PosRabbit extends Rabbit implements NeutralMob, PossessedAnimal {
 	@Override
 	public void setPossessionTimer(int possessionTimer) {
 		this.possessionTimer = possessionTimer;
+	}
+
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
 	}
 }

@@ -2,7 +2,6 @@ package com.lgow.endofherobrine.entity.possessed;
 
 import com.lgow.endofherobrine.entity.ModMobTypes;
 import com.lgow.endofherobrine.entity.PossessedMob;
-import com.lgow.endofherobrine.entity.ai.StarePlayerGoal;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
@@ -33,12 +31,13 @@ public class PosZombie extends Zombie  implements PossessedMob {
 	}
 
 	@Override
-	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("minecraft", "entities/zombie"); }
+	protected ResourceLocation getDefaultLootTable() { return new ResourceLocation("entities/zombie"); }
 
 	@Override
 	protected void registerGoals() {
-		this.registerPosMobGoals(this, true);
+		this.registerPosMonsterGoals(this, true);
 		this.goalSelector.addGoal(0, new ZombieAttackGoal(this, 1, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
 	@Override

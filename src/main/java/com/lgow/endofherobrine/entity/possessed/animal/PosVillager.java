@@ -55,7 +55,7 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 
 	@Override
 	protected ResourceLocation getDefaultLootTable() {
-		return new ResourceLocation("minecraft", "entities/villager");
+		return new ResourceLocation("entities/villager");
 	}
 
 	@Override
@@ -129,6 +129,11 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 		this.possessionTimer = possessionTimer;
 	}
 
+	@Override
+	public int getPossessionTimer() {
+		return possessionTimer;
+	}
+
 	public Villager getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
 		Villager villager = super.getBreedOffspring(pLevel, pOtherParent);
 		PosVillager posVillager = villager.convertTo(EntityInit.P_VILlAGER.get(), true);
@@ -148,6 +153,7 @@ public class PosVillager extends Villager implements NeutralMob, PossessedAnimal
 		super.aiStep();
 		if (!this.level().isClientSide) {
 			this.updatePersistentAnger((ServerLevel) this.level(), true);
+this.possessionTimer++;
 		}
 	}
 }

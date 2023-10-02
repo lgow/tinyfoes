@@ -3,10 +3,12 @@ package com.lgow.endofherobrine.client.renderer;
 import com.lgow.endofherobrine.Main;
 import com.lgow.endofherobrine.block.ModSkullBlock;
 import com.lgow.endofherobrine.client.model.DopModel;
+import com.lgow.endofherobrine.client.model.PosArmorStandModel;
 import com.lgow.endofherobrine.client.model.PosPigmanModel;
 import com.lgow.endofherobrine.client.model.PosVillagerModel;
 import com.lgow.endofherobrine.client.model.modellayer.ModModelLayers;
 import com.lgow.endofherobrine.client.renderer.entity.*;
+import com.lgow.endofherobrine.entity.possessed.PosArmorStand;
 import com.lgow.endofherobrine.tileentities.BlockEntityInit;
 import com.lgow.endofherobrine.util.ModResourceLocation;
 import net.minecraft.client.model.SkullModel;
@@ -30,6 +32,7 @@ public class RenderSetup {
 		EntityRenderers.register(HEROBRINE_BOSS.get(), HerobrineRender::new);
 		EntityRenderers.register(BUILDER.get(), BuilderRender::new);
 		EntityRenderers.register(LURKER.get(), HerobrineRender::new);
+		EntityRenderers.register(P_ARMOR_STAND.get(), PosArmorStandRenderer::new);
 		EntityRenderers.register(P_CHICKEN.get(), PosChickenRender::new);
 		EntityRenderers.register(P_COW.get(), PosCowRender::new);
 		EntityRenderers.register(P_HUSK.get(), PosHuskRender::new);
@@ -59,6 +62,7 @@ public class RenderSetup {
 		event.registerLayerDefinition(ModModelLayers.PIGMAN, PosPigmanModel::createSnoutLayer);
 		event.registerLayerDefinition(ModModelLayers.VILLAGER, PosVillagerModel::createUncrossedArmsLayer);
 		event.registerLayerDefinition(ModModelLayers.DOPPELGANGER, DopModel::createBody);
+		event.registerLayerDefinition(ModModelLayers.ARMOR_STAND, PosArmorStandModel::createBodyLayer);
 	}
 
 	@SubscribeEvent
