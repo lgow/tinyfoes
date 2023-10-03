@@ -14,7 +14,7 @@ import net.tinyallies.entity.ModEntities;
 import net.tinyallies.util.TinyAlliesResLoc;
 
 @Environment(EnvType.CLIENT)
-public class TinyAlliesCommonClient {
+public class TinyAlliesClientCommon {
 	public static ModelLayerLocation BLOB;
 
 	public static void preClientInit() {

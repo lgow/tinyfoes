@@ -270,6 +270,7 @@ public class Creepy extends Creeper implements NeutralMob, BabyMonster {
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		addBabySaveData(pCompound, this.orderedToSit);
+		pCompound.putBoolean("Sitting", orderedToSit);
 		addPersistentAngerSaveData(pCompound);
 	}
 

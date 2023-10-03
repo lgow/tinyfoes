@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "net.tinyallies.fabric.FabricTinyAllies"
+    ],
+    "client": [
+      "net.tinyallies.fabric.FabricClientTinyAllies"
     ]
   },
   "depends": {

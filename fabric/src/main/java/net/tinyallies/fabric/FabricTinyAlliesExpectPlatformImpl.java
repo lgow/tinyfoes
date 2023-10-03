@@ -5,7 +5,7 @@ import net.tinyallies.TinyAlliesExpectPlatform;
 
 import java.nio.file.Path;
 
-public class ExampleExpectPlatformImpl {
+public class FabricTinyAlliesExpectPlatformImpl {
 	/**
 	 * This is our actual method to {@link TinyAlliesExpectPlatform#getConfigDirectory()}.
 	 */

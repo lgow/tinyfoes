@@ -207,7 +207,7 @@ public interface BabyMonster {
 	}
 
 	default void updatePose(LivingEntity pTarget) {
-		pTarget.setPose(this.isOrderedToSit() ? Pose.CROUCHING : Pose.STANDING);
+		pTarget.setPose(this.isInSittingPose() ? Pose.CROUCHING : Pose.STANDING);
 	}
 
 	default boolean babyHurt(LivingEntity livingEntity, DamageSource pSource, boolean b) {

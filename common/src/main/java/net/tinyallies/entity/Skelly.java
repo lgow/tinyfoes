@@ -48,8 +48,6 @@ public class Skelly extends Skeleton implements NeutralMob, BabyMonster {
 		applyAttributeModifiers();
 	}
 
-	
-
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));

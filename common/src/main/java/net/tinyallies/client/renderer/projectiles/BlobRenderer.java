@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.tinyallies.client.TinyAlliesCommonClient;
+import net.tinyallies.client.TinyAlliesClientCommon;
 import net.tinyallies.client.model.BabifyerBlobModel;
 import net.tinyallies.entity.projectile.BabyfierBlob;
 import net.tinyallies.util.TinyAlliesResLoc;
@@ -19,7 +19,7 @@ public class BlobRenderer extends EntityRenderer<BabyfierBlob> {
 
 	public BlobRenderer(EntityRendererProvider.Context pContext) {
 		super(pContext);
-		this.model = new BabifyerBlobModel(pContext.bakeLayer(TinyAlliesCommonClient.BLOB));
+		this.model = new BabifyerBlobModel(pContext.bakeLayer(TinyAlliesClientCommon.BLOB));
 	}
 
 	@Override
