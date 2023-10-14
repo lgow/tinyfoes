@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 
 public interface PossessedMob {
 	default boolean canRevertPossession() {
-		return true;
+		return false;
 	}
 
 	default void registerPosMonsterGoals(PathfinderMob mob, boolean hasCustomAttack) {

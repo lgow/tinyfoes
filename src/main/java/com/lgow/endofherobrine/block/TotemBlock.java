@@ -58,7 +58,7 @@ public class TotemBlock extends Block {
 	//checks if the block is in its respective totem shape
 	private boolean isInAltar(BlockPos pos, ServerLevel level) {
 		BlockPos below = pos.below();
-		return !isBlackstone && level.canSeeSky(pos.above()) && level.getBlockState(below).is(SOUL_SOIL)
+		return !isBlackstone && level.canSeeSky(pos.above()) && level.getBlockState(below).is(RESPAWN_ANCHOR)
 				&& level.getBlockState(pos.above()).is(FIRE) //
 				&& level.getBlockState(pos.east().north()).is(REDSTONE_TORCH) //
 				&& level.getBlockState(pos.north().west()).is(REDSTONE_TORCH) //

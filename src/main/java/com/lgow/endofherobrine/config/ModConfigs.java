@@ -55,7 +55,7 @@ public class ModConfigs {
 					"spawnCooldown", 3600, 0, Integer.MAX_VALUE);
 			SPAWN_CHANCE = builder.comment("The chance out of a hundred that herobrine will spawn").defineInRange(
 					"spawnChance", 10, 0, 100);
-			SPAWN_BUILDER = builder.comment("Should spawn herobrine builder?").define("spawnBuilder", false);
+			SPAWN_BUILDER = builder.comment("Should spawn herobrine builder?").define("spawnBuilder", true);
 			builder.pop();
 		}
 	}
@@ -87,7 +87,7 @@ public class ModConfigs {
 		return MOB_POSSESSION.get();
 	}
 
-	public static boolean shouldPreventPossession(EntityType<? extends Mob> entity) {
+	public static boolean shouldPreventPossession(EntityType<?> entity) {
 		return BLACKLIST_POSSESSION.get().contains(entity.getDescriptionId().substring(17));
 	}
 

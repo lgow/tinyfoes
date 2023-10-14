@@ -1,11 +1,12 @@
 package com.lgow.endofherobrine.event;
 
 import com.lgow.endofherobrine.Main;
-import com.lgow.endofherobrine.config.ModConfigs;
 import com.lgow.endofherobrine.entity.PossessedMob;
+import com.lgow.endofherobrine.entity.possessed.PosHusk;
 import com.lgow.endofherobrine.util.ModUtil;
 import com.lgow.endofherobrine.world.data.ModSavedData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -32,8 +33,12 @@ public class PossessionEvents {
 	@SubscribeEvent
 	public void onMobTick(LivingEvent.LivingTickEvent event) {
 		if (event.getEntity().level() instanceof ServerLevel serverLevel) {
+			LivingEntity livingEntity = event.getEntity();
+			if (livingEntity instanceof PosHusk posHusk && posHusk.isNoAi()) {
+				posHusk.discard();
+			}
 			if (event.getEntity() instanceof PossessedMob posMob) {
-					ModUtil.revertPossession(((Mob) posMob), posMob.canRevertPossession());
+				ModUtil.revertPossession(((Mob) posMob), posMob.canRevertPossession());
 			}
 			else if (event.getEntity() instanceof Mob mob && ModSavedData.get(serverLevel.getServer())
 					.hasResurrectedHerobrine()) {

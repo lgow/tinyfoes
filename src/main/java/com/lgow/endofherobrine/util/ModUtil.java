@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.lgow.endofherobrine.config.ModConfigs.*;
 import static com.lgow.endofherobrine.entity.EntityInit.*;
@@ -36,22 +37,11 @@ public class ModUtil {
 	private static final Map<EntityType<? extends Monster>, EntityType<? extends Monster>> monsterPossessionList = Map.of(
 			HUSK, P_HUSK.get(), SILVERFISH, P_SILVERFISH.get(), SKELETON, P_SKELETON.get(), STRAY, P_STRAY.get(),
 			ZOMBIE, P_ZOMBIE.get(), ZOMBIE_VILLAGER, P_ZOMBIE_VILLAGER.get());
-	private static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> reversionList = new HashMap<>();
-
-	static {
-		reversionList.put(P_CHICKEN.get(), CHICKEN);
-		reversionList.put(P_COW.get(), COW);
-		reversionList.put(P_PIG.get(), PIG);
-		reversionList.put(P_RABBIT.get(), RABBIT);
-		reversionList.put(P_SHEEP.get(), SHEEP);
-		reversionList.put(P_VILlAGER.get(), VILLAGER);
-		reversionList.put(P_HUSK.get(), HUSK);
-		reversionList.put(P_SILVERFISH.get(), SILVERFISH);
-		reversionList.put(P_SKELETON.get(), SKELETON);
-		reversionList.put(P_STRAY.get(), STRAY);
-		reversionList.put(P_ZOMBIE.get(), ZOMBIE);
-		reversionList.put(P_ZOMBIE_VILLAGER.get(), ZOMBIE_VILLAGER);
-	}
+	public static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> possessionList = Stream.concat(
+			animalPossessionList.entrySet().stream(), monsterPossessionList.entrySet().stream()).collect(HashMap::new,
+			(map, entry) -> map.put(entry.getKey(), entry.getValue()), HashMap::putAll);
+	public static final Map<EntityType<? extends Mob>, EntityType<? extends Mob>> reversionList = possessionList.entrySet()
+			.stream().collect(HashMap::new, (map, entry) -> map.put(entry.getValue(), entry.getKey()), HashMap::putAll);
 
 	//Spawns herobrine relative to a position and direction
 	public static void spawnHerobrine(AbstractHerobrine herobrine, ServerLevel server, Direction dir, Vec3 pos, double offs) {
@@ -65,8 +55,8 @@ public class ModUtil {
 	}
 
 	public static void possessMob(Mob mob, ServerLevel level, boolean isAngry, boolean affectMonsters) {
-		EntityType<?> type = mob.getType();
-		if (shouldDoMobPossession() && !mob.getType().getTags().toList().contains(DONT_POSSESS)) {
+		EntityType<?> type =  mob.getType();
+		if (shouldDoMobPossession() && !shouldPreventPossession(type)) {
 			if (animalPossessionList.containsKey(type)) {
 				Mob posMob = mob.convertTo(animalPossessionList.get(mob.getType()), true);
 				if (type.equals(PIG)) {
@@ -94,11 +84,12 @@ public class ModUtil {
 		}
 		if (affectMonsters && monsterPossessionList.containsKey(mob.getType())) {
 			Mob posMob = mob.convertTo(monsterPossessionList.get(type), true);
-			if (type.equals(ZOMBIE_VILLAGER)) {
-				((PosZombieVillager) posMob).setVillagerData(((ZombieVillager) mob).getVillagerData());
-				if (((ZombieVillager) mob).tradeOffers != null) {
-					((PosZombieVillager) posMob).setTradeOffers(((ZombieVillager) mob).tradeOffers);
-				}
+//			if (type.equals(ZOMBIE_VILLAGER)) {
+//				((PosZombieVillager) posMob).setVillagerData(((ZombieVillager) mob).getVillagerData());
+//				((PosZombieVillager) posMob).setTradeOffers(((ZombieVillager) mob).tradeOffers);
+//			}
+			if(type.equals(HUSK) && mob.isNoAi()){
+				posMob.discard();
 			}
 		}
 	}
@@ -125,6 +116,10 @@ public class ModUtil {
 				((Villager) mob).setVillagerData(((PosVillager) posMob).getVillagerData());
 				((Villager) mob).setOffers(((PosVillager) posMob).getOffers());
 				((Villager) mob).setVillagerXp(((PosVillager) posMob).getVillagerXp());
+			}
+			else if (posMobType.equals(P_ZOMBIE_VILLAGER.get())) {
+				((ZombieVillager) posMob).setVillagerData(((PosZombieVillager) mob).getVillagerData());
+				((ZombieVillager) posMob).setTradeOffers(((PosZombieVillager) mob).tradeOffers);
 			}
 		}
 	}

@@ -16,7 +16,6 @@ import java.util.Map;
 public class ModSavedData extends SavedData {
 	private final Map<String, SpawnerData> spawnerDataMap = new HashMap<>();
 	private boolean defeatedHerobrine, herobrineIsDead, resurrectedHerobrine;
-	private String builtSigns = "";
 	private int herobrineRestTimer, lastLetterIndex;
 
 	public ModSavedData() { }
@@ -71,6 +70,7 @@ public class ModSavedData extends SavedData {
 		return herobrineIsDead || herobrineRestTimer > 0;
 	}
 
+
 	public ModSavedData read(CompoundTag nbt) {
 		if (nbt.contains("HerobrineSpawnDelay", Tag.TAG_INT)) {
 			this.getSpawnerData("Herobrine").setSpawnDelay(nbt.getInt("HerobrineSpawnDelay"));
@@ -103,7 +103,7 @@ public class ModSavedData extends SavedData {
 
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
-		// SpawnData section
+		// Create "SpawnData" section
 		ListTag spawnDataList = new ListTag();
 		this.spawnerDataMap.forEach((s, data) -> {
 			CompoundTag key = new CompoundTag();
@@ -112,26 +112,13 @@ public class ModSavedData extends SavedData {
 			spawnDataList.add(key);
 		});
 		nbt.put("SpawnData", spawnDataList);
-		// Herobrine section
-		CompoundTag herobrineTag = new CompoundTag();
-		herobrineTag.putInt("HerobrineRestTimer", herobrineRestTimer);
-		herobrineTag.putBoolean("DefeatedHerobrine", defeatedHerobrine);
-		herobrineTag.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
-		herobrineTag.putBoolean("HerobrineIsDead", herobrineIsDead);
-		nbt.put("Herobrine", herobrineTag);
-		// Builder section
-		CompoundTag builderTag = new CompoundTag();
-		builderTag.putInt("LastLetterIndex", lastLetterIndex);
-		nbt.put("Builder", builderTag);
+		// Create "Herobrine" section
+		nbt.putInt("HerobrineRestTimer", herobrineRestTimer);
+		nbt.putBoolean("DefeatedHerobrine", defeatedHerobrine);
+		nbt.putBoolean("ResurrectedHerobrine", resurrectedHerobrine);
+		nbt.putBoolean("HerobrineIsDead", herobrineIsDead);
+		nbt.putInt("LastLetterIndex", lastLetterIndex);
 		return nbt;
-	}
-
-	public String getBuiltSigns() {
-		return builtSigns;
-	}
-
-	public void concatBuiltSigns(String builtSigns) {
-		this.builtSigns.concat(", " + builtSigns);
 	}
 
 	public int getLastLetterIndex() {
@@ -145,5 +132,6 @@ public class ModSavedData extends SavedData {
 		else {
 			this.lastLetterIndex++;
 		}
+		this.setDirty();
 	}
 }

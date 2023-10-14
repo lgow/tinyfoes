@@ -52,18 +52,16 @@ public class RandomEvents {
 		Player player = event.player;
 		if (this.randomEventsTimer <= 0) {
 			this.randomEventsTimer = 600;
-			if (player.level() instanceof ServerLevel server && probability(server, 0.05F)) {
+			if (player.level() instanceof ServerLevel server && probability(server, 0.1F)) {
 				if (player.isCrouching() && herobrineExists(player.level())) {
 					player.hurt(player.damageSources().mobAttack(player.level()
 									.getEntitiesOfClass(AbstractHerobrine.class, player.getBoundingBox().inflate(256)).get(0)),
 							1F);
 				}
-				else {
-					switch (ModUtil.random.nextInt(1)) {
+				switch (ModUtil.random.nextInt(1)) {
 						case 0: {
 							player.setSecondsOnFire((int) (player.getHealth() - 2));
 						}
-					}
 				}
 			}
 		}
@@ -90,7 +88,7 @@ public class RandomEvents {
 	@SubscribeEvent
 	public void onBlockPlaceScore(BlockEvent.EntityPlaceEvent event) {
 		if (this.randomEventsTimer <= 0 && event.getLevel() instanceof ServerLevel serverLevel && probability(
-				serverLevel, 0.05F) && event.getEntity() instanceof ServerPlayer) {
+				serverLevel, 0.1F) && event.getEntity() instanceof ServerPlayer) {
 			event.getLevel().destroyBlock(event.getPos(), true);
 		}
 	}

@@ -18,8 +18,7 @@ import static net.minecraft.world.entity.MobCategory.CREATURE;
 import static net.minecraft.world.entity.MobCategory.MONSTER;
 
 public class EntityInit {
-	public static final TagKey<EntityType<?>> DONT_POSSESS = TagKey.create(Registries.ENTITY_TYPE, new ModResourceLocation("prevent_possession"));
-	public static final MobCategory HEROBRINE = MobCategory.create("herobrine", "herobrine", 1, false, false, 256);
+public static final MobCategory HEROBRINE = MobCategory.create("herobrine", "herobrine", 1, false, false, 256);
 	public static final RegistryObject<EntityType<HerobrineBoss>> HEROBRINE_BOSS = registerHerobrine("herobrine",
 			HerobrineBoss::new);
 	public static final RegistryObject<EntityType<Builder>> BUILDER = registerHerobrine("builder", Builder::new);
