@@ -44,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob {
@@ -276,10 +277,12 @@ public class HerobrineBoss extends AbstractHerobrine implements RangedAttackMob 
 		else if (!this.isEnraged() && this.getHealth() < pAmount && this.getHealth() > 1.0F) {
 			boolean b = super.hurt(pSource, Math.max(this.getHealth() - 1.0F, 0.0F));
 			if (hasbeencriiticalHit) {
-				this.sendSystemMessage(Component.literal("I'll be back"));
+				this.getServer().getPlayerList().broadcastSystemMessage(Component.literal("<Herobrine> ")
+						.append(Component.translatable("herobrine.death_1")), false);
 				ModSavedData data = ModSavedData.get(this.level().getServer());
 				data.setDefeatedHerobrine(true);
 				data.setHerobrineRestTimer(12000);
+				super.hurt(pSource, pAmount);
 				this.teleportAway();
 			}
 			else {

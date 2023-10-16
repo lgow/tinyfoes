@@ -27,16 +27,15 @@ public class PossessionEvents {
 			if (probability(server, 0.5f)) {
 				possessMob(mob, server, true, false);
 			}
+			if (event.getEntity() instanceof PosHusk posHusk && posHusk.isNoAi()) {
+				posHusk.discard();
+			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onMobTick(LivingEvent.LivingTickEvent event) {
 		if (event.getEntity().level() instanceof ServerLevel serverLevel) {
-			LivingEntity livingEntity = event.getEntity();
-			if (livingEntity instanceof PosHusk posHusk && posHusk.isNoAi()) {
-				posHusk.discard();
-			}
 			if (event.getEntity() instanceof PossessedMob posMob) {
 				ModUtil.revertPossession(((Mob) posMob), posMob.canRevertPossession());
 			}
