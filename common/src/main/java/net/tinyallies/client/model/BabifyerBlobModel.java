@@ -7,8 +7,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
+import net.tinyallies.entity.projectile.BabyfierBlob;
 
-public class BabifyerBlobModel extends EntityModel {
+public class BabifyerBlobModel extends EntityModel<BabyfierBlob> {
 	private final ModelPart blob;
 
 	public BabifyerBlobModel(ModelPart root) {
@@ -30,6 +31,6 @@ public class BabifyerBlobModel extends EntityModel {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float f, float g, float h, float i, float j) {
+	public void setupAnim(BabyfierBlob entity, float f, float g, float h, float i, float j) {
 	}
 }
