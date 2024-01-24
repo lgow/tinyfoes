@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.UUID;
 
 @Mixin(Monster.class)
-public class MixinMonster extends PathfinderMob {
+public abstract class MixinMonster extends PathfinderMob {
 	@Unique private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString(
 			"B9766B59-9566-4402-BC1F-2EE2A276D836");
 	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID;

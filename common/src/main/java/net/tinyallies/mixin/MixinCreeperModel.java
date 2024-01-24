@@ -40,7 +40,7 @@ public abstract class MixinCreeperModel<T extends Entity> extends HierarchicalMo
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root, rightHindLeg, leftHindLeg);
+		return ImmutableList.of(root.getChild("body"), rightHindLeg, leftHindLeg);
 	}
 	@Unique
 	protected Iterable<ModelPart> frontLegs() {

@@ -3,6 +3,8 @@ package net.tinyallies.mixin;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.EndermanModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -10,7 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.tinyallies.util.ModUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-
+@Environment(EnvType.CLIENT)
 @Mixin(EndermanModel.class)
 public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T> {
 	@Shadow public boolean carrying, creepy;

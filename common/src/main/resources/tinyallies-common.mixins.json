@@ -6,6 +6,7 @@
   "minVersion": "0.8",
   "mixins": [
     "MixinAbstractSkeleton",
+    "MixinBlaze",
     "MixinCaveSpider",
     "MixinCreeper",
     "MixinEnderMan",
@@ -17,10 +18,18 @@
     "defaultRequire": 1
   },
   "client": [
+    "MixinBlazeModel",
     "MixinCarriedBlockLayer",
     "MixinCreeperModel",
+    "MixinCrossedArmsItemLayer",
     "MixinEnderManModel",
+    "MixinGhastModel",
+    "MixinIllagerModel",
     "MixinItemInHandLayer",
-    "MixinSpiderModel"
+    "MixinRavagerModel",
+    "MixinSpiderModel",
+    "MixinVillagerModel",
+    "MixinVillagerRender",
+    "MixinWitchItemLayer"
   ]
 }
