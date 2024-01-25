@@ -11,6 +11,7 @@
     "MixinCreeper",
     "MixinEnderMan",
     "MixinMonster",
+    "MixinPlayer",
     "MixinSpider",
     "MixinWitherSkeleton"
   ],
@@ -26,10 +27,13 @@
     "MixinGhastModel",
     "MixinIllagerModel",
     "MixinItemInHandLayer",
+    "MixinPlayerModel",
+    "MixinPlayerRender",
     "MixinRavagerModel",
     "MixinSpiderModel",
     "MixinVillagerModel",
     "MixinVillagerRender",
+    "MixinWardenModel",
     "MixinWitchItemLayer"
   ]
 }
