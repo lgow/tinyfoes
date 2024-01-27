@@ -9,17 +9,17 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.tinyallies.client.TinyAlliesClientCommon;
-import net.tinyallies.client.model.BabifyerBlobModel;
+import net.tinyallies.client.TinyFoesClientCommon;
+import net.tinyallies.client.model.BabyfierBlobModel;
 import net.tinyallies.entity.projectile.BabyfierBlob;
-import net.tinyallies.util.TinyAlliesResLoc;
+import net.tinyallies.util.TinyFoesResLoc;
 
 public class BlobRenderer extends EntityRenderer<BabyfierBlob> {
-	private final BabifyerBlobModel model;
+	private final BabyfierBlobModel model;
 
 	public BlobRenderer(EntityRendererProvider.Context pContext) {
 		super(pContext);
-		this.model = new BabifyerBlobModel(pContext.bakeLayer(TinyAlliesClientCommon.BLOB));
+		this.model = new BabyfierBlobModel(pContext.bakeLayer(TinyFoesClientCommon.BLOB));
 	}
 
 	@Override
@@ -37,6 +37,6 @@ public class BlobRenderer extends EntityRenderer<BabyfierBlob> {
 
 	@Override
 	public ResourceLocation getTextureLocation(BabyfierBlob entity) {
-		return new TinyAlliesResLoc("textures/projectiles/blob.png");
+		return new TinyFoesResLoc("textures/projectiles/blob.png");
 	}
 }

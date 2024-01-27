@@ -4,13 +4,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.RegisterEvent;
-import net.tinyallies.TinyAlliesCommon;
-import net.tinyallies.client.TinyAlliesClientCommon;
+import net.tinyallies.TinyFoesCommon;
+import net.tinyallies.client.TinyFoesClientCommon;
 
-@Mod.EventBusSubscriber(modid = TinyAlliesCommon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ForgeTinyAlliesClient {
+@Mod.EventBusSubscriber(modid = TinyFoesCommon.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ForgeTinyFoesClient {
 	@SubscribeEvent
 	public static void onInitializeClient(RegisterEvent event) {
-		TinyAlliesClientCommon.preClientInit();
+		TinyFoesClientCommon.preClientInit();
 	}
 }

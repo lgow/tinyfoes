@@ -3,7 +3,7 @@ package net.tinyallies.registry;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 import net.tinyallies.effect.Babyfication;
-import net.tinyallies.util.TinyAlliesResLoc;
+import net.tinyallies.util.TinyFoesResLoc;
 
 public class ModEffects {
 	public static final MobEffect BABYFICATION;
@@ -13,7 +13,7 @@ public class ModEffects {
 	}
 
 	private static MobEffect registerEffect(String name, MobEffect effect) {
-		return Registry.register(Registry.MOB_EFFECT, new TinyAlliesResLoc(name), effect);
+		return Registry.register(Registry.MOB_EFFECT, new TinyFoesResLoc(name), effect);
 	}
 
 	public static void register() {

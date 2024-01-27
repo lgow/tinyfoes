@@ -1,13 +1,13 @@
 package net.tinyallies.fabric;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.tinyallies.TinyAlliesExpectPlatform;
+import net.tinyallies.TinyFoesExpectPlatform;
 
 import java.nio.file.Path;
 
-public class FabricTinyAlliesExpectPlatformImpl {
+public class FabricTinyFoesExpectPlatformImpl {
 	/**
-	 * This is our actual method to {@link TinyAlliesExpectPlatform#getConfigDirectory()}.
+	 * This is our actual method to {@link TinyFoesExpectPlatform#getConfigDirectory()}.
 	 */
 	public static Path getConfigDirectory() {
 		return FabricLoader.getInstance().getConfigDir();

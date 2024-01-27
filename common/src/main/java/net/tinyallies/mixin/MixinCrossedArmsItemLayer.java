@@ -17,6 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(CrossedArmsItemLayer.class)
@@ -28,17 +32,13 @@ public abstract class MixinCrossedArmsItemLayer <T extends LivingEntity, M exten
 		super(renderLayerParent);
 	}
 
-	@Override
-	public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l) {
-		poseStack.pushPose();
+	@Redirect(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value =  "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
+	public void render(PoseStack poseStack, double d, double e, double f) {
 		if(this.getParentModel().young){
 			poseStack.translate(0.0, 1.1f, -0.2f);
 		}else{
 			poseStack.translate(0.0, 0.4f, -0.4f);
 		}
-		poseStack.mulPose(Vector3f.XP.rotationDegrees(180.0f));
-		ItemStack itemStack = livingEntity.getItemBySlot(EquipmentSlot.MAINHAND);
-		itemInHandRenderer.renderItem(livingEntity, itemStack, ItemTransforms.TransformType.GROUND, false, poseStack, multiBufferSource, i);
-		poseStack.popPose();
 	}
 }

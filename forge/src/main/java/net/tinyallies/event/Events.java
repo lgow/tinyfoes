@@ -1,7 +1,7 @@
 package net.tinyallies.event;
 
 //
-//@Mod.EventBusSubscriber(modid = TinyAlliesCommon.MODID)
+//@Mod.EventBusSubscriber(modid = TinyFoesCommon.MODID)
 public class Events {
 	//	@SubscribeEvent
 	//	public static void convertAllBabyZombies(LivingEvent.LivingTickEvent event) {

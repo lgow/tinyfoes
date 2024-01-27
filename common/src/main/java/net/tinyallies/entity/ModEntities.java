@@ -8,16 +8,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.monster.*;
-import net.tinyallies.TinyAlliesCommon;
+import net.tinyallies.TinyFoesCommon;
 import net.tinyallies.entity.projectile.BabyfierBlob;
-import net.tinyallies.util.TinyAlliesResLoc;
+import net.tinyallies.util.TinyFoesResLoc;
 
 import java.util.function.Supplier;
 
 import static net.minecraft.world.entity.MobCategory.MONSTER;
 
 public class ModEntities {
-	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyAlliesCommon.REGISTRIES.get(Registry.ENTITY_TYPE);
+	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyFoesCommon.REGISTRIES.get(Registry.ENTITY_TYPE);
 //	public static final RegistrySupplier<EntityType<Creepy>> CREEPY = registerBaby("creeper", Creepy::new, MONSTER,
 //			0.33F, 0.85F);
 //	public static final RegistrySupplier<EntityType<Skelly>> SKELLY = registerBaby("skeleton", Skelly::new, MONSTER,
@@ -37,7 +37,7 @@ public class ModEntities {
 	}
 
 	public static <T extends EntityType<?>> RegistrySupplier<T> create(final String path, final Supplier<T> type) {
-		return ENTITY_TYPES.register(new TinyAlliesResLoc(path), type);
+		return ENTITY_TYPES.register(new TinyFoesResLoc(path), type);
 	}
 
 	public static void register() {

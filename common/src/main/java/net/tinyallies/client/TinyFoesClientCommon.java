@@ -7,19 +7,19 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.world.entity.player.Player;
-import net.tinyallies.client.model.BabifyerBlobModel;
+import net.tinyallies.client.model.BabyfierBlobModel;
 import net.tinyallies.client.renderer.BlobRenderer;
 import net.tinyallies.entity.ModEntities;
-import net.tinyallies.util.TinyAlliesResLoc;
+import net.tinyallies.util.TinyFoesResLoc;
 
 @Environment(EnvType.CLIENT)
-public class TinyAlliesClientCommon {
+public class TinyFoesClientCommon {
 	public static ModelLayerLocation BLOB;
 
 	public static void preClientInit() {
 		EntityRendererRegistry.register(ModEntities.BLOB, BlobRenderer::new);
-		BLOB = new ModelLayerLocation(new TinyAlliesResLoc("blob"), "main");
-		EntityModelLayerRegistry.register(BLOB, BabifyerBlobModel::createBodyLayer);
+		BLOB = new ModelLayerLocation(new TinyFoesResLoc("blob"), "main");
+		EntityModelLayerRegistry.register(BLOB, BabyfierBlobModel::createBodyLayer);
 	}
 
 	public static Player getClientPlayer() {

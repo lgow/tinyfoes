@@ -19,7 +19,7 @@ public abstract class MixinBlaze extends Monster {
 	}
 
 	@Inject(method = "aiStep", at = @At("HEAD"))
-	private void sjksja(CallbackInfo ci) {
+	private void aiStep(CallbackInfo ci) {
 		if (!this.onGround && this.getDeltaMovement().y < 0.0) {
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1.0, 0.6, 1.0));
 		}

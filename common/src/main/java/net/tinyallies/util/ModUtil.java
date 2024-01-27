@@ -3,17 +3,23 @@ package net.tinyallies.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
-import net.tinyallies.entity.ModEntities;
-
-import java.util.Map;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.tinyallies.items.ModItems;
+import org.jetbrains.annotations.NotNull;
 
 public class ModUtil {
-	public static void babifyMob(Mob mob) {
-		mob.setBaby(!mob.isBaby());
-	}
+	public final static ItemStack TAB_ICON = new ItemStack(ModItems.TINY_TAB.get());
+	public final static NonNullList<Item> TAB_ITEM_LIST = NonNullList.of(new ItemStack(ModItems.BABYFIER.get()).getItem(), Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG,
+			Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG, Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG,
+			Items.PIGLIN_BRUTE_SPAWN_EGG, Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG, Items.SKELETON_SPAWN_EGG,
+			Items.SPIDER_SPAWN_EGG, Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG, Items.WARDEN_SPAWN_EGG,
+			Items.WITCH_SPAWN_EGG, Items.WITHER_SKELETON_SPAWN_EGG);
+
+
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		pPoseStack.pushPose();

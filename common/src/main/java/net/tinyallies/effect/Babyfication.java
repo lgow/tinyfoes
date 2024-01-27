@@ -5,6 +5,6 @@ import net.minecraft.world.effect.MobEffectCategory;
 
 public class Babyfication extends MobEffect {
 	public Babyfication() {
-		super(MobEffectCategory.NEUTRAL, 0x5400FF);
+		super(MobEffectCategory.NEUTRAL, 0xff7f8c);
 	}
 }

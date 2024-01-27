@@ -6,13 +6,12 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.Entity;
 import net.tinyallies.entity.projectile.BabyfierBlob;
 
-public class BabifyerBlobModel extends EntityModel<BabyfierBlob> {
+public class BabyfierBlobModel extends EntityModel<BabyfierBlob> {
 	private final ModelPart blob;
 
-	public BabifyerBlobModel(ModelPart root) {
+	public BabyfierBlobModel(ModelPart root) {
 		this.blob = root.getChild("blob");
 	}
 

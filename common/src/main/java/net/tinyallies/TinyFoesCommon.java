@@ -5,7 +5,7 @@ import net.tinyallies.registry.ModRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TinyAlliesCommon {
+public class TinyFoesCommon {
 	public static final String MODID = "tinyallies";
 	public static final Registries REGISTRIES = Registries.get(MODID);
 	public static final Logger LOGGER = LogManager.getLogger(MODID);

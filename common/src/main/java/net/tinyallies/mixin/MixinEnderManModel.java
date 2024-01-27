@@ -10,8 +10,14 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.LivingEntity;
 import net.tinyallies.util.ModUtil;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 @Environment(EnvType.CLIENT)
 @Mixin(EndermanModel.class)
 public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T> {
@@ -41,78 +47,19 @@ public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T
 	protected Iterable<ModelPart> bodyParts() {
 		return ImmutableList.of(this.body, this.rightArm, this.leftArm, this.rightLeg, this.leftLeg);
 	}
-
-	@Override
-	public void setupAnim(T livingEntity, float f, float g, float h, float i, float j) {
-		super.setupAnim(livingEntity, f, g, h, i, j);
-		this.head.visible = true;
-		int k = -14;
-		this.body.xRot = 0.0f;
-		this.body.y = -14.0f;
-		this.body.z = -0.0f;
-		this.rightLeg.xRot -= 0.0f;
-		this.leftLeg.xRot -= 0.0f;
-		this.rightArm.xRot *= 0.5f;
-		this.leftArm.xRot *= 0.5f;
-		this.rightLeg.xRot *= 0.5f;
-		this.leftLeg.xRot *= 0.5f;
-		float l = 0.4f;
-		if (this.rightArm.xRot > 0.4f) {
-			this.rightArm.xRot = 0.4f;
-		}
-		if (this.leftArm.xRot > 0.4f) {
-			this.leftArm.xRot = 0.4f;
-		}
-		if (this.rightArm.xRot < -0.4f) {
-			this.rightArm.xRot = -0.4f;
-		}
-		if (this.leftArm.xRot < -0.4f) {
-			this.leftArm.xRot = -0.4f;
-		}
-		if (this.rightLeg.xRot > 0.4f) {
-			this.rightLeg.xRot = 0.4f;
-		}
-		if (this.leftLeg.xRot > 0.4f) {
-			this.leftLeg.xRot = 0.4f;
-		}
-		if (this.rightLeg.xRot < -0.4f) {
-			this.rightLeg.xRot = -0.4f;
-		}
-		if (this.leftLeg.xRot < -0.4f) {
-			this.leftLeg.xRot = -0.4f;
-		}
-		if (carrying) {
-			this.rightArm.zRot = 0.05f;
-			this.leftArm.zRot = -0.05f;
-			if (this.young) {
-				this.rightArm.yRot += 0.41;
-				this.leftArm.yRot += -0.41;
-				this.rightArm.xRot = -0.7f;
-				this.leftArm.xRot = -0.7f;
-			}
-			else {
-				this.rightArm.xRot = -0.5f;
-				this.leftArm.xRot = -0.5f;
-			}
-		}
-		this.rightLeg.z = 0.0f;
-		this.leftLeg.z = 0.0f;
-		this.rightLeg.y = -5.0f;
-		this.leftLeg.y = -5.0f;
-		this.head.z = -0.0f;
-		this.head.y = -13.0f;
-		this.hat.x = this.head.x;
-		this.hat.y = this.head.y;
-		this.hat.z = this.head.z;
-		this.hat.xRot = this.head.xRot;
-		this.hat.yRot = this.head.yRot;
-		this.hat.zRot = this.head.zRot;
-		if (creepy) {
-			float m = 1.0f;
-			this.head.y -= 5.0f;
-		}
-		int n = -14;
-		this.rightArm.setPos(-5.0f, -12.0f, 0.0f);
-		this.leftArm.setPos(5.0f, -12.0f, 0.0f);
+	@Redirect(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at=@At(value= "FIELD", target = "Lnet/minecraft/client/model/EndermanModel;carrying:Z", opcode = Opcodes.GETFIELD))
+	public boolean setupAnim1(EndermanModel<T> instance) {
+		return instance.carrying && !instance.young;
 	}
+
+	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at=@At("TAIL"))
+	public void setupAnim2(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
+		if (carrying && this.young) {
+			this.rightArm.yRot += 0.41;
+			this.leftArm.yRot += -0.41;
+			this.rightArm.xRot = -0.7f;
+			this.leftArm.xRot = -0.7f;
+		}
+	}
+
 }

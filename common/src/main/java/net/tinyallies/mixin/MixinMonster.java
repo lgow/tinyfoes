@@ -10,29 +10,25 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.tinyallies.entity.BabyfiableEntity;
+import net.tinyallies.registry.ModEffects;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-
-import java.util.UUID;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Monster.class)
-public abstract class MixinMonster extends PathfinderMob {
-	@Unique private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString(
-			"B9766B59-9566-4402-BC1F-2EE2A276D836");
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID;
-	@Unique private static AttributeModifier SPEED_MODIFIER_BABY;
-
-	static {
-		SPEED_MODIFIER_BABY = new AttributeModifier(SPEED_MODIFIER_BABY_UUID, "Baby speed boost", 0.5,
-				AttributeModifier.Operation.MULTIPLY_BASE);
-		DATA_BABY_ID = SynchedEntityData.defineId(MixinMonster.class, EntityDataSerializers.BOOLEAN);
-	}
+public abstract class MixinMonster extends PathfinderMob implements BabyfiableEntity {
+	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMonster.class,
+			EntityDataSerializers.BOOLEAN);
+	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(MixinMonster.class,
+			EntityDataSerializers.BOOLEAN);
 
 	protected MixinMonster(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
@@ -49,47 +45,77 @@ public abstract class MixinMonster extends PathfinderMob {
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.getEntityData().define(DATA_BABY_ID, false);
-	}
-
-	public boolean isBaby() {
-		return this.getEntityData().get(DATA_BABY_ID);
-	}
-
-	public void setBaby(boolean bl) {
-		this.getEntityData().set(DATA_BABY_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (bl) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-			}
-		}
-	}
-
-	public int getExperienceReward() {
-		if (this.isBaby()) {
-			this.xpReward = (int) ((double) this.xpReward * 2.5);
-		}
-		return super.getExperienceReward();
-	}
-
-	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
-		if (DATA_BABY_ID.equals(entityDataAccessor)) {
-			this.refreshDimensions();
-		}
-		super.onSyncedDataUpdated(entityDataAccessor);
+		this.getEntityData().define(DATA_BABYFIED_ID, false);
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compoundTag) {
 		super.addAdditionalSaveData(compoundTag);
-		compoundTag.putBoolean("IsBaby", this.isBaby());
+		compoundTag.putBoolean("IsBaby", this.getEntityData().get(DATA_BABY_ID));
+		compoundTag.putBoolean("IsBabyfied", this.getEntityData().get(DATA_BABYFIED_ID));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compoundTag) {
 		super.readAdditionalSaveData(compoundTag);
 		this.setBaby(compoundTag.getBoolean("IsBaby"));
+		this.setBabyfied(compoundTag.getBoolean("IsBabyfied"));
+	}
+
+	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
+		if (DATA_BABY_ID.equals(entityDataAccessor)) {
+			this.refreshDimensions();
+		}
+		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
+			this.refreshDimensions();
+		}
+		super.onSyncedDataUpdated(entityDataAccessor);
+	}
+
+	public boolean isBabyfied() {
+		return this.getEntityData().get(DATA_BABYFIED_ID);
+	}
+
+	@Override
+	public void setBabyfied(boolean b) {
+		this.getEntityData().set(DATA_BABYFIED_ID, b);
+		if (this.level != null && !this.level.isClientSide) {
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (b) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
+	}
+
+	@Override
+	public boolean isBaby() {
+		return this.getEntityData().get(DATA_BABY_ID) || isBabyfied();
+	}
+
+	@Override
+	public void setBaby(boolean b) {
+		this.getEntityData().set(DATA_BABY_ID, b);
+		if (this.level != null && !this.level.isClientSide) {
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (b) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
+	}
+
+	public int getExperienceReward() {
+		if (isBaby()) {
+			this.xpReward = (int) ((double) this.xpReward * 2.5);
+		}
+		return super.getExperienceReward();
+	}
+
+	@Override
+	protected void customServerAiStep() {
+		this.setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
+		super.customServerAiStep();
 	}
 }
 

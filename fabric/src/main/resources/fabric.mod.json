@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.tinyallies.fabric.FabricTinyAllies"
+      "net.tinyallies.fabric.FabricTinyFoes"
     ],
     "client": [
-      "net.tinyallies.fabric.FabricClientTinyAllies"
+      "net.tinyallies.fabric.FabricClientTinyFoes"
     ]
   },
   "depends": {
@@ -28,7 +28,7 @@
     "architectury": ">=6.5.85"
   },
   "mixins": [
-    "tinyallies.mixins.json",
+    "tinyallies-fabric.mixins.json",
     "tinyallies-common.mixins.json"
   ]
 }

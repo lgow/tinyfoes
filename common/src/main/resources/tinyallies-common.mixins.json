@@ -10,6 +10,8 @@
     "MixinCaveSpider",
     "MixinCreeper",
     "MixinEnderMan",
+    "MixinEntity",
+    "MixinMob",
     "MixinMonster",
     "MixinPlayer",
     "MixinSpider",

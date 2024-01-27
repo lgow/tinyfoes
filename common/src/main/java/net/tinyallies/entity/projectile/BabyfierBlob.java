@@ -1,5 +1,6 @@
 package net.tinyallies.entity.projectile;
 
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -8,15 +9,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.tinyallies.entity.ModEntities;
+import net.tinyallies.registry.ModEffects;
 import net.tinyallies.util.ModUtil;
 
 public class BabyfierBlob extends ThrowableProjectile {
+	private boolean shouldInvertAge;
+
 	public BabyfierBlob(EntityType<BabyfierBlob> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 	}
 
-	public BabyfierBlob(LivingEntity pShooter, Level pLevel) {
+	public BabyfierBlob(LivingEntity pShooter, Level pLevel, boolean shouldInvertAge) {
 		super(ModEntities.BLOB.get(), pShooter, pLevel);
+		this.shouldInvertAge = shouldInvertAge;
 	}
 
 	@Override
@@ -30,8 +35,16 @@ public class BabyfierBlob extends ThrowableProjectile {
 
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
-		if (!level.isClientSide && pResult.getEntity() instanceof Mob mob) {
-			ModUtil.babifyMob(mob);
+		if (!level.isClientSide && pResult.getEntity() instanceof LivingEntity livingEntity) {
+			if(shouldInvertAge) {
+				if(livingEntity.hasEffect(ModEffects.BABYFICATION)){
+					livingEntity.removeEffect(ModEffects.BABYFICATION);
+				}else if(pResult.getEntity() instanceof Mob mob){
+					mob.setBaby(!mob.isBaby());
+				}
+			}else{
+				livingEntity.addEffect(new MobEffectInstance(ModEffects.BABYFICATION, 260));
+			}
 		}
 		super.onHitEntity(pResult);
 	}

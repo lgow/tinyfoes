@@ -14,25 +14,27 @@ import org.spongepowered.asm.mixin.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(CreeperModel.class)
-public abstract class MixinCreeperModel<T extends Entity> extends HierarchicalModel<T> {
+public abstract class MixinCreeperModel <T extends Entity> extends HierarchicalModel<T> {
 	@Mutable @Shadow @Final private ModelPart head, leftHindLeg, rightHindLeg, leftFrontLeg, rightFrontLeg, root;
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		if(this.young){
+		if (this.young) {
 			ModUtil.babyfyModel(headParts(), bodyParts(), 14F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
 					pRed, pGreen, pBlue, pAlpha);
 			pPoseStack.pushPose();
 			pPoseStack.scale(0.5F, 0.5F, 0.5F);
-			pPoseStack.translate(0.0F, 1.5F, 0.0F );
+			pPoseStack.translate(0.0F, 1.5F, 0.0F);
 			this.frontLegs().forEach((modelPart) -> {
 				modelPart.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 			});
 			pPoseStack.popPose();
-		}else {
-					super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		}
+		else {
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		}
 	}
+
 	@Unique
 	protected Iterable<ModelPart> headParts() {
 		return ImmutableList.of(this.head);
@@ -42,6 +44,7 @@ public abstract class MixinCreeperModel<T extends Entity> extends HierarchicalMo
 	protected Iterable<ModelPart> bodyParts() {
 		return ImmutableList.of(root.getChild("body"), rightHindLeg, leftHindLeg);
 	}
+
 	@Unique
 	protected Iterable<ModelPart> frontLegs() {
 		return ImmutableList.of(rightFrontLeg, leftFrontLeg);
