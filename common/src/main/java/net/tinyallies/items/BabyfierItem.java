@@ -31,25 +31,27 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 	public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
 		if (pEntityLiving instanceof Player player) {
 			int i = this.getUseDuration(pStack) - pTimeLeft;
-			if (i < 20) {
+			if (i < 5) {
 				if (!pLevel.isClientSide()) {
 					ageInversionMode = !ageInversionMode;
 					player.displayClientMessage(Component.literal(
-							"Babyfication: " + (ageInversionMode ? "Invert Age (permanent)" : "Apply Effect (temporary)")), true);
+							"Babyfication: " + (ageInversionMode ? "Invert Age (permanent)"
+									: "Apply Effect (temporary)")), true);
 				}
-				return;
 			}
-			if (!pLevel.isClientSide) {
-				BabyfierBlob blob = new BabyfierBlob(pEntityLiving, pLevel, ageInversionMode);
-				blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
-				pLevel.addFreshEntity(blob);
-				pStack.hurtAndBreak(1, player, (player1) -> {
-					player1.broadcastBreakEvent(player.getUsedItemHand());
-				});
+			if (i > 20) {
+				if (!pLevel.isClientSide) {
+					BabyfierBlob blob = new BabyfierBlob(pEntityLiving, pLevel, ageInversionMode);
+					blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+					pLevel.addFreshEntity(blob);
+					pStack.hurtAndBreak(1, player, (player1) -> {
+						player1.broadcastBreakEvent(player.getUsedItemHand());
+					});
+				}
+				pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE,
+						SoundSource.PLAYERS, 1.0F, 1.0F / (pLevel.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+				player.awardStat(Stats.ITEM_USED.get(this));
 			}
-			pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE,
-					SoundSource.PLAYERS, 1.0F, 1.0F / (pLevel.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
-			player.awardStat(Stats.ITEM_USED.get(this));
 		}
 	}
 

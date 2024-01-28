@@ -117,5 +117,10 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 		this.setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
 		super.customServerAiStep();
 	}
+
+	@Override
+	public double getMyRidingOffset() {
+		return this.isBaby() ? 0.0 : -0.45;
+	}
 }
 
