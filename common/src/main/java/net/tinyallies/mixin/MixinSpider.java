@@ -4,7 +4,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,4 +18,9 @@ public abstract class MixinSpider extends Monster {
 	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
 		return this.isBaby() ? entityDimensions.height * 0.9F : super.getStandingEyeHeight(pose, entityDimensions);
 	}
+
+//	@Override
+//	public double getPassengersRidingOffset() {
+//		return isBaby() ? this.getBbHeight() * 1.5f : this.getBbHeight() * 0.5f;
+//	}
 }

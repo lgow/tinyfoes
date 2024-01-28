@@ -4,12 +4,15 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.tinyallies.capability.BabyfiedData;
 import net.tinyallies.entity.ModEntities;
 import net.tinyallies.registry.ModEffects;
+import net.tinyallies.util.IEntityDataSaver;
 import net.tinyallies.util.ModUtil;
 
 public class BabyfierBlob extends ThrowableProjectile {
@@ -41,6 +44,8 @@ public class BabyfierBlob extends ThrowableProjectile {
 					livingEntity.removeEffect(ModEffects.BABYFICATION);
 				}else if(pResult.getEntity() instanceof Mob mob){
 					mob.setBaby(!mob.isBaby());
+				}else if(pResult.getEntity() instanceof Player player){
+					BabyfiedData.updateIsBabyfied((IEntityDataSaver) player,!player.isBaby());
 				}
 			}else{
 				livingEntity.addEffect(new MobEffectInstance(ModEffects.BABYFICATION, 260));
