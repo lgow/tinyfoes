@@ -10,12 +10,16 @@ import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.LivingEntity;
 import net.tinyallies.util.ModUtil;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Environment(EnvType.CLIENT)
 @Mixin(PlayerModel.class)
 public abstract class MixinPlayerModel <T extends LivingEntity> extends HumanoidModel<T> {
+	@Shadow @Final public ModelPart jacket, leftSleeve, rightSleeve, rightPants, leftPants;
+
 	public MixinPlayerModel(ModelPart modelPart) {
 		super(modelPart);
 	}
@@ -33,11 +37,12 @@ public abstract class MixinPlayerModel <T extends LivingEntity> extends Humanoid
 
 	@Unique
 	protected Iterable<ModelPart> headParts() {
-		return ImmutableList.of(head);
+		return ImmutableList.of(head, hat);
 	}
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(body, leftArm, rightArm, rightLeg, leftLeg);
+		return ImmutableList.of(body, jacket, leftArm, leftSleeve, rightArm, rightSleeve, rightLeg, rightPants, leftLeg,
+				leftPants);
 	}
 }

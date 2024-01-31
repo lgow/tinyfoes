@@ -35,8 +35,8 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 				if (!pLevel.isClientSide()) {
 					ageInversionMode = !ageInversionMode;
 					player.displayClientMessage(Component.literal(
-							"Babyfication: " + (ageInversionMode ? "Invert Age (permanent)"
-									: "Apply Effect (temporary)")), true);
+							(ageInversionMode ? "Invert Age Mode (permanent)"
+									: "Apply Effect Mode (temporary)")), true);
 				}
 			}
 			if (i > 20) {
