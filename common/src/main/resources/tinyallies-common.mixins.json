@@ -5,18 +5,23 @@
   "compatibilityLevel": "JAVA_16",
   "minVersion": "0.8",
   "mixins": [
+    "MixinAbstractGolem",
     "MixinAbstractSkeleton",
     "MixinBlaze",
     "MixinCaveSpider",
     "MixinCreeper",
     "MixinEnderMan",
     "MixinEntity",
+    "MixinFlyingMob",
     "MixinMob",
     "MixinMonster",
+    "MixinPatrollingMonster",
+    "MixinPiglin",
     "MixinPlayer",
     "MixinRavager",
     "MixinSpider",
-    "MixinWitherSkeleton"
+    "MixinWitherSkeleton",
+    "MixinZombie"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -27,9 +32,11 @@
     "MixinCreeperModel",
     "MixinCrossedArmsItemLayer",
     "MixinEnderManModel",
+    "MixinGhast",
     "MixinGhastModel",
     "MixinIllagerModel",
     "MixinItemInHandLayer",
+    "MixinPhantomModel",
     "MixinPlayerModel",
     "MixinPlayerRender",
     "MixinRavagerModel",
@@ -37,6 +44,7 @@
     "MixinVillagerModel",
     "MixinVillagerRender",
     "MixinWardenModel",
-    "MixinWitchItemLayer"
+    "MixinWitchItemLayer",
+    "MixinWitherModel"
   ]
 }

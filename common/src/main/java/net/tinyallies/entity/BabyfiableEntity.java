@@ -9,9 +9,13 @@ public interface BabyfiableEntity {
 			UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Baby speed boost", 0.5,
 			AttributeModifier.Operation.MULTIPLY_BASE);
 
-	void setBabyfied(boolean b);
+	default void $setBabyfied(boolean b){
+	};
 
-	default boolean isBabyfied(){
+
+	default boolean $isBabyfied(){
 		return false;
 	};
+
+	boolean $isBaby();
 }

@@ -18,4 +18,9 @@ public abstract class MixinAbstractSkeleton extends Monster {
 	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
 		return this.isBaby() ? 0.93F : super.getStandingEyeHeight(pose, entityDimensions);
 	}
+
+	@Override
+	public double getMyRidingOffset() {
+		return isBaby() ? -0.2 : -0.6;
+	}
 }

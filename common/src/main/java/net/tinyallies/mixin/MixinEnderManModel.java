@@ -47,12 +47,15 @@ public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T
 	protected Iterable<ModelPart> bodyParts() {
 		return ImmutableList.of(this.body, this.rightArm, this.leftArm, this.rightLeg, this.leftLeg);
 	}
-	@Redirect(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at=@At(value= "FIELD", target = "Lnet/minecraft/client/model/EndermanModel;carrying:Z", opcode = Opcodes.GETFIELD))
+
+	@Redirect(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
+			at = @At(value = "FIELD", target = "Lnet/minecraft/client/model/EndermanModel;carrying:Z",
+					opcode = Opcodes.GETFIELD))
 	public boolean setupAnim1(EndermanModel<T> instance) {
 		return instance.carrying && !instance.young;
 	}
 
-	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at=@At("TAIL"))
+	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
 	public void setupAnim2(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
 		if (carrying && this.young) {
 			this.rightArm.yRot += 0.41;
@@ -61,5 +64,4 @@ public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T
 			this.leftArm.xRot = -0.7f;
 		}
 	}
-
 }

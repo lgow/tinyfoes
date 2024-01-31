@@ -5,6 +5,8 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.tinyallies.capability.BabyfiedData;
@@ -14,6 +16,7 @@ import net.tinyallies.util.IEntityDataSaver;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -49,27 +52,65 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
 	void serverAiStep(CallbackInfo ci) {
-		this.setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
+		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
 	}
+
 
 	@Override
 	public boolean isBaby() {
-		return ((IEntityDataSaver) this).getPersistentData().getBoolean("IsBabyfied");
+		return $isBaby() || $isBabyfied();
+	}
+
+	@Unique
+	public void $setBaby(boolean bl) {
+		BabyfiedData.updateIsBaby((IEntityDataSaver) this, bl);
+		if (this.level != null && !this.level.isClientSide) {
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (bl) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
+		this.refreshDimensions();
+	}
+
+
+	@Override
+	public boolean $isBaby() {
+		return getSavedData("IsBaby");
 	}
 
 	@Override
-	public void setBabyfied(boolean bl) {
+	public boolean $isBabyfied() {
+		return getSavedData("IsBabyfied");
+	}
+
+	@Override
+	public void $setBabyfied(boolean bl) {
 		BabyfiedData.updateIsBabyfied((IEntityDataSaver) this, bl);
+		if (this.level != null && !this.level.isClientSide) {
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (bl) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
 		this.refreshDimensions();
+	}
+
+	private boolean getSavedData(String id) {
+		return ((IEntityDataSaver) this).getPersistentData().getBoolean(id);
 	}
 
 	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
 	public void addAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		compoundTag.putBoolean("IsBabyfied", this.isBaby());
+		compoundTag.putBoolean("IsBaby", this.$isBaby());
+		compoundTag.putBoolean("IsBabyfied", this.$isBabyfied());
 	}
 
 	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
 	public void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		this.setBabyfied(((IEntityDataSaver) this).getPersistentData().getBoolean("IsBabyfied"));
+		this.$setBaby(getSavedData("IsBaby"));
+		this.$setBabyfied(getSavedData("IsBabyfied"));
 	}
 }
