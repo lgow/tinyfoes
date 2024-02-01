@@ -1,7 +1,7 @@
 package net.tinyallies.fabric;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.tinyallies.TinyFoesExpectPlatform;
+import net.tinyallies.common.TinyFoesExpectPlatform;
 
 import java.nio.file.Path;
 

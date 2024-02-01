@@ -8,9 +8,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.tinyallies.TinyFoesCommon;
-import net.tinyallies.items.ModItems;
-import net.tinyallies.util.ModUtil;
+import net.tinyallies.common.TinyFoesCommon;
+import net.tinyallies.common.items.ModItems;
+import net.tinyallies.common.util.ModUtil;
+import net.tinyallies.forge.networking.ForgePacketHandler;
 
 @Mod(TinyFoesCommon.MODID)
 public class ForgeTinyFoes {
@@ -18,7 +19,7 @@ public class ForgeTinyFoes {
 			TinyFoesCommon.MODID + ".tiny_tab") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(ModItems.BABYFIER.get());
+			return new ItemStack(ModItems.TINY_TAB.get());
 		}
 
 		@Override
@@ -34,5 +35,6 @@ public class ForgeTinyFoes {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		EventBuses.registerModEventBus(TinyFoesCommon.MODID, modEventBus);
 		TinyFoesCommon.init();
+		ForgePacketHandler.register();
 	}
 }

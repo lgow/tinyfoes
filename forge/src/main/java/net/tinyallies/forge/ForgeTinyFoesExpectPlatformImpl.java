@@ -1,7 +1,7 @@
 package net.tinyallies.forge;
 
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.tinyallies.TinyFoesExpectPlatform;
+import net.tinyallies.common.TinyFoesExpectPlatform;
 
 import java.nio.file.Path;
 

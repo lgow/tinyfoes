@@ -1,11 +1,13 @@
 {
   "required": true,
-  "package": "net.tinyallies.mixin",
+  "package": "net.tinyallies.fabric.mixin",
   "compatibilityLevel": "JAVA_16",
   "minVersion": "0.8",
   "client": [
   ],
   "mixins": [
+    "MixinEntity",
+    "MixinPlayer"
   ],
   "injectors": {
     "defaultRequire": 1

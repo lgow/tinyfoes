@@ -1,6 +1,6 @@
 package net.tinyallies.fabric;
 
-import net.tinyallies.TinyFoesExpectPlatform;
+import net.tinyallies.common.TinyFoesExpectPlatform;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.nio.file.Path;

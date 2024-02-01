@@ -1,7 +1,7 @@
 package net.tinyallies.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.tinyallies.client.TinyFoesClientCommon;
+import net.tinyallies.common.client.TinyFoesClientCommon;
 
 public class FabricClientTinyFoes implements ClientModInitializer {
     @Override
