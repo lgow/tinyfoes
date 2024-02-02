@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -36,5 +37,6 @@ public class ForgeTinyFoes {
 		EventBuses.registerModEventBus(TinyFoesCommon.MODID, modEventBus);
 		TinyFoesCommon.init();
 		ForgePacketHandler.register();
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 }

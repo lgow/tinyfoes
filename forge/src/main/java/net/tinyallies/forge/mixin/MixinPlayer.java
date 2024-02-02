@@ -11,6 +11,8 @@ import net.minecraft.world.level.Level;
 import net.tinyallies.common.entity.BabyfiableEntity;
 import net.tinyallies.common.registry.ModEffects;
 import net.tinyallies.forge.capabilities.CapabilityProvider;
+import net.tinyallies.forge.capabilities.IsBaby;
+import net.tinyallies.forge.capabilities.IsBabyfied;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Optional;
 
 @Mixin(Player.class)
-public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity{
+public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity {
 	@Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
 	@Shadow @Final private static Map<Pose, EntityDimensions> POSES;
 
@@ -61,6 +63,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Unique
 	public void $setBaby(boolean bl) {
+		this.getCapability(CapabilityProvider.IS_BABY_CAPABILITY).ifPresent((isBaby) -> isBaby.setValue(bl, this));
 		if (this.level != null && !this.level.isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -73,24 +76,20 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Override
 	public boolean $isBaby() {
-		AtomicBoolean b = new AtomicBoolean(false);
-		this.getCapability(CapabilityProvider.IS_BABY_CAPABILITY).ifPresent((isBaby) -> {
-			b.set(isBaby.getValue());
-		});
-		return b.get();
+		Optional<IsBaby> resolve = this.getCapability(CapabilityProvider.IS_BABY_CAPABILITY).resolve();
+		return resolve.isPresent() && resolve.get().getValue();
 	}
 
 	@Override
 	public boolean $isBabyfied() {
-		AtomicBoolean b = new AtomicBoolean(false);
-		this.getCapability(CapabilityProvider.IS_BABYFIED_CAPABILITY).ifPresent((isBabyfied) -> {
-			 b.set(isBabyfied.getValue());
-		});
-		return b.get();
+		Optional<IsBabyfied> resolve = this.getCapability(CapabilityProvider.IS_BABYFIED_CAPABILITY).resolve();
+		return resolve.isPresent() && resolve.get().getValue();
 	}
 
 	@Override
 	public void $setBabyfied(boolean bl) {
+		this.getCapability(CapabilityProvider.IS_BABYFIED_CAPABILITY).ifPresent(
+				(isBabyfied) -> isBabyfied.setValue(bl, this));
 		if (this.level != null && !this.level.isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -105,4 +104,15 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	public double getMyRidingOffset() {
 		return isBaby() ? 0.0F : -0.35;
 	}
+	//	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+	//	public void addAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
+	//		compoundTag.putBoolean("IsBaby", this.$isBaby());
+	//		compoundTag.putBoolean("IsBabyfied", this.$isBabyfied());
+	//	}
+	//
+	//	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
+	//	public void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
+	//		this.$setBaby(compoundTag.getBoolean("IsBaby"));
+	//		this.$setBabyfied(compoundTag.getBoolean("IsBabyfied"));
+	//	}
 }

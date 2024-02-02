@@ -24,4 +24,28 @@ public class SyncIsBaby {
 		NetworkEvent.Context context = supplier.get();
 		context.enqueueWork(() -> PlayerData.setBaby(value));
 	}
+
+
+	//	private CompoundNBT data;
+	//
+	//	XiuXianStateSyncMessage(PacketBuffer buf) {
+	//		this.data = buf.readCompoundTag();
+	//	}
+	//
+	//	public XiuXianStateSyncMessage(CompoundNBT nbt) {
+	//		this.data = nbt;
+	//	}
+	//
+	//	void encode(PacketBuffer buf) {
+	//		buf.writeCompoundTag(data);
+	//	}
+	//
+	//	void handle(Supplier<NetworkEvent.Context> context) {
+	//		NetworkEvent.Context ctx = context.get();
+	//		ctx.enqueueWork(() -> {
+	//			
+	//		});
+	//		ctx.setPacketHandled(true);
+	//	}
+	//}
 }

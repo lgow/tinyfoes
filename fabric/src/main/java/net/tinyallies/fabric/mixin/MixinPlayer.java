@@ -1,6 +1,5 @@
 package net.tinyallies.fabric.mixin;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,10 +8,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.tinyallies.fabric.persistent_data.BabyfiedData;
-import net.tinyallies.fabric.persistent_data.IEntityDataSaver;
 import net.tinyallies.common.entity.BabyfiableEntity;
 import net.tinyallies.common.registry.ModEffects;
+import net.tinyallies.fabric.persistent_data.BabyfiedData;
+import net.tinyallies.fabric.persistent_data.IEntityDataSaver;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -103,17 +102,5 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	private boolean getSavedData(String id) {
 		return this.getPersistentData().getBoolean(id);
-	}
-
-	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-	public void addAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		compoundTag.putBoolean("IsBaby", this.$isBaby());
-		compoundTag.putBoolean("IsBabyfied", this.$isBabyfied());
-	}
-
-	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
-	public void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		this.$setBaby(getSavedData("IsBaby"));
-		this.$setBabyfied(getSavedData("IsBabyfied"));
 	}
 }

@@ -1,7 +1,9 @@
 package net.tinyallies.forge.networking;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+import net.tinyallies.forge.capabilities.CapabilityProvider;
 
 import java.util.function.Supplier;
 
@@ -21,7 +23,13 @@ public class SyncIsBabyfied {
 	}
 
 	public void handle(Supplier<NetworkEvent.Context> supplier) {
+
 		NetworkEvent.Context context = supplier.get();
-		context.enqueueWork(() -> PlayerData.setBabyfied(value));
+		context.enqueueWork(() -> {
+			Minecraft.getInstance().player.getCapability(CapabilityProvider.IS_BABYFIED_CAPABILITY).ifPresent((s) -> {
+				s.setValue(value, Minecraft.getInstance().player);
+			});
+			PlayerData.setBabyfied(value);
+		});
 	}
 }

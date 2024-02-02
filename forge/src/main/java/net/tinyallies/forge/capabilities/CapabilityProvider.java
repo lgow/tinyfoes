@@ -16,18 +16,18 @@ public class CapabilityProvider implements ICapabilityProvider, INBTSerializable
 	public final static Capability<IsBaby> IS_BABY_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() { });
 	public final static Capability<IsBabyfied> IS_BABYFIED_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() { });
 	private IsBaby isBaby = null;
-	private final LazyOptional<IsBaby> lazyChakraControl = LazyOptional.of(this::createChakraControl);
-	private IsBabyfied narutoRunning = null;
+	private final LazyOptional<IsBaby> lazyIsBaby = LazyOptional.of(this::createIsBaby);
+	private IsBabyfied isBabyfied = null;
 	private final LazyOptional<IsBabyfied> lazyIsBabyfied = LazyOptional.of(this::createIsBabyfied);
 
 	private IsBabyfied createIsBabyfied() {
-		if (this.narutoRunning == null) {
-			this.narutoRunning = new IsBabyfied();
+		if (this.isBabyfied == null) {
+			this.isBabyfied = new IsBabyfied();
 		}
-		return this.narutoRunning;
+		return this.isBabyfied;
 	}
 
-	private IsBaby createChakraControl() {
+	private IsBaby createIsBaby() {
 		if (this.isBaby == null) {
 			this.isBaby = new IsBaby();
 		}
@@ -37,7 +37,7 @@ public class CapabilityProvider implements ICapabilityProvider, INBTSerializable
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
 		if (cap == IS_BABY_CAPABILITY) {
-			return lazyChakraControl.cast();
+			return lazyIsBaby.cast();
 		}
 		if (cap == IS_BABYFIED_CAPABILITY) { return lazyIsBabyfied.cast(); }
 		return LazyOptional.empty();
@@ -46,12 +46,14 @@ public class CapabilityProvider implements ICapabilityProvider, INBTSerializable
 	@Override
 	public CompoundTag serializeNBT() {
 		CompoundTag nbt = new CompoundTag();
-		createChakraControl().saveNBTData(nbt);
+		createIsBaby().saveNBTData(nbt);
+		createIsBabyfied().saveNBTData(nbt);
 		return nbt;
 	}
 
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		createChakraControl().loadNBTData(nbt);
+		createIsBabyfied().loadNBTData(nbt);
+		createIsBaby().loadNBTData(nbt);
 	}
 }

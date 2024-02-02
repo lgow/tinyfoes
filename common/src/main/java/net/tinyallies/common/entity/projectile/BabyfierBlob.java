@@ -9,6 +9,7 @@ import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.tinyallies.common.entity.BabyfiableEntity;
 import net.tinyallies.common.entity.ModEntities;
 import net.tinyallies.common.registry.ModEffects;
 
@@ -45,9 +46,9 @@ public class BabyfierBlob extends ThrowableProjectile {
 				} else if (pResult.getEntity() instanceof Mob mob) {
 					mob.setBaby(!mob.isBaby());
 				}
-//				else if (pResult.getEntity() instanceof Player player) {
-//					BabyfiedData.updateIsBaby((IEntityDataSaver) player, !((BabyfiableEntity) player).$isBaby());
-//				}
+				else if (pResult.getEntity() instanceof BabyfiableEntity babyfiableEntity) {
+					babyfiableEntity.$setBaby(!babyfiableEntity.$isBaby());
+				}
 			}
 			else {
 				livingEntity.addEffect(new MobEffectInstance(ModEffects.BABYFICATION.get(), 260));
