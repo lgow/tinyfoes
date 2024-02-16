@@ -19,11 +19,11 @@ public class ModEffects {
 
 	private static final Registrar<MobEffect> MOB_EFFECTS = DeferredRegister.create(TinyFoesCommon.MODID, Registry.MOB_EFFECT_REGISTRY).getRegistrar();
 private static final Registrar<Potion> POTIONS = DeferredRegister.create(TinyFoesCommon.MODID, Registry.POTION_REGISTRY).getRegistrar();
+	public static final RegistrySupplier<Potion> BABYFICATION_POTION;
 
 	static {
 		BABYFICATION = registerEffect("babyfication", Babyfication::new);
-		POTIONS.register(new TinyFoesResLoc("babyfication"), () -> new Potion(new MobEffectInstance(ModEffects.BABYFICATION.get(), 260)));
-
+		BABYFICATION_POTION = POTIONS.register(new TinyFoesResLoc("babyfication"), () -> new Potion(new MobEffectInstance(ModEffects.BABYFICATION.get(), 260)));
 	}
 
 	private static RegistrySupplier<MobEffect> registerEffect(String name, Supplier<MobEffect> effect){

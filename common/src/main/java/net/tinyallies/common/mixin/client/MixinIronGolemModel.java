@@ -1,4 +1,4 @@
-package net.tinyallies.common.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.SnowGolemModel;
+import net.minecraft.client.model.IronGolemModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Entity;
 import net.tinyallies.common.util.ModUtil;
@@ -16,19 +16,21 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 @Environment(value= EnvType.CLIENT)
-@Mixin(SnowGolemModel.class)
-public abstract class MixinSnowGolemModel <T extends Entity>
+@Mixin(IronGolemModel.class)
+public abstract class MixinIronGolemModel <T extends Entity>
 		extends HierarchicalModel<T> {
-	@Shadow @Final private ModelPart upperBody;
 	@Shadow @Final private ModelPart leftArm;
 	@Shadow @Final private ModelPart rightArm;
-	@Shadow @Final private ModelPart root;
 	@Shadow @Final private ModelPart head;
+	@Shadow @Final private ModelPart rightLeg;
+	@Shadow @Final private ModelPart leftLeg;
+
+	@Shadow public abstract ModelPart root();
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 15F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
+			ModUtil.babyfyModel(headParts(), bodyParts(), 19F, 1F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
 					pRed, pGreen, pBlue, pAlpha);
 		}
 		else {
@@ -43,6 +45,6 @@ public abstract class MixinSnowGolemModel <T extends Entity>
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root.getChild("lower_body"), upperBody, leftArm, rightArm);
+		return ImmutableList.of(root().getChild("body") , leftArm, rightArm, leftLeg, rightLeg);
 	}
 }

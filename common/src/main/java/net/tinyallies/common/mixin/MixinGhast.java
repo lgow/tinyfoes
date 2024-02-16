@@ -10,7 +10,6 @@ import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Environment(EnvType.CLIENT)
 @Mixin(Ghast.class)
 public abstract class MixinGhast extends FlyingMob {
 	protected MixinGhast(EntityType<? extends FlyingMob> entityType, Level level) {

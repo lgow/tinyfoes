@@ -1,4 +1,4 @@
-package net.tinyallies.common.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
@@ -24,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(ItemInHandLayer.class)
 public abstract class MixinItemInHandLayer <T extends LivingEntity, M extends EntityModel<T> & ArmedModel> extends RenderLayer<T, M> {
-	@Shadow @Final private ItemInHandRenderer itemInHandRenderer;
 
 	public MixinItemInHandLayer(RenderLayerParent<T, M> renderLayerParent) {
 		super(renderLayerParent);

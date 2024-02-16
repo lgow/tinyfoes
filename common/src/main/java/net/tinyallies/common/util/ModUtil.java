@@ -44,4 +44,22 @@ public class ModUtil {
 		});
 		pPoseStack.popPose();
 	}
+
+	public static void scaleModelPart(ModelPart part, float scale){
+		part.xScale = scale;
+		part.yScale = scale;
+		part.zScale = scale;
+	}
+
+	public static void scaleBodyPart(ModelPart part){
+		scaleModelPart(part, 0.75f);
+	}
+
+	public static void scaleHeadPart(ModelPart part){
+		scaleModelPart(part, 0.5f);
+	}
+
+	public static void scaleReset(ModelPart part){
+		scaleModelPart(part, 1.0f);
+	}
 }

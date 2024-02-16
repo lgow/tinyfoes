@@ -1,4 +1,4 @@
-package net.tinyallies.common.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -58,8 +58,10 @@ public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T
 	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
 	public void setupAnim2(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
 		if (carrying && this.young) {
-			this.rightArm.yRot += 0.41;
-			this.leftArm.yRot += -0.41;
+			this.rightArm.yRot = 0.41f;
+			this.leftArm.yRot = -0.41f;
+			this.rightArm.zRot = 0.06f;
+			this.leftArm.zRot = -0.06f;
 			this.rightArm.xRot = -0.7f;
 			this.leftArm.xRot = -0.7f;
 		}

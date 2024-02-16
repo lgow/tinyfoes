@@ -21,11 +21,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AgeableMob.class)
-public abstract class MixinMob extends Mob implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(MixinMob.class,
+public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
+	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(MixinAgeableMob.class,
 			EntityDataSerializers.BOOLEAN);
 
-	protected MixinMob(EntityType<? extends Monster> entityType, Level level) {
+	protected MixinAgeableMob(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
 	}
 

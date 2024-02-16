@@ -26,10 +26,14 @@ import java.util.Map;
 public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity, IEntityDataSaver {
 	@Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
 	@Shadow @Final private static Map<Pose, EntityDimensions> POSES;
+	@Unique public boolean isBaby, isBabyfied;
 
 	protected MixinPlayer(EntityType<? extends LivingEntity> entityType, Level level) {
 		super(entityType, level);
 	}
+
+	@Shadow
+	public abstract int getPortalWaitTime();
 
 	@Override
 	public EntityDimensions getDimensions(Pose pose) {
@@ -49,47 +53,51 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		return 1.62f * this.getScale();
 	}
 
-	@Inject(method = "aiStep", at = @At("HEAD"))
-	void serverAiStep(CallbackInfo ci) {
+	@Inject(method = "serverAiStep", at = @At("HEAD"))
+	void aiStep(CallbackInfo ci) {
 		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+		isBaby = getPersistentData().getBoolean("IsBaby");
+		isBabyfied = getPersistentData().getBoolean("IsBabyfied");
 	}
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return $isBabyfied();
 	}
+	//	@Unique
+	//	public void $setBaby(boolean bl) {
+	//		if (this.level != null && !this.level.isClientSide) {
+	//			BabyfiedData.updateIsBaby((Player) (Object) this, bl);
+	//			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+	//			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+	//			if (bl) {
+	//				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+	//			}
+	//		}
+	//		this.refreshDimensions();
+	//	}
 
-	@Unique
-	public void $setBaby(boolean bl) {
-		BabyfiedData.updateIsBaby(this, bl);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (bl) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-			}
-		}
-		this.refreshDimensions();
-	}
-
-	@Override
-	public boolean $isBaby() {
-		return getSavedData("IsBaby");
-	}
-
+	//	@Override
+	//	public boolean $isBaby() {
+	//		return isBaby;
+	//	}
+	//
 	@Override
 	public boolean $isBabyfied() {
-		return getSavedData("IsBabyfied");
+		return isBabyfied;
 	}
 
 	@Override
 	public void $setBabyfied(boolean bl) {
-		BabyfiedData.updateIsBabyfied(this, bl);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (bl) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+		if (this.level != null) {
+			if (!this.level.isClientSide) {
+				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+				}
+			}else{
+				BabyfiedData.updateIsBabyfied((Player) (Object) this, bl);
 			}
 		}
 		this.refreshDimensions();
@@ -98,9 +106,5 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Override
 	public double getMyRidingOffset() {
 		return isBaby() ? 0.0F : -0.35;
-	}
-
-	private boolean getSavedData(String id) {
-		return this.getPersistentData().getBoolean(id);
 	}
 }

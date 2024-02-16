@@ -1,4 +1,4 @@
-package net.tinyallies.common.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -6,35 +6,31 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.WardenModel;
+import net.minecraft.client.model.RavagerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Ravager;
 import net.tinyallies.common.util.ModUtil;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
-@Mixin(WardenModel.class)
-public abstract class MixinWardenModel <T extends Warden>
-		extends HierarchicalModel<T>  {
-	@Shadow @Final protected ModelPart head;
-	@Shadow @Final private ModelPart root;
-
+@Mixin(RavagerModel.class)
+public abstract class MixinRavagerModel <T extends Entity> extends HierarchicalModel<T> {
+	@Mutable @Shadow @Final private ModelPart root, head, mouth, rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg, neck;
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 0, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+		if(this.young){
+			ModUtil.babyfyModel(headParts(), bodyParts(), 0F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed,
+				pGreen, pBlue, pAlpha);
 		}
-		else {
+		else{
 			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		}
 	}
+
 
 	@Unique
 	protected Iterable<ModelPart> headParts() {
@@ -43,11 +39,11 @@ public abstract class MixinWardenModel <T extends Warden>
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root);
+		return ImmutableList.of(root.getChild("neck"), root.getChild("body"), rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg);
 	}
 
-	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/warden/Warden;FFFFF)V", at = @At("TAIL"))
-	public void setupAnim(T warden, float f, float g, float h, float i, float j, CallbackInfo ci) {
+	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/Ravager;FFFFF)V", at = @At("HEAD"))
+	public void setupAnim(Ravager ravager, float f, float g, float h, float i, float j, CallbackInfo ci) {
 		if(this.young){
 			this.head.xScale = 1.5F;
 			this.head.yScale = 1.5F;
@@ -58,5 +54,4 @@ public abstract class MixinWardenModel <T extends Warden>
 			this.head.zScale = 1.0F;
 		}
 	}
-
 }

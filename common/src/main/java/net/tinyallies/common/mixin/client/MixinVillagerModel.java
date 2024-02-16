@@ -1,4 +1,4 @@
-package net.tinyallies.common.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -6,19 +6,18 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.IllagerModel;
+import net.minecraft.client.model.VillagerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.Entity;
 import net.tinyallies.common.util.ModUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 @Environment(EnvType.CLIENT)
-@Mixin(IllagerModel.class)
-public abstract class MixinIllagerModel <T extends AbstractIllager> extends HierarchicalModel<T>  {
-	@Shadow @Final private ModelPart root, rightLeg, leftLeg, head, hat, arms, leftArm;
-	@Shadow @Final private ModelPart rightArm;
+@Mixin(VillagerModel.class)
+public abstract class MixinVillagerModel <T extends Entity> extends HierarchicalModel<T> {
+	@Shadow @Final private ModelPart root, rightLeg, leftLeg, head;
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
@@ -33,11 +32,11 @@ public abstract class MixinIllagerModel <T extends AbstractIllager> extends Hier
 
 	@Unique
 	protected Iterable<ModelPart> headParts() {
-		return ImmutableList.of(head, hat);
+		return ImmutableList.of(head);
 	}
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root.getChild("body"), arms, rightArm, leftArm, rightLeg, leftLeg);
+		return ImmutableList.of(root.getChild("body"), root.getChild("arms"), rightLeg, leftLeg);
 	}
 }
