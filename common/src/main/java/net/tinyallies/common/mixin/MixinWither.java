@@ -40,9 +40,4 @@ public abstract class MixinWither extends Monster implements BabyfiableEntity {
 			cir.setReturnValue(i <= 0 ? this.getY() + 1.6 : this.getY() + 1.35);
 		}
 	}
-
-	@Inject(method = "customServerAiStep", at = @At("HEAD"))
-	protected void customServerAiStep(CallbackInfo ci) {
-		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
-	}
 }

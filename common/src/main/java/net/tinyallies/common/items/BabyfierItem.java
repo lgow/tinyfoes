@@ -43,6 +43,7 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 				if (!pLevel.isClientSide) {
 					BabyfierBlob blob = new BabyfierBlob(pEntityLiving, pLevel, ageInversionMode);
 					blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+
 					pLevel.addFreshEntity(blob);
 					pStack.hurtAndBreak(1, player, (player1) -> {
 						player1.broadcastBreakEvent(player.getUsedItemHand());

@@ -15,7 +15,7 @@ public class ModUtil {
 			Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG, Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG,
 			Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG, Items.PHANTOM_SPAWN_EGG, Items.PIGLIN_BRUTE_SPAWN_EGG,
 			Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.SPIDER_SPAWN_EGG,
-			Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG, Items.WARDEN_SPAWN_EGG, Items.WITCH_SPAWN_EGG,
+			Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG, Items.WARDEN_SPAWN_EGG, Items.WANDERING_TRADER_SPAWN_EGG, Items.WITCH_SPAWN_EGG,
 			Items.WITHER_SKELETON_SPAWN_EGG);
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
@@ -45,21 +45,21 @@ public class ModUtil {
 		pPoseStack.popPose();
 	}
 
-	public static void scaleModelPart(ModelPart part, float scale){
+	public static void scaleModelPart(ModelPart part, float scale) {
 		part.xScale = scale;
 		part.yScale = scale;
 		part.zScale = scale;
 	}
 
-	public static void scaleBodyPart(ModelPart part){
+	public static void scaleBodyPart(ModelPart part) {
 		scaleModelPart(part, 0.75f);
 	}
 
-	public static void scaleHeadPart(ModelPart part){
-		scaleModelPart(part, 0.5f);
+	public static void scaleHeadPart(ModelPart part, boolean b) {
+		scaleModelPart(part, b ? 2.0f : 1.0f);
 	}
 
-	public static void scaleReset(ModelPart part){
+	public static void scaleReset(ModelPart part) {
 		scaleModelPart(part, 1.0f);
 	}
 }

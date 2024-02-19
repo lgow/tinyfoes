@@ -17,78 +17,19 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(FlyingMob.class)
 public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinFlyingMob.class,
-			EntityDataSerializers.BOOLEAN);
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
-			MixinFlyingMob.class, EntityDataSerializers.BOOLEAN);
 
 	protected MixinFlyingMob(EntityType<? extends Mob> entityType, Level level) {
 		super(entityType, level);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.getEntityData().define(DATA_BABY_ID, false);
-		this.getEntityData().define(DATA_BABYFIED_ID, false);
-	}
-
-	@Override
-	public void addAdditionalSaveData(CompoundTag compoundTag) {
-		super.addAdditionalSaveData(compoundTag);
-		compoundTag.putBoolean("IsBaby", this.getEntityData().get(DATA_BABY_ID));
-		compoundTag.putBoolean("IsBabyfied", this.getEntityData().get(DATA_BABYFIED_ID));
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compoundTag) {
-		super.readAdditionalSaveData(compoundTag);
-		this.setBaby(compoundTag.getBoolean("IsBaby"));
-		this.$setBabyfied(compoundTag.getBoolean("IsBabyfied"));
-	}
-
-	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
-		if (DATA_BABY_ID.equals(entityDataAccessor)) {
-			this.refreshDimensions();
-		}
-		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
-			this.refreshDimensions();
-		}
-		super.onSyncedDataUpdated(entityDataAccessor);
-	}
-
-	@Override
-	public boolean $isBabyfied() {
-		return this.getEntityData().get(DATA_BABYFIED_ID);
-	}
-
-	@Override
-	public void $setBabyfied(boolean b) {
-		this.getEntityData().set(DATA_BABYFIED_ID, b);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (b) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-			}
-		}
-	}
-
-	@Override
 	public boolean isBaby() {
-		return this.getEntityData().get(DATA_BABY_ID) || $isBabyfied();
+		return $isBaby() || $isBabyfied();
 	}
 
 	@Override
 	public void setBaby(boolean b) {
-		this.getEntityData().set(DATA_BABY_ID, b);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (b) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-			}
-		}
+		this.$setBaby(b);
 	}
 
 	public int getExperienceReward() {
@@ -96,12 +37,6 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 			this.xpReward = (int) ((double) this.xpReward * 2.5);
 		}
 		return super.getExperienceReward();
-	}
-
-	@Override
-	protected void customServerAiStep() {
-		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
-		super.customServerAiStep();
 	}
 
 	@Override

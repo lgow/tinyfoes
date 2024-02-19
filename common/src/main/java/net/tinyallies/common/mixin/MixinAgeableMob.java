@@ -22,9 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AgeableMob.class)
 public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(MixinAgeableMob.class,
-			EntityDataSerializers.BOOLEAN);
-
 	protected MixinAgeableMob(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
 	}
@@ -37,49 +34,6 @@ public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
 		return this.getAge() < 0 || $isBabyfied();
 	}
 
-	public boolean $isBabyfied() {
-		return this.getEntityData().get(DATA_BABYFIED_ID);
-	}
-
-	@Override
-	public void $setBabyfied(boolean b) {
-		this.getEntityData().set(DATA_BABYFIED_ID, b);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (b) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-			}
-		}
-	}
-
-	@Inject(method = "defineSynchedData", at = @At("TAIL"))
-	public void defineSynchedData(CallbackInfo ci) {
-		this.getEntityData().define(DATA_BABYFIED_ID, false);
-	}
-
-	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-	public void addAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		compoundTag.putBoolean("IsBabyfied", this.getEntityData().get(DATA_BABYFIED_ID));
-	}
-
-	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-	public void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		this.$setBabyfied(compoundTag.getBoolean("IsBabyfied"));
-	}
-
-	@Inject(method = "onSyncedDataUpdated", at = @At("TAIL"))
-	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor, CallbackInfo ci) {
-		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
-			this.refreshDimensions();
-		}
-	}
-
-	@Override
-	protected void customServerAiStep() {
-		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
-		super.customServerAiStep();
-	}
 }
 
 

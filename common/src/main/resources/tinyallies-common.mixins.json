@@ -14,6 +14,7 @@
     "MixinEnderMan",
     "MixinFlyingMob",
     "MixinGhast",
+    "MixinMob",
     "MixinMonster",
     "MixinPatrollingMonster",
     "MixinPiglin",
@@ -25,6 +26,7 @@
     "MixinWitch",
     "MixinWither",
     "MixinWitherSkeleton",
+    "MixinZoglin",
     "MixinZombie"
   ],
   "injectors": {
@@ -40,6 +42,7 @@
     "client.MixinEnderManModel",
     "client.MixinGhastModel",
     "client.MixinIllagerModel",
+    "client.MixinIronGolemFlowerLayer",
     "client.MixinIronGolemModel",
     "client.MixinItemInHandLayer",
     "client.MixinPhantomModel",
@@ -50,7 +53,7 @@
     "client.MixinSpiderModel",
     "client.MixinStuckInModelLayer",
     "client.MixinVillagerModel",
-    "client.MixinVillagerRender",
+    "client.MixinVillagerRenderer",
     "client.MixinWardenModel",
     "client.MixinWitchItemLayer",
     "client.MixinWitherModel"

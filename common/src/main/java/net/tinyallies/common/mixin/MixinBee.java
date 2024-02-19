@@ -17,8 +17,8 @@ public abstract class MixinBee extends AgeableMob implements BabyfiableEntity {
 		super(entityType, level);
 	}
 
-	@Inject(method = "customServerAiStep", at = @At("HEAD"))
-	protected void customServerAiStep(CallbackInfo ci) {
-		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
-	}
+//	@Inject(method = "customServerAiStep", at = @At("HEAD"))
+//	protected void customServerAiStep(CallbackInfo ci) {
+//		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+//	}
 }
