@@ -13,18 +13,26 @@ import net.minecraft.world.entity.player.Player;
 public class BabyfiedData {
 	boolean isbabyfied = false;
 
-	public static boolean updateIsBaby(Player player, boolean amount) {
+	public static boolean updateIsBaby(Player player, boolean bl) {
 		CompoundTag nbt = ((IEntityDataSaver)player).getPersistentData();
-		nbt.putBoolean("IsBaby", amount);
-		return amount;
+		nbt.putBoolean("IsBaby", bl);
+		syncIsBabyfied(bl, player);
+		return bl;
 	}
 
-	public static boolean updateIsBabyfied(Player player, boolean amount) {
-		CompoundTag nbt = ((IEntityDataSaver)player).getPersistentData();
-		nbt.putBoolean("IsBabyfied", amount);
-		syncIsBabyfied(amount, player);
-		return amount;
-	}
+//	public static boolean updateIsBabyfied(Player player, boolean bl) {
+//		CompoundTag nbt = ((IEntityDataSaver)player).getPersistentData();
+//		nbt.putBoolean("IsBabyfied", bl);
+//		syncIsBabyfied(bl, player);
+//		return bl;
+//	}
+
+//	public static void syncIsBabyfied(boolean isBabyfied, Player serverPlayer) {
+//		FriendlyByteBuf buffer = PacketByteBufs.create();
+//		buffer.writeBoolean(isBabyfied);
+//		buffer.writeUUID(serverPlayer.getUUID());
+//		ClientPlayNetworking.send(ModMessages.C_2_S, buffer);
+//	}
 
 	public static void syncIsBabyfied(boolean isBabyfied, Player serverPlayer) {
 		FriendlyByteBuf buffer = PacketByteBufs.create();

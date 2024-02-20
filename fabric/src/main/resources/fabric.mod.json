@@ -9,7 +9,7 @@
   ],
   "custom": {
     "cardinal-components": [
-      "tinyallies:cardinal_components"
+      "tinyallies:babyfication"
     ]
   },
   "contact": {
@@ -25,7 +25,9 @@
     ],
     "client": [
       "net.tinyallies.fabric.FabricClientTinyFoes"
-    ]
+    ],
+    "cardinal-components-entity": [
+      "net.tinyallies.fabric.FabricTinyFoes"]
   },
   "depends": {
     "fabric": "*",

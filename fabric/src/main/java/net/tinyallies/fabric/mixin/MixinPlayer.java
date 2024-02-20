@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.tinyallies.common.entity.BabyfiableEntity;
 import net.tinyallies.common.registry.ModEffects;
+import net.tinyallies.fabric.FabricTinyFoes;
 import net.tinyallies.fabric.persistent_data.BabyfiedData;
 import net.tinyallies.fabric.persistent_data.IEntityDataSaver;
 import org.spongepowered.asm.mixin.Final;
@@ -57,31 +58,32 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	void aiStep(CallbackInfo ci) {
 		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
 		isBaby = getPersistentData().getBoolean("IsBaby");
-		isBabyfied = getPersistentData().getBoolean("IsBabyfied");
+		isBabyfied = FabricTinyFoes.getBabyfication(this);
 	}
 
 	@Override
 	public boolean isBaby() {
-		return $isBabyfied();
+		return $isBaby() || $isBabyfied();
 	}
-	//	@Unique
-	//	public void $setBaby(boolean bl) {
-	//		if (this.level != null && !this.level.isClientSide) {
-	//			BabyfiedData.updateIsBaby((Player) (Object) this, bl);
-	//			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-	//			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-	//			if (bl) {
-	//				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-	//			}
-	//		}
-	//		this.refreshDimensions();
-	//	}
 
-	//	@Override
-	//	public boolean $isBaby() {
-	//		return isBaby;
-	//	}
-	//
+	@Unique
+	public void $setBaby(boolean bl) {
+		if (this.level != null && !this.level.isClientSide) {
+			BabyfiedData.updateIsBaby((Player) (Object) this, bl);
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (bl) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			}
+		}
+		this.refreshDimensions();
+	}
+
+	@Override
+	public boolean $isBaby() {
+		return isBaby;
+	}
+
 	@Override
 	public boolean $isBabyfied() {
 		return isBabyfied;
@@ -89,15 +91,12 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Override
 	public void $setBabyfied(boolean bl) {
-		if (this.level != null) {
-			if (!this.level.isClientSide) {
-				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-				}
-			}else{
-				BabyfiedData.updateIsBabyfied((Player) (Object) this, bl);
+		FabricTinyFoes.setBabyfication(this, bl);
+		if (this.level != null && !this.level.isClientSide) {
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (bl) {
+				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 			}
 		}
 		this.refreshDimensions();

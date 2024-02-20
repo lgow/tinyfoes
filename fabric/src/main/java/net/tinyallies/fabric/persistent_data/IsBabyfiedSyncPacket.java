@@ -12,11 +12,13 @@ import java.util.UUID;
 
 public class IsBabyfiedSyncPacket {
 	public static void clientToServer(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-		UUID uuid = buf.readUUID();
+//		UUID uuid = buf.readUUID();
 		boolean readBoolean = buf.readBoolean();
 		server.execute(()->{
 			((IEntityDataSaver)player).getPersistentData().putBoolean(
-					"IsBabyfied", readBoolean);
+					"IsBaby", readBoolean);
+//			((IEntityDataSaver)player).getPersistentData().putBoolean(
+//					"IsBabyfied", readBoolean);
 		});
 	}
 

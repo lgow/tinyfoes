@@ -25,5 +25,7 @@ public interface BabyfiableEntity {
 		return false;
 	}
 
-	boolean $isBaby();
+	default boolean $isBaby() {
+		return false;
+	}
 }
