@@ -1,4 +1,4 @@
-package net.tinyallies.fabric.mixin;
+package net.tinyallies.common.mixin.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;

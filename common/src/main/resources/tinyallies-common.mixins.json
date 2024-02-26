@@ -18,6 +18,7 @@
     "MixinMonster",
     "MixinPatrollingMonster",
     "MixinPiglin",
+    "MixinPlayer",
     "MixinRavager",
     "MixinSkeletonHorse",
     "MixinSlime",
@@ -35,7 +36,6 @@
   "client": [
     "client.MixinAbstractClientPlayer",
     "client.MixinBlazeModel",
-    "client.MixinCapeLayer",
     "client.MixinCarriedBlockLayer",
     "client.MixinCreeperModel",
     "client.MixinCrossedArmsItemLayer",
@@ -46,6 +46,7 @@
     "client.MixinIronGolemModel",
     "client.MixinItemInHandLayer",
     "client.MixinPhantomModel",
+    "client.MixinPlayerModel",
     "client.MixinPlayerRender",
     "client.MixinRavagerModel",
     "client.MixinSnowGolemHeadLayer",
