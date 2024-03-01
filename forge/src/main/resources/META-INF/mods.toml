@@ -4,30 +4,30 @@ loaderVersion = "[43,)"
 license = "All Rights Reserved"
 
 [[mods]]
-modId = "tinyallies"
+modId = "tinyfoes"
 version = "${version}"
-displayName = "Tiny Allies"
+displayName = "Tiny Foes"
 authors = "Lgowz"
 description = '''
 Tiny Allies adds tamable baby versions of the classic vanilla monsters!
 '''
 #logoFile = "assets/tinyallies/icon.png"
 
-[[dependencies.tinyallies]]
+[[dependencies.tinyfoes]]
 modId = "forge"
 mandatory = true
 versionRange = "[43,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.tinyallies]]
+[[dependencies.tinyfoes]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.19.2,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.tinyallies]]
+[[dependencies.tinyfoes]]
 modId = "architectury"
 mandatory = true
 versionRange = "[6.5.85,)"

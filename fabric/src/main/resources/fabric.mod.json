@@ -1,33 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "tinyallies",
+  "id": "tinyfoes",
   "version": "${version}",
-  "name": "Tiny Allies",
-  "description": "Tiny Allies adds tamable baby versions of the classic vanilla monsters!",
+  "name": "Tiny Foes",
+  "description": "Baby monsters?!",
   "authors": [
     "Lgowz"
   ],
-  "custom": {
-    "cardinal-components": [
-      "tinyallies:babyfication"
-    ]
-  },
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
   "license": "All Rights Reserved",
-  "icon": "assets/tinyallies/icon.png",
+  "icon": "assets/tinyfoes/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.tinyallies.fabric.FabricTinyFoes"
+      "net.tinyfoes.fabric.FabricTinyFoes"
     ],
     "client": [
-      "net.tinyallies.fabric.FabricClientTinyFoes"
+      "net.tinyfoes.fabric.FabricClientTinyFoes"
     ],
     "cardinal-components-entity": [
-      "net.tinyallies.fabric.FabricTinyFoes"]
+      "net.tinyfoes.fabric.FabricTinyFoes"]
   },
   "depends": {
     "fabric": "*",
@@ -35,7 +30,7 @@
     "architectury": ">=6.5.85"
   },
   "mixins": [
-    "tinyallies-fabric.mixins.json",
-    "tinyallies-common.mixins.json"
+    "tinyfoes-fabric.mixins.json",
+    "tinyfoes-common.mixins.json"
   ]
 }

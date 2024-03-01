@@ -3,7 +3,7 @@ architectury {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/tinyallies.accesswidener")
+    accessWidenerPath = file("src/main/resources/tinyfoes.accesswidener")
 }
 
 dependencies {
