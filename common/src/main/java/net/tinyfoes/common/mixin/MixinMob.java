@@ -79,32 +79,31 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 		return this.getEntityData().get(DATA_BABY_ID);
 	}
 
-	@Override
-	public void $setBaby(boolean b) {
-		this.getEntityData().set(DATA_BABY_ID, b);
+
+	@Unique
+	public void $setBaby(boolean bl) {
+		this.entityData.set(DATA_BABY_ID, bl);
 		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance movementSpeed = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			AttributeInstance attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE);
-			AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
-			movementSpeed.removeModifier(SPEED_MODIFIER_BABY);
-			attackDamage.removeModifier(ATTACK_MODIFIER_BABY);
-			maxHealth.removeModifier(HEALTH_MODIFIER_BABY);
-			if (b && !$isBabyfied()) {
-				movementSpeed.addTransientModifier(SPEED_MODIFIER_BABY);
-				attackDamage.addTransientModifier(ATTACK_MODIFIER_BABY);
-				maxHealth.addTransientModifier(HEALTH_MODIFIER_BABY);
+			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+			if (!$isBabyfied()) {
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+				}
 			}
 		}
 	}
 
 	@Override
-	public void $setBabyfied(boolean b) {
-		this.getEntityData().set(DATA_BABYFIED_ID, b);
+	public void $setBabyfied(boolean bl) {
+		this.entityData.set(DATA_BABYFIED_ID, bl);
 		if (this.level != null && !this.level.isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-			if (b && !$isBaby()) {
-				attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+			if (!$isBaby()) {
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+				}
 			}
 		}
 	}

@@ -22,8 +22,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Monster.class)
 public abstract class MixinMonster extends PathfinderMob implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMonster.class,
-			EntityDataSerializers.BOOLEAN);
 	protected MixinMonster(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
 	}

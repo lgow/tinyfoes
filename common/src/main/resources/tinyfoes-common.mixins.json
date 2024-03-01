@@ -34,8 +34,8 @@
     "defaultRequire": 1
   },
   "client": [
-    "client.MixinAbstractClientPlayer",
     "client.MixinBlazeModel",
+    "client.MixinCapeLayer",
     "client.MixinCarriedBlockLayer",
     "client.MixinCreeperModel",
     "client.MixinCrossedArmsItemLayer",
