@@ -5,7 +5,7 @@ import net.tinyfoes.common.registry.ModRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TinyFoesCommon {
+public class CommonTinyFoes {
 	public static final String MODID = "tinyfoes";
 	public static final Registries REGISTRIES = Registries.get(MODID);
 	public static final Logger LOGGER = LogManager.getLogger(MODID);

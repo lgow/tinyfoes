@@ -65,7 +65,9 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
 	void serverAiStep(CallbackInfo ci) {
-		this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+		if (!this.level.isClientSide) {
+			this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+		}
 	}
 
 	@Unique
@@ -147,7 +149,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 					this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE, 1, 1);
 				}
 				else {
-					this.playSound(SoundEvents.BAMBOO_HIT, 1, 1);
+					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP, 1, 1);
 				}
 			}
 		}

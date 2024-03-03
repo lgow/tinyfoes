@@ -3,17 +3,16 @@ package net.tinyfoes.common.entity;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.tinyfoes.common.TinyFoesCommon;
+import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.entity.projectile.BabyfierBlob;
 import net.tinyfoes.common.util.TinyFoesResLoc;
 
 import java.util.function.Supplier;
 
 public class ModEntities {
-	private static final Registrar<EntityType<?>> ENTITY_TYPES = TinyFoesCommon.REGISTRIES.get(Registry.ENTITY_TYPE);
+	private static final Registrar<EntityType<?>> ENTITY_TYPES = CommonTinyFoes.REGISTRIES.get(Registry.ENTITY_TYPE);
 
 	public static final RegistrySupplier<EntityType<BabyfierBlob>> BLOB = create("blob",
 			() -> EntityType.Builder.<BabyfierBlob> of(BabyfierBlob::new, MobCategory.MISC).clientTrackingRange(4)

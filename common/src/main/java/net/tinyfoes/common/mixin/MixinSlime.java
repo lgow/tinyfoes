@@ -7,13 +7,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.tinyfoes.common.entity.BabyfiableEntity;
-import net.tinyfoes.common.registry.ModEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,11 +18,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Slime.class)
 public abstract class MixinSlime extends Mob implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Integer> DATA_SIZE_HOLDER = SynchedEntityData.defineId(MixinSlime.class,
+	@Unique private static final EntityDataAccessor<Integer> DATA_SIZE_HOLDER = SynchedEntityData.defineId(MixinSlime.class,
 			EntityDataSerializers.INT);
 	public MixinSlime(EntityType<? extends Horse> entityType, Level level) {
 		super(entityType, level);

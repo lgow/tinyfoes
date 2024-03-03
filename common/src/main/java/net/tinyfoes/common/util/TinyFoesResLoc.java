@@ -1,10 +1,10 @@
 package net.tinyfoes.common.util;
 
 import net.minecraft.resources.ResourceLocation;
-import net.tinyfoes.common.TinyFoesCommon;
+import net.tinyfoes.common.CommonTinyFoes;
 
 public class TinyFoesResLoc extends ResourceLocation {
 	public TinyFoesResLoc(String pPath) {
-		super(TinyFoesCommon.MODID, pPath);
+		super(CommonTinyFoes.MODID, pPath);
 	}
 }

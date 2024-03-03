@@ -1,5 +1,6 @@
 package net.tinyfoes.common.mixin;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,11 +21,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.minecraft.world.entity.EntityType.*;
+
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(MixinMob.class,
-			EntityDataSerializers.BOOLEAN);
-	@Unique private static EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
+	@Unique private static final NonNullList<EntityType<? extends Mob>> BLACKLIST = NonNullList.of(null,ELDER_GUARDIAN, GUARDIAN, VEX, SILVERFISH,
+			ENDERMITE);
+	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
+			MixinMob.class, EntityDataSerializers.BOOLEAN);
+	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
 			EntityDataSerializers.BOOLEAN);
 
 	protected MixinMob(EntityType<? extends Monster> entityType, Level level) {
@@ -79,16 +84,17 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 		return this.getEntityData().get(DATA_BABY_ID);
 	}
 
-
 	@Unique
 	public void $setBaby(boolean bl) {
-		this.entityData.set(DATA_BABY_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!$isBabyfied()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+		if (!BLACKLIST.contains(this.getType())) {
+			this.entityData.set(DATA_BABY_ID, bl);
+			if (this.level != null && !this.level.isClientSide) {
+				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				if (!$isBabyfied()) {
+					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+					if (bl) {
+						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					}
 				}
 			}
 		}
@@ -96,13 +102,15 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Override
 	public void $setBabyfied(boolean bl) {
-		this.entityData.set(DATA_BABYFIED_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!$isBaby()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+		if (!BLACKLIST.contains(this.getType())) {
+			this.entityData.set(DATA_BABYFIED_ID, bl);
+			if (this.level != null && !this.level.isClientSide) {
+				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				if (!$isBaby()) {
+					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+					if (bl) {
+						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					}
 				}
 			}
 		}
