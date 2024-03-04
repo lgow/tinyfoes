@@ -19,7 +19,6 @@ import static net.tinyfoes.common.util.ModUtil.TAB_ICON;
 public class FabricTinyFoes implements ModInitializer {
 	@Override
 	public void onInitialize() {
-		EntityRendererRegistry.register(ModEntities.BLOB, BlobRenderer::new);
 		CommonTinyFoes.init();
 		FabricItemGroupBuilder.create(new TinyFoesResLoc("tiny_tab")).appendItems((n) -> {
 			n.addAll(ModUtil.TAB_ITEM_LIST);
