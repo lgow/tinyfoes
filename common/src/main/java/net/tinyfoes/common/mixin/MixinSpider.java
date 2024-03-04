@@ -18,5 +18,4 @@ public abstract class MixinSpider extends Monster {
 	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
 		return this.isBaby() ? entityDimensions.height * 0.9F : super.getStandingEyeHeight(pose, entityDimensions);
 	}
-
 }

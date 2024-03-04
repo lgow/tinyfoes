@@ -15,10 +15,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-@Environment(value= EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 @Mixin(SnowGolemModel.class)
-public abstract class MixinSnowGolemModel <T extends Entity>
-		extends HierarchicalModel<T> {
+public abstract class MixinSnowGolemModel <T extends Entity> extends HierarchicalModel<T> {
 	@Shadow @Final private ModelPart upperBody;
 	@Shadow @Final private ModelPart leftArm;
 	@Shadow @Final private ModelPart rightArm;

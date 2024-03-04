@@ -13,15 +13,15 @@ import net.tinyfoes.common.entity.BabyfiableEntity;
 import net.tinyfoes.common.entity.ModEntities;
 import net.tinyfoes.common.registry.ModEffects;
 
-public class BabyfierBlob extends ThrowableProjectile {
+public class BabificationRay extends ThrowableProjectile {
 	private boolean shouldInvertAge;
 
-	public BabyfierBlob(EntityType<BabyfierBlob> pEntityType, Level pLevel) {
+	public BabificationRay(EntityType<BabificationRay> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
 	}
 
-	public BabyfierBlob(LivingEntity pShooter, Level pLevel, boolean shouldInvertAge) {
-		super(ModEntities.BLOB.get(), pShooter, pLevel);
+	public BabificationRay(LivingEntity pShooter, Level pLevel, boolean shouldInvertAge) {
+		super(ModEntities.BABYFICATION_RAY.get(), pShooter, pLevel);
 		this.shouldInvertAge = shouldInvertAge;
 	}
 
@@ -42,8 +42,9 @@ public class BabyfierBlob extends ThrowableProjectile {
 					livingEntity.removeEffect(ModEffects.BABYFICATION.get());
 				}
 				if (pResult.getEntity() instanceof Slime slime) {
-					slime.setSize(1,true);
-				} else if (pResult.getEntity() instanceof Mob mob) {
+					slime.setSize(1, true);
+				}
+				else if (pResult.getEntity() instanceof Mob mob) {
 					mob.setBaby(!mob.isBaby());
 				}
 				else if (pResult.getEntity() instanceof BabyfiableEntity babyfiableEntity) {

@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[43,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://discord.gg/Z8qMNugsZq"
 license = "All Rights Reserved"
-
 [[mods]]
 modId = "tinyfoes"
 version = "${version}"
 displayName = "Tiny Foes"
 authors = "Lgowz"
+displayURL = "https://curseforge.com/minecraft/mc-mods/tinyfoes"
 description = '''
-Tiny Allies adds tamable baby versions of the classic vanilla monsters!
+Tiny Foes adds the baby versions of most vanilla enemies!
 '''
 #logoFile = "assets/tinyallies/icon.png"
 

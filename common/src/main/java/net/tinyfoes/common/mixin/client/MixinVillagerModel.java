@@ -40,5 +40,4 @@ public abstract class MixinVillagerModel <T extends Entity> extends Hierarchical
 	protected Iterable<ModelPart> bodyParts() {
 		return ImmutableList.of(root.getChild("body"), root.getChild("arms"), rightLeg, leftLeg);
 	}
-
 }

@@ -21,15 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(ItemInHandLayer.class)
 public abstract class MixinItemInHandLayer <T extends LivingEntity, M extends EntityModel<T> & ArmedModel> extends RenderLayer<T, M> {
-
 	public MixinItemInHandLayer(RenderLayerParent<T, M> renderLayerParent) {
 		super(renderLayerParent);
 	}
 
-
-	@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", shift = At.Shift.AFTER), cancellable = true)
+	@Inject(method = "renderArmWithItem",
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",
+					shift = At.Shift.AFTER), cancellable = true)
 	public void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-		if(this.getParentModel().young) {
+		if (this.getParentModel().young) {
 			poseStack.scale(2.0F, 2.0F, 2.0F);
 		}
 	}

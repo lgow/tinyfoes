@@ -25,17 +25,16 @@ public abstract class MixinWitherModel <T extends WitherBoss> extends Hierarchic
 			pPoseStack.pushPose();
 			pPoseStack.scale(0.75F, 0.75F, 0.75F);
 			pPoseStack.translate(0.0F, 15 / 16.0F, 0 / 16.0F);
-			pPoseStack.translate(0.06F, -0.065, 0 );
+			pPoseStack.translate(0.06F, -0.065, 0);
 			rightHead.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 			pPoseStack.popPose();
 			pPoseStack.pushPose();
 			pPoseStack.scale(0.75F, 0.75F, 0.75F);
 			pPoseStack.translate(0.0F, 15 / 16.0F, 0 / 16.0F);
-			pPoseStack.translate(-0.06F, -0.065, 0 );
+			pPoseStack.translate(-0.06F, -0.065, 0);
 			leftHead.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 			pPoseStack.popPose();
 		}
-
 		else {
 			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		}
@@ -48,6 +47,6 @@ public abstract class MixinWitherModel <T extends WitherBoss> extends Hierarchic
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(ribcage, tail,root.getChild("shoulders"));
+		return ImmutableList.of(ribcage, tail, root.getChild("shoulders"));
 	}
 }

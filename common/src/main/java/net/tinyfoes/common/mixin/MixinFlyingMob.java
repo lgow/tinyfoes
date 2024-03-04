@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(FlyingMob.class)
 public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
-
 	protected MixinFlyingMob(EntityType<? extends Mob> entityType, Level level) {
 		super(entityType, level);
 	}
@@ -24,6 +23,7 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 		this.$setBaby(b);
 	}
 
+	@Override
 	public int getExperienceReward() {
 		if (isBaby()) {
 			this.xpReward = (int) ((double) this.xpReward * 2.5);

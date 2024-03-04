@@ -15,17 +15,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-@Environment(value= EnvType.CLIENT)
+@Environment(value = EnvType.CLIENT)
 @Mixin(IronGolemModel.class)
-public abstract class MixinIronGolemModel <T extends Entity>
-		extends HierarchicalModel<T> {
+public abstract class MixinIronGolemModel <T extends Entity> extends HierarchicalModel<T> {
 	@Shadow @Final private ModelPart leftArm;
 	@Shadow @Final private ModelPart rightArm;
 	@Shadow @Final private ModelPart head;
 	@Shadow @Final private ModelPart rightLeg;
 	@Shadow @Final private ModelPart leftLeg;
 
-	@Shadow public abstract ModelPart root();
+	@Shadow
+	public abstract ModelPart root();
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
@@ -45,6 +45,6 @@ public abstract class MixinIronGolemModel <T extends Entity>
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root().getChild("body") , leftArm, rightArm, leftLeg, rightLeg);
+		return ImmutableList.of(root().getChild("body"), leftArm, rightArm, leftLeg, rightLeg);
 	}
 }

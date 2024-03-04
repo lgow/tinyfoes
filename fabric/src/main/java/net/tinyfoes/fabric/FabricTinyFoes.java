@@ -1,6 +1,5 @@
 package net.tinyfoes.fabric;
 
-import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
@@ -8,8 +7,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.tinyfoes.common.CommonTinyFoes;
-import net.tinyfoes.common.client.renderer.BlobRenderer;
-import net.tinyfoes.common.entity.ModEntities;
 import net.tinyfoes.common.registry.ModEffects;
 import net.tinyfoes.common.util.ModUtil;
 import net.tinyfoes.common.util.TinyFoesResLoc;

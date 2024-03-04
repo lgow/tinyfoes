@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -25,8 +26,8 @@ import static net.minecraft.world.entity.EntityType.*;
 
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
-	@Unique private static final NonNullList<EntityType<? extends Mob>> BLACKLIST = NonNullList.of(null,ELDER_GUARDIAN, GUARDIAN, VEX, SILVERFISH,
-			ENDERMITE);
+	@Unique private static final NonNullList<EntityType<? extends Mob>> BLACKLIST = NonNullList.of(null, ELDER_GUARDIAN,
+			GUARDIAN, VEX, SILVERFISH, ENDERMITE);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinMob.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
@@ -57,13 +58,32 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 		this.setBaby(compoundTag.getBoolean("IsBaby"));
 	}
 
-	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
-		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
-			this.refreshDimensions();
-		}
 		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
+			if (this.level.isClientSide && this.tickCount > 20) {
+				if (!$isBaby()) {
+					if (!$isBabyfied()) {
+						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
+					}
+				}
+				else if (!$isBabyfied()) {
+					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP);
+				}
+			}
+		}
+		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
+			this.refreshDimensions();
+			if (this.tickCount > 20) {
+				if (!$isBabyfied()) {
+					if (!$isBaby()) {
+						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
+					}
+				}
+				else if (!$isBaby()) {
+					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP);
+				}
+			}
 		}
 		super.onSyncedDataUpdated(entityDataAccessor);
 	}

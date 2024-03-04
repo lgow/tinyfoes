@@ -12,8 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.tinyfoes.common.entity.BabyfiableEntity;
-import net.tinyfoes.common.entity.projectile.BabyfierBlob;
+import net.tinyfoes.common.entity.projectile.BabificationRay;
 
 import java.util.function.Predicate;
 
@@ -38,12 +37,13 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 					player.displayClientMessage(Component.literal(
 									(ageInversionMode ? "Invert Age Mode (permanent)" : "Apply Effect Mode (temporary)")),
 							true);
-					((BabyfiableEntity) player).$setBaby(!((BabyfiableEntity) player).$isBaby());
+					//DEBUG OPTION
+					//((BabyfiableEntity) player).$setBaby(!((BabyfiableEntity) player).$isBaby());
 				}
 			}
 			if (i > 20) {
 				if (!pLevel.isClientSide) {
-					BabyfierBlob blob = new BabyfierBlob(pEntityLiving, pLevel, ageInversionMode);
+					BabificationRay blob = new BabificationRay(pEntityLiving, pLevel, ageInversionMode);
 					blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
 					pLevel.addFreshEntity(blob);
 					pStack.hurtAndBreak(1, player, (player1) -> {

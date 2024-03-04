@@ -36,6 +36,7 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 		$setBaby(b);
 	}
 
+	@Override
 	public int getExperienceReward() {
 		if (isBaby()) {
 			this.xpReward = (int) ((double) this.xpReward * 2.5);

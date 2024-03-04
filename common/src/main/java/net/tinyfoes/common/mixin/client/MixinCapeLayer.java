@@ -18,11 +18,12 @@ public abstract class MixinCapeLayer extends RenderLayer<AbstractClientPlayer, P
 		super(renderLayerParent);
 	}
 
-	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V"))
+	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/player/AbstractClientPlayer;FFFFFF)V",
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V"))
 	public void setupAnim2(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, AbstractClientPlayer abstractClientPlayer, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-		if(this.getParentModel().young){
-			poseStack.translate(0.0f, 0.75f,0.0f);
-			poseStack.scale(0.5f,0.5f,0.5f);
+		if (this.getParentModel().young) {
+			poseStack.translate(0.0f, 0.75f, 0.0f);
+			poseStack.scale(0.5f, 0.5f, 0.5f);
 		}
 	}
 }

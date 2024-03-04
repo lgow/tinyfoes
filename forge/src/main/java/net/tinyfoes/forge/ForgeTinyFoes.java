@@ -16,6 +16,7 @@ import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.items.ModItems;
 import net.tinyfoes.common.registry.ModEffects;
 import net.tinyfoes.common.util.ModUtil;
+import net.tinyfoes.forge.recipe.ModBrewingRecipe;
 
 @Mod(CommonTinyFoes.MODID)
 public class ForgeTinyFoes {
@@ -43,7 +44,7 @@ public class ForgeTinyFoes {
 
 	private void setup(final FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
-			BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, Items.POISONOUS_POTATO.asItem(),
+			BrewingRecipeRegistry.addRecipe(new ModBrewingRecipe(Potions.AWKWARD, Items.POISONOUS_POTATO.asItem(),
 					ModEffects.BABYFICATION_POTION.get()));
 		});
 	}

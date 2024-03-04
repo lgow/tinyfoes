@@ -10,16 +10,17 @@ import net.tinyfoes.common.items.ModItems;
 
 public class ModUtil {
 	public final static ItemStack TAB_ICON = new ItemStack(ModItems.TINY_TAB.get());
-	public final static NonNullList<ItemStack> TAB_ITEM_LIST = NonNullList.of(null,new ItemStack(ModItems.BABYFIER.get()),
-			new ItemStack(Items.BLAZE_SPAWN_EGG), new ItemStack(Items.CREEPER_SPAWN_EGG),
-			new ItemStack(Items.CAVE_SPIDER_SPAWN_EGG), new ItemStack(Items.ENDERMAN_SPAWN_EGG),
-			new ItemStack(Items.EVOKER_SPAWN_EGG), new ItemStack(Items.GHAST_SPAWN_EGG),
-			new ItemStack(Items.PHANTOM_SPAWN_EGG), new ItemStack(Items.PIGLIN_BRUTE_SPAWN_EGG),
-			new ItemStack(Items.PILLAGER_SPAWN_EGG), new ItemStack(Items.RAVAGER_SPAWN_EGG),
-			new ItemStack(Items.SKELETON_SPAWN_EGG), new ItemStack(Items.SPIDER_SPAWN_EGG),
-			new ItemStack(Items.STRAY_SPAWN_EGG), new ItemStack(Items.VINDICATOR_SPAWN_EGG),
-			new ItemStack(Items.WARDEN_SPAWN_EGG), new ItemStack(Items.WANDERING_TRADER_SPAWN_EGG),
-			new ItemStack(Items.WITCH_SPAWN_EGG), new ItemStack(Items.WITHER_SKELETON_SPAWN_EGG));
+	public final static NonNullList<ItemStack> TAB_ITEM_LIST = NonNullList.of(null,
+			new ItemStack(ModItems.BABYFIER.get()), new ItemStack(Items.BLAZE_SPAWN_EGG),
+			new ItemStack(Items.CREEPER_SPAWN_EGG), new ItemStack(Items.CAVE_SPIDER_SPAWN_EGG),
+			new ItemStack(Items.ENDERMAN_SPAWN_EGG), new ItemStack(Items.EVOKER_SPAWN_EGG),
+			new ItemStack(Items.GHAST_SPAWN_EGG), new ItemStack(Items.PHANTOM_SPAWN_EGG),
+			new ItemStack(Items.PIGLIN_BRUTE_SPAWN_EGG), new ItemStack(Items.PILLAGER_SPAWN_EGG),
+			new ItemStack(Items.RAVAGER_SPAWN_EGG), new ItemStack(Items.SKELETON_SPAWN_EGG),
+			new ItemStack(Items.SPIDER_SPAWN_EGG), new ItemStack(Items.STRAY_SPAWN_EGG),
+			new ItemStack(Items.VINDICATOR_SPAWN_EGG), new ItemStack(Items.WARDEN_SPAWN_EGG),
+			new ItemStack(Items.WANDERING_TRADER_SPAWN_EGG), new ItemStack(Items.WITCH_SPAWN_EGG),
+			new ItemStack(Items.WITHER_SKELETON_SPAWN_EGG));
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		babyfyModel(headParts, bodyParts, headY, headZ, 1.5F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed,

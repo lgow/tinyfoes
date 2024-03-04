@@ -16,18 +16,18 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
+
 @Environment(EnvType.CLIENT)
 @Mixin(GhastModel.class)
 public abstract class MixinGhastModel <T extends Entity> extends HierarchicalModel<T> {
-
 	@Shadow @Final private ModelPart root;
 	@Shadow @Final private ModelPart[] tentacles;
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(),0.5F ,0.4F, 24F, 0F, 2.3F ,pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 0.5F, 0.4F, 24F, 0F, 2.3F, pPoseStack, pBuffer, pPackedLight,
+					pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		}
 		else {
 			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);

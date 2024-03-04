@@ -8,6 +8,9 @@ import net.minecraft.world.level.Level;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AgeableMob.class)
 public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
@@ -23,6 +26,10 @@ public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
 		return this.getAge() < 0 || $isBabyfied();
 	}
 
+	@Inject(method = "isBaby", at = @At("RETURN"), cancellable = true)
+	public void getMyRidingOffset(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(cir.getReturnValue() || $isBabyfied());
+	}
 }
 
 

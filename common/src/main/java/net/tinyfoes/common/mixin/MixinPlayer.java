@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,15 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import net.tinyfoes.common.registry.ModEffects;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Map;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity {
@@ -32,8 +31,6 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 			MixinPlayer.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinPlayer.class, EntityDataSerializers.BOOLEAN);
-	@Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
-	@Shadow @Final private static Map<Pose, EntityDimensions> POSES;
 
 	protected MixinPlayer(EntityType<? extends LivingEntity> entityType, Level level) {
 		super(entityType, level);
@@ -45,22 +42,14 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Shadow
 	public abstract void playSound(SoundEvent soundEvent, float f, float g);
 
-	@Override
-	public EntityDimensions getDimensions(Pose pose) {
-		return POSES.getOrDefault(pose, STANDING_DIMENSIONS).scale(this.getScale());
+	@Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
+	public void getDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+		cir.setReturnValue(cir.getReturnValue().scale(this.getScale()));
 	}
 
-	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		switch (pose) {
-			case SWIMMING, FALL_FLYING, SPIN_ATTACK -> {
-				return 0.4f * this.getScale();
-			}
-			case CROUCHING -> {
-				return 1.27f * this.getScale();
-			}
-		}
-		return 1.62f * this.getScale();
+	@Inject(method = "getStandingEyeHeight", at = @At("RETURN"), cancellable = true)
+	public void getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
+		cir.setReturnValue(cir.getReturnValue() * this.getScale());
 	}
 
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
@@ -142,14 +131,33 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
-		if (DATA_BABY_ID.equals(entityDataAccessor) || DATA_BABYFIED_ID.equals(entityDataAccessor)) {
+		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
-			if (this.level.isClientSide) {
-				if (!isBaby()) {
-					this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE, 1, 1);
+			if (this.level.isClientSide && this.tickCount > 20) {
+				if (!$isBaby()) {
+					if (!$isBabyfied()) {
+						this.level.playSound((Player) (Object) this, this.blockPosition(),
+								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
+					}
 				}
-				else {
-					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP, 1, 1);
+				else if (!$isBabyfied()) {
+					this.level.playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
+							SoundSource.PLAYERS, 1.0F, 1.0F);
+				}
+			}
+		}
+		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
+			this.refreshDimensions();
+			if (this.tickCount > 20) {
+				if (!$isBabyfied()) {
+					if (!$isBaby()) {
+						this.level.playSound((Player) (Object) this, this.blockPosition(),
+								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
+					}
+				}
+				else if (!$isBaby()) {
+					this.level.playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
+							SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}

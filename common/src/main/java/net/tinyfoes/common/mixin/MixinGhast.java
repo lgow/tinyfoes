@@ -16,6 +16,6 @@ public abstract class MixinGhast extends FlyingMob {
 
 	@Override
 	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-	return isBaby() ? 1.3f : 2.6f;
+		return isBaby() ? 1.3f : 2.6f;
 	}
 }

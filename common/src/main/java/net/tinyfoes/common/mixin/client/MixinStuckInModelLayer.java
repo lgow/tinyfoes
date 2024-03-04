@@ -18,19 +18,22 @@ public abstract class MixinStuckInModelLayer <T extends LivingEntity, M extends 
 		super(renderLayerParent);
 	}
 
-	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;translateAndRotate(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
+	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/client/model/geom/ModelPart;translateAndRotate(Lcom/mojang/blaze3d/vertex/PoseStack;)V"))
 	public void translateAndRotate(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-		if(this.getParentModel().young){
-			poseStack.translate(0.0f, 0.75f,0.0f);
-			poseStack.scale(0.5f, 0.5f,0.5f);
+		if (this.getParentModel().young) {
+			poseStack.translate(0.0f, 0.75f, 0.0f);
+			poseStack.scale(0.5f, 0.5f, 0.5f);
 		}
 	}
 
-	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/StuckInBodyLayer;renderStuckItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFF)V"))
+	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/client/renderer/entity/layers/StuckInBodyLayer;renderStuckItem(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFF)V"))
 	public void renderStuckItem(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-		if(this.getParentModel().young){
-			poseStack.scale(2.0f, 2.0f,2.0f);
+		if (this.getParentModel().young) {
+			poseStack.scale(2.0f, 2.0f, 2.0f);
 		}
 	}
-
 }

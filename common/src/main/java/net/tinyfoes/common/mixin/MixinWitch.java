@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Witch.class)
-public abstract class MixinWitch extends Raider implements RangedAttackMob , BabyfiableEntity {
+public abstract class MixinWitch extends Raider implements RangedAttackMob, BabyfiableEntity {
 	@Unique private NearestBabyfiableHostileMobTargetGoal<Mob> tinyfoes$babyfyMobsGoal;
 
 	protected MixinWitch(EntityType<? extends Raider> entityType, Level level) {

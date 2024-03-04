@@ -34,10 +34,11 @@ public abstract class MixinBlaze extends Monster {
 			}
 			else {
 				for (int i = 0; i < 2; ++i) {
-					this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5), this.getRandomY(), this.getRandomZ(0.5), 0.0,
-							0.0, 0.0);
+					this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5), this.getRandomY(),
+							this.getRandomZ(0.5), 0.0, 0.0, 0.0);
 				}
 			}
-		} super.aiStep();
+		}
+		super.aiStep();
 	}
 }

@@ -20,8 +20,9 @@ public abstract class MixinWitchItemLayer <T extends LivingEntity> extends Cross
 		super(renderLayerParent, itemInHandRenderer);
 	}
 
-	@Redirect(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
-			at = @At(value =  "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
+	@Redirect(
+			method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
 	public void render(PoseStack poseStack, double d, double e, double f) {
 		if (this.getParentModel().young) {
 			poseStack.translate(-0.05, 0.04, .36);

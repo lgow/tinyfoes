@@ -17,20 +17,21 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Environment(EnvType.CLIENT)
 @Mixin(CrossedArmsItemLayer.class)
-public abstract class MixinCrossedArmsItemLayer <T extends LivingEntity, M extends EntityModel<T>>
-		extends RenderLayer<T, M>{
+public abstract class MixinCrossedArmsItemLayer <T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 	@Shadow @Final private ItemInHandRenderer itemInHandRenderer;
 
 	public MixinCrossedArmsItemLayer(RenderLayerParent<T, M> renderLayerParent) {
 		super(renderLayerParent);
 	}
 
-	@Redirect(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
-			at = @At(value =  "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
+	@Redirect(
+			method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
 	public void render(PoseStack poseStack, double d, double e, double f) {
-		if(this.getParentModel().young){
+		if (this.getParentModel().young) {
 			poseStack.translate(0.0, 1.1f, -0.2f);
-		}else{
+		}
+		else {
 			poseStack.translate(0.0, 0.4f, -0.4f);
 		}
 	}

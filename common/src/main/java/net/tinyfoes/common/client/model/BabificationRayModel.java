@@ -8,10 +8,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 
-public class BabyfierBlobModel extends EntityModel<ThrowableProjectile> {
+public class BabificationRayModel extends EntityModel<ThrowableProjectile> {
 	private final ModelPart blob;
 
-	public BabyfierBlobModel(ModelPart root) {
+	public BabificationRayModel(ModelPart root) {
 		this.blob = root.getChild("blob");
 	}
 

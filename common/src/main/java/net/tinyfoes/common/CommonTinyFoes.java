@@ -13,6 +13,4 @@ public class CommonTinyFoes {
 	public static void init() {
 		ModRegistries.register();
 	}
-
-
 }

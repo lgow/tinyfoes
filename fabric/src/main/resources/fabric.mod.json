@@ -3,13 +3,13 @@
   "id": "tinyfoes",
   "version": "${version}",
   "name": "Tiny Foes",
-  "description": "Baby monsters?!",
+  "description": "Tiny Foes adds the baby versions of most vanilla enemies",
   "authors": [
     "Lgowz"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://curseforge.com/minecraft/mc-mods/tinyfoes",
+    "issues": "https://discord.gg/Z8qMNugsZq"
   },
   "license": "All Rights Reserved",
   "icon": "assets/tinyfoes/icon.png",
@@ -20,9 +20,7 @@
     ],
     "client": [
       "net.tinyfoes.fabric.FabricClientTinyFoes"
-    ],
-    "cardinal-components-entity": [
-      "net.tinyfoes.fabric.FabricTinyFoes"]
+    ]
   },
   "depends": {
     "fabric": "*",

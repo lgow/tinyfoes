@@ -14,9 +14,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+
 @Environment(EnvType.CLIENT)
 @Mixin(IllagerModel.class)
-public abstract class MixinIllagerModel <T extends AbstractIllager> extends HierarchicalModel<T>  {
+public abstract class MixinIllagerModel <T extends AbstractIllager> extends HierarchicalModel<T> {
 	@Shadow @Final private ModelPart root, rightLeg, leftLeg, head, hat, arms, leftArm;
 	@Shadow @Final private ModelPart rightArm;
 

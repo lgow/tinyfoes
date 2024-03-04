@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(AbstractGolem.class)
 public abstract class MixinAbstractGolem extends PathfinderMob implements BabyfiableEntity {
-
 	protected MixinAbstractGolem(EntityType<? extends PathfinderMob> entityType, Level level) {
 		super(entityType, level);
 	}
@@ -18,5 +17,4 @@ public abstract class MixinAbstractGolem extends PathfinderMob implements Babyfi
 	public boolean isBaby() {
 		return $isBaby() || $isBabyfied();
 	}
-
 }

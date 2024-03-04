@@ -20,17 +20,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RavagerModel.class)
 public abstract class MixinRavagerModel <T extends Entity> extends HierarchicalModel<T> {
 	@Mutable @Shadow @Final private ModelPart root, head, mouth, rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg, neck;
+
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		if(this.young){
-			ModUtil.babyfyModel(headParts(), bodyParts(), 0F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed,
-				pGreen, pBlue, pAlpha);
+		if (this.young) {
+			ModUtil.babyfyModel(headParts(), bodyParts(), 0F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
+					pRed, pGreen, pBlue, pAlpha);
 		}
-		else{
+		else {
 			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		}
 	}
-
 
 	@Unique
 	protected Iterable<ModelPart> headParts() {
@@ -39,16 +39,18 @@ public abstract class MixinRavagerModel <T extends Entity> extends HierarchicalM
 
 	@Unique
 	protected Iterable<ModelPart> bodyParts() {
-		return ImmutableList.of(root.getChild("neck"), root.getChild("body"), rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg);
+		return ImmutableList.of(root.getChild("neck"), root.getChild("body"), rightHindLeg, leftHindLeg, rightFrontLeg,
+				leftFrontLeg);
 	}
 
 	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/Ravager;FFFFF)V", at = @At("HEAD"))
 	public void setupAnim(Ravager ravager, float f, float g, float h, float i, float j, CallbackInfo ci) {
-		if(this.young){
+		if (this.young) {
 			this.head.xScale = 1.5F;
 			this.head.yScale = 1.5F;
 			this.head.zScale = 1.5F;
-		}else{
+		}
+		else {
 			this.head.xScale = 1.0F;
 			this.head.yScale = 1.0F;
 			this.head.zScale = 1.0F;

@@ -29,7 +29,6 @@ public abstract class MixinPhantomModel <T extends Entity> extends HierarchicalM
 	@Shadow @Final private ModelPart rightWingTip;
 	@Shadow @Final private ModelPart tailBase;
 	@Shadow @Final private ModelPart tailTip;
-
 	ModelPart body, head;
 
 	@Override
@@ -62,22 +61,23 @@ public abstract class MixinPhantomModel <T extends Entity> extends HierarchicalM
 
 	@Override
 	public void setupAnim(T entity, float f, float g, float h, float i, float j) {
-		if(this.young){
+		if (this.young) {
 			this.head.xScale = 1.5F;
 			this.head.yScale = 1.5F;
 			this.head.zScale = 1.5F;
-		}else{
+		}
+		else {
 			this.head.xScale = 1.0F;
 			this.head.yScale = 1.0F;
 			this.head.zScale = 1.0F;
 		}
-		float k = ((float)((Phantom)entity).getUniqueFlapTickOffset() + h) * 7.448451f * ((float)Math.PI / 180);
+		float k = ((float) ((Phantom) entity).getUniqueFlapTickOffset() + h) * 7.448451f * ((float) Math.PI / 180);
 		float l = 16.0f;
-		this.leftWingBase.zRot = Mth.cos(k) * 16.0f * ((float)Math.PI / 180);
-		this.leftWingTip.zRot = Mth.cos(k) * 16.0f * ((float)Math.PI / 180);
+		this.leftWingBase.zRot = Mth.cos(k) * 16.0f * ((float) Math.PI / 180);
+		this.leftWingTip.zRot = Mth.cos(k) * 16.0f * ((float) Math.PI / 180);
 		this.rightWingBase.zRot = -this.leftWingBase.zRot;
 		this.rightWingTip.zRot = -this.leftWingTip.zRot;
-		this.tailBase.xRot = -(5.0f + Mth.cos(k * 2.0f) * 5.0f) * ((float)Math.PI / 180);
-		this.tailTip.xRot = -(5.0f + Mth.cos(k * 2.0f) * 5.0f) * ((float)Math.PI / 180);
+		this.tailBase.xRot = -(5.0f + Mth.cos(k * 2.0f) * 5.0f) * ((float) Math.PI / 180);
+		this.tailTip.xRot = -(5.0f + Mth.cos(k * 2.0f) * 5.0f) * ((float) Math.PI / 180);
 	}
 }

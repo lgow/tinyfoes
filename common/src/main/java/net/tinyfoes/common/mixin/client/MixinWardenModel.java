@@ -20,8 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(WardenModel.class)
-public abstract class MixinWardenModel <T extends Warden>
-		extends HierarchicalModel<T>  {
+public abstract class MixinWardenModel <T extends Warden> extends HierarchicalModel<T> {
 	@Shadow @Final protected ModelPart head;
 	@Shadow @Final private ModelPart root;
 
@@ -48,15 +47,15 @@ public abstract class MixinWardenModel <T extends Warden>
 
 	@Inject(method = "setupAnim(Lnet/minecraft/world/entity/monster/warden/Warden;FFFFF)V", at = @At("TAIL"))
 	public void setupAnim(T warden, float f, float g, float h, float i, float j, CallbackInfo ci) {
-		if(this.young){
+		if (this.young) {
 			this.head.xScale = 1.5F;
 			this.head.yScale = 1.5F;
 			this.head.zScale = 1.5F;
-		}else{
+		}
+		else {
 			this.head.xScale = 1.0F;
 			this.head.yScale = 1.0F;
 			this.head.zScale = 1.0F;
 		}
 	}
-
 }

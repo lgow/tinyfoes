@@ -13,14 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WitherBoss.class)
 public abstract class MixinWither extends Monster implements BabyfiableEntity {
-
 	protected MixinWither(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
 	}
 
 	@Inject(method = "getHeadX", at = @At("HEAD"), cancellable = true)
 	private void getHeadX(int i, CallbackInfoReturnable<Double> cir) {
-		if(this.isBaby()) {
+		if (this.isBaby()) {
 			if (i <= 0) {
 				cir.setReturnValue(this.getX() - 0.05);
 			}
@@ -34,7 +33,7 @@ public abstract class MixinWither extends Monster implements BabyfiableEntity {
 
 	@Inject(method = "getHeadY", at = @At("HEAD"), cancellable = true)
 	private void getHeadY(int i, CallbackInfoReturnable<Double> cir) {
-		if(this.isBaby()) {
+		if (this.isBaby()) {
 			cir.setReturnValue(i <= 0 ? this.getY() + 1.6 : this.getY() + 1.35);
 		}
 	}

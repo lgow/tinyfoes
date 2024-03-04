@@ -21,8 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Slime.class)
 public abstract class MixinSlime extends Mob implements BabyfiableEntity {
-	@Unique private static final EntityDataAccessor<Integer> DATA_SIZE_HOLDER = SynchedEntityData.defineId(MixinSlime.class,
-			EntityDataSerializers.INT);
+	@Unique private static final EntityDataAccessor<Integer> DATA_SIZE_HOLDER = SynchedEntityData.defineId(
+			MixinSlime.class, EntityDataSerializers.INT);
+
 	public MixinSlime(EntityType<? extends Horse> entityType, Level level) {
 		super(entityType, level);
 	}
