@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "tinyfoes:mob_effect/babyfication"
+    "layer0": "tinyfoes:item/tiny_tab"
   }
 }

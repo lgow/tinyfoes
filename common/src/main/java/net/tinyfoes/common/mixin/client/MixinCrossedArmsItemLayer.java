@@ -26,13 +26,13 @@ public abstract class MixinCrossedArmsItemLayer <T extends LivingEntity, M exten
 
 	@Redirect(
 			method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
-			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
-	public void render(PoseStack poseStack, double d, double e, double f) {
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 0))
+	public void render(PoseStack instance, float f, float g, float h) {
 		if (this.getParentModel().young) {
-			poseStack.translate(0.0, 1.1f, -0.2f);
+			instance.translate(0.0, 1.1f, -0.2f);
 		}
 		else {
-			poseStack.translate(0.0, 0.4f, -0.4f);
+			instance.translate(0.0, 0.4f, -0.4f);
 		}
 	}
 }

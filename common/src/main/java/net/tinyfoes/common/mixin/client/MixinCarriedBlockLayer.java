@@ -21,14 +21,13 @@ public abstract class MixinCarriedBlockLayer extends RenderLayer<EnderMan, Ender
 
 	@Redirect(
 			method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/monster/EnderMan;FFFFFF)V",
-			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
-	public void render(PoseStack poseStack, double d, double e, double f) {
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V",
+					ordinal = 0))
+	public void render(PoseStack instance, float f, float g, float h) {
 		if (this.getParentModel().young) {
-			poseStack.translate(0, 1.0, -0.43);
+			instance.translate(0, 1.0, -0.43);
+		}else {
+			instance.translate(0.0, 0.6875, -0.75);
 		}
-		else {
-			poseStack.translate(0.0, 0.6875, -0.75);
-		}
-		//		poseStack.translate(0.8, 0.1875, 0.8);
 	}
 }

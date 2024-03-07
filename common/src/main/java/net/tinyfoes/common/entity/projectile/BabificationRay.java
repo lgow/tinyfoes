@@ -27,8 +27,8 @@ public class BabificationRay extends ThrowableProjectile {
 
 	@Override
 	protected void onHit(HitResult pResult) {
-		if (!this.level.isClientSide) {
-			this.level.broadcastEntityEvent(this, (byte) 3);
+		if (!this.level().isClientSide) {
+			this.level().broadcastEntityEvent(this, (byte) 3);
 			this.discard();
 		}
 		super.onHit(pResult);
@@ -36,7 +36,7 @@ public class BabificationRay extends ThrowableProjectile {
 
 	@Override
 	protected void onHitEntity(EntityHitResult pResult) {
-		if (!level.isClientSide && pResult.getEntity() instanceof LivingEntity livingEntity) {
+		if (!this.level().isClientSide && pResult.getEntity() instanceof LivingEntity livingEntity) {
 			if (shouldInvertAge) {
 				if (livingEntity.hasEffect(ModEffects.BABYFICATION.get())) {
 					livingEntity.removeEffect(ModEffects.BABYFICATION.get());

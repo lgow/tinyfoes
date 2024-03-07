@@ -19,22 +19,22 @@ public abstract class MixinBlaze extends Monster {
 
 	@Inject(method = "aiStep", at = @At("HEAD"))
 	private void aiStep(CallbackInfo ci) {
-		if (!this.onGround && this.getDeltaMovement().y < 0.0) {
+		if (!this.onGround() && this.getDeltaMovement().y < 0.0) {
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1.0, 0.6, 1.0));
 		}
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-				this.level.playLocalSound(this.getX() + 0.5, this.getY() + 0.5, this.getZ() + 0.5,
+				this.level().playLocalSound(this.getX() + 0.5, this.getY() + 0.5, this.getZ() + 0.5,
 						SoundEvents.BLAZE_BURN, this.getSoundSource(), 1.0f + this.random.nextFloat(),
 						this.random.nextFloat() * 0.7f + 0.3f, false);
 			}
 			if (this.isBaby()) {
-				this.level.addParticle(ParticleTypes.SMOKE, this.getRandomX(0.5), this.getRandomY(),
+				this.level().addParticle(ParticleTypes.SMOKE, this.getRandomX(0.5), this.getRandomY(),
 						this.getRandomZ(0.5), 0.0, 0.0, 0.0);
 			}
 			else {
 				for (int i = 0; i < 2; ++i) {
-					this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5), this.getRandomY(),
+					this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5), this.getRandomY(),
 							this.getRandomZ(0.5), 0.0, 0.0, 0.0);
 				}
 			}

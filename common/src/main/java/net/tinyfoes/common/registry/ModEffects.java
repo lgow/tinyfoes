@@ -4,6 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -17,9 +18,9 @@ public class ModEffects {
 	public static final RegistrySupplier<MobEffect> BABYFICATION;
 	public static final RegistrySupplier<Potion> BABYFICATION_POTION;
 	private static final Registrar<MobEffect> MOB_EFFECTS = DeferredRegister.create(CommonTinyFoes.MODID,
-			Registry.MOB_EFFECT_REGISTRY).getRegistrar();
+			Registries.MOB_EFFECT).getRegistrar();
 	private static final Registrar<Potion> POTIONS = DeferredRegister.create(CommonTinyFoes.MODID,
-			Registry.POTION_REGISTRY).getRegistrar();
+			Registries.POTION).getRegistrar();
 
 	static {
 		BABYFICATION = registerEffect("babyfication", Babyfication::new);

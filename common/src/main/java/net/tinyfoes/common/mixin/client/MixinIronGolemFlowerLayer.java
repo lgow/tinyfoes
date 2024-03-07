@@ -29,7 +29,7 @@ public abstract class MixinIronGolemFlowerLayer extends RenderLayer<IronGolem, I
 	}
 
 	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/IronGolem;FFFFFF)V",
-			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 2))
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", ordinal = 2))
 	public void renderStuckItem(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, IronGolem ironGolem, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
 		if (this.getParentModel().young) {
 			poseStack.scale(2.0f, 2.0f, 2.0f);

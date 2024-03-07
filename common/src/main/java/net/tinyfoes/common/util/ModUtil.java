@@ -3,24 +3,28 @@ package net.tinyfoes.common.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.tinyfoes.common.items.ModItems;
+import net.tinyfoes.common.registry.ModEffects;
+
+import java.util.List;
 
 public class ModUtil {
-	public final static ItemStack TAB_ICON = new ItemStack(ModItems.TINY_TAB.get());
-	public final static NonNullList<ItemStack> TAB_ITEM_LIST = NonNullList.of(null,
-			new ItemStack(ModItems.BABYFIER.get()), new ItemStack(Items.BLAZE_SPAWN_EGG),
-			new ItemStack(Items.CREEPER_SPAWN_EGG), new ItemStack(Items.CAVE_SPIDER_SPAWN_EGG),
-			new ItemStack(Items.ENDERMAN_SPAWN_EGG), new ItemStack(Items.EVOKER_SPAWN_EGG),
-			new ItemStack(Items.GHAST_SPAWN_EGG), new ItemStack(Items.PHANTOM_SPAWN_EGG),
-			new ItemStack(Items.PIGLIN_BRUTE_SPAWN_EGG), new ItemStack(Items.PILLAGER_SPAWN_EGG),
-			new ItemStack(Items.RAVAGER_SPAWN_EGG), new ItemStack(Items.SKELETON_SPAWN_EGG),
-			new ItemStack(Items.SPIDER_SPAWN_EGG), new ItemStack(Items.STRAY_SPAWN_EGG),
-			new ItemStack(Items.VINDICATOR_SPAWN_EGG), new ItemStack(Items.WARDEN_SPAWN_EGG),
-			new ItemStack(Items.WANDERING_TRADER_SPAWN_EGG), new ItemStack(Items.WITCH_SPAWN_EGG),
-			new ItemStack(Items.WITHER_SKELETON_SPAWN_EGG));
+	public final static ItemStack TINY_TAB_ICON = new ItemStack(ModItems.TINY_ICON.get());
+	public final static List<Item> TAB_ITEM_LIST = List.of(ModItems.BABYFIER.get(),
+// doesnt work
+//			PotionUtils.setPotion(new ItemStack(Items.POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
+//			PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
+//			PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
+			Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG, Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG,
+			Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG, Items.IRON_GOLEM_SPAWN_EGG, Items.PHANTOM_SPAWN_EGG,
+			Items.PIGLIN_BRUTE_SPAWN_EGG, Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG, Items.SKELETON_SPAWN_EGG,
+			Items.SNOW_GOLEM_SPAWN_EGG, Items.SPIDER_SPAWN_EGG, Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG,
+			Items.WARDEN_SPAWN_EGG, Items.WANDERING_TRADER_SPAWN_EGG, Items.WITCH_SPAWN_EGG,
+			Items.WITHER_SKELETON_SPAWN_EGG);
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		babyfyModel(headParts, bodyParts, headY, headZ, 1.5F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed,

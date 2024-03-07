@@ -24,8 +24,8 @@
   },
   "depends": {
     "fabric": "*",
-    "minecraft": ">=1.19.2",
-    "architectury": ">=6.5.85"
+    "minecraft": ">=${minecraft_version}",
+    "architectury": ">=${architectury_version}"
   },
   "mixins": [
     "tinyfoes-fabric.mixins.json",

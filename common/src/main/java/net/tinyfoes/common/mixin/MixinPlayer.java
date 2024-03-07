@@ -54,7 +54,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
 	void serverAiStep(CallbackInfo ci) {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
 		}
 	}
@@ -62,7 +62,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Unique
 	public void $setBaby(boolean bl) {
 		this.entityData.set(DATA_BABY_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
+		if (this.level() != null && !this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!$isBabyfied()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -76,7 +76,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Override
 	public void $setBabyfied(boolean bl) {
 		this.entityData.set(DATA_BABYFIED_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
+		if (this.level() != null && !this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!$isBaby()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -133,15 +133,15 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
 		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
-			if (this.level.isClientSide && this.tickCount > 20) {
+			if (this.level().isClientSide && this.tickCount > 20) {
 				if (!$isBaby()) {
 					if (!$isBabyfied()) {
-						this.level.playSound((Player) (Object) this, this.blockPosition(),
+						this.level().playSound((Player) (Object) this, this.blockPosition(),
 								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 				else if (!$isBabyfied()) {
-					this.level.playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
+					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
 							SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
@@ -151,12 +151,12 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 			if (this.tickCount > 20) {
 				if (!$isBabyfied()) {
 					if (!$isBaby()) {
-						this.level.playSound((Player) (Object) this, this.blockPosition(),
+						this.level().playSound((Player) (Object) this, this.blockPosition(),
 								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 				else if (!$isBaby()) {
-					this.level.playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
+					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
 							SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}

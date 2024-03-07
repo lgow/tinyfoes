@@ -75,15 +75,15 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob, Baby
 			else if (h <= 3.0 && !livingEntity.hasEffect(MobEffects.WEAKNESS) && this.random.nextFloat() < 0.25F) {
 				potion = Potions.WEAKNESS;
 			}
-			ThrownPotion thrownPotion = new ThrownPotion(this.level, this);
+			ThrownPotion thrownPotion = new ThrownPotion(this.level(), this);
 			thrownPotion.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), potion));
 			thrownPotion.setXRot(thrownPotion.getXRot() - -20.0F);
 			thrownPotion.shoot(d, e + h * 0.2, g, 0.75F, 8.0F);
 			if (!this.isSilent()) {
-				this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_THROW,
+				this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_THROW,
 						this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 			}
-			this.level.addFreshEntity(thrownPotion);
+			this.level().addFreshEntity(thrownPotion);
 		}
 	}
 

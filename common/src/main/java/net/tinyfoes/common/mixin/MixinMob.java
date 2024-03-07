@@ -61,7 +61,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	public void onSyncedDataUpdated(EntityDataAccessor<?> entityDataAccessor) {
 		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
-			if (this.level.isClientSide && this.tickCount > 20) {
+			if (this.level().isClientSide && this.tickCount > 20) {
 				if (!$isBaby()) {
 					if (!$isBabyfied()) {
 						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
@@ -90,7 +90,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Inject(method = "aiStep", at = @At("HEAD"))
 	public void aiStep(CallbackInfo ci) {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
 		}
 	}
@@ -108,7 +108,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	public void $setBaby(boolean bl) {
 		if (!BLACKLIST.contains(this.getType())) {
 			this.entityData.set(DATA_BABY_ID, bl);
-			if (this.level != null && !this.level.isClientSide) {
+			if (this.level() != null && !this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 				if (!$isBabyfied()) {
 					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -124,7 +124,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	public void $setBabyfied(boolean bl) {
 		if (!BLACKLIST.contains(this.getType())) {
 			this.entityData.set(DATA_BABYFIED_ID, bl);
-			if (this.level != null && !this.level.isClientSide) {
+			if (this.level() != null && !this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 				if (!$isBaby()) {
 					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
