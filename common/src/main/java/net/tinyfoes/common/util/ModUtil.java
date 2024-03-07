@@ -6,9 +6,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.tinyfoes.common.items.ModItems;
-import net.tinyfoes.common.registry.ModEffects;
 
 import java.util.List;
 
