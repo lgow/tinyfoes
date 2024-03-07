@@ -27,6 +27,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
+
 processResources {
     expand(project.properties)
     inputs.property "version", project.version
@@ -50,6 +51,7 @@ remapJar {
     injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = "fabric"
 }
 
 sourcesJar {
