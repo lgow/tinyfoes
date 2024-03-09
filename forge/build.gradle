@@ -37,10 +37,16 @@ dependencies {
 }
 
 processResources {
+    expand(project.properties)
     inputs.property "version", project.version
-
+    inputs.property("minecraft_version", rootProject.minecraft_version)
+    inputs.property("architectury_version", rootProject.architectury_version)
+    inputs.property("forge_loader_version", rootProject.forge_loader_version)
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
+        expand "forge_loader_version": rootProject.forge_loader_version
+        expand "minecraft_version": rootProject.minecraft_version
+        expand "architectury_version": rootProject.architectury_version
     }
 }
 
