@@ -13,6 +13,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tinyfoes.common.entity.projectile.BabificationRay;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
@@ -24,8 +25,8 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 	}
 
 	@Override
-	public Predicate<ItemStack> getAllSupportedProjectiles() {
-		return null;
+	public @NotNull Predicate<ItemStack> getAllSupportedProjectiles() {
+		return ItemStack::isEmpty;
 	}
 
 	public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
