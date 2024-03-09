@@ -30,9 +30,4 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 		}
 		return super.getExperienceReward();
 	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return this.isBaby() ? 0.0 : -0.45;
-	}
 }

@@ -2,10 +2,7 @@ package net.tinyfoes.common.mixin;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -42,11 +39,6 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 			this.xpReward = (int) ((double) this.xpReward * 2.5);
 		}
 		return super.getExperienceReward();
-	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return this.isBaby() ? 0.0 : -0.45;
 	}
 }
 

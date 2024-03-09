@@ -111,7 +111,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 			if (this.level() != null && !this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 				if (!$isBabyfied()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+					attributeInstance.removeModifier(SPEED_MODIFIER_BABY.getId());
 					if (bl) {
 						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 					}
@@ -127,7 +127,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 			if (this.level() != null && !this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 				if (!$isBaby()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+					attributeInstance.removeModifier(SPEED_MODIFIER_BABY.getId());
 					if (bl) {
 						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 					}

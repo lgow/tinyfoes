@@ -7,10 +7,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -65,7 +62,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		if (this.level() != null && !this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!$isBabyfied()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY.getId());
 				if (bl) {
 					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
@@ -79,7 +76,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		if (this.level() != null && !this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!$isBaby()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY.getId());
 				if (bl) {
 					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
@@ -100,11 +97,6 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Override
 	public boolean isBaby() {
 		return $isBaby() || $isBabyfied();
-	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return isBaby() ? 0.0F : -0.35;
 	}
 
 	@Inject(method = "defineSynchedData", at = @At("HEAD"))
