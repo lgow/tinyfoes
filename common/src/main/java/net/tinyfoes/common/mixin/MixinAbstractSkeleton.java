@@ -17,14 +17,11 @@ public abstract class MixinAbstractSkeleton extends Monster {
 		super(entityType, level);
 	}
 
-	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		return this.isBaby() ? 0.93F : super.getStandingEyeHeight(pose, entityDimensions);
-	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return isBaby() ? -0.2 : -0.6;
+	@Inject(method = "getStandingEyeHeight", at = @At("HEAD"), cancellable = true)
+	public void getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
+		if(this.isBaby()){
+			cir.setReturnValue(0.93F);
+		}
 	}
 
 	@Inject(method = "getMyRidingOffset", at = @At("HEAD"), cancellable = true)

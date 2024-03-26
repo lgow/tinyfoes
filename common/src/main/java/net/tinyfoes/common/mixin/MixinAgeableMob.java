@@ -23,12 +23,17 @@ public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
 
 	@Override
 	public boolean isBaby() {
-		return this.getAge() < 0 || $isBabyfied();
+		return $isBaby() || $isBabyfied();
 	}
 
 	@Inject(method = "isBaby", at = @At("RETURN"), cancellable = true)
 	public void getMyRidingOffset(CallbackInfoReturnable<Boolean> cir) {
 		cir.setReturnValue(cir.getReturnValue() || $isBabyfied());
+	}
+
+	@Override
+	public boolean $isBaby() {
+		return this.getAge() < 0;
 	}
 }
 

@@ -148,7 +148,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		}
 		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
-			if (this.tickCount > 20) {
+			if (this.level.isClientSide && this.tickCount > 20) {
 				if (!$isBabyfied()) {
 					if (!$isBaby()) {
 						this.level.playSound((Player) (Object) this, this.blockPosition(),

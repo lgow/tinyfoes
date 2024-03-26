@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(EndermanModel.class)
 public class MixinEnderManModel <T extends LivingEntity> extends HumanoidModel<T> {
-	@Shadow public boolean carrying, creepy;
+	@Shadow public boolean carrying;
 
 	public MixinEnderManModel(ModelPart pRoot) {
 		super(pRoot);

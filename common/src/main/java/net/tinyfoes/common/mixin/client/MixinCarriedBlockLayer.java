@@ -29,6 +29,5 @@ public abstract class MixinCarriedBlockLayer extends RenderLayer<EnderMan, Ender
 		else {
 			poseStack.translate(0.0, 0.6875, -0.75);
 		}
-		//		poseStack.translate(0.8, 0.1875, 0.8);
 	}
 }

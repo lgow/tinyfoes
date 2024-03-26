@@ -6,22 +6,27 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.tinyfoes.common.items.ModItems;
+import net.tinyfoes.common.registry.ModEffects;
 
 import java.util.List;
 
+import static net.tinyfoes.common.registry.ModEffects.BABYFICATION_POTION;
+
 public class ModUtil {
-	public final static ItemStack TINY_TAB_ICON = new ItemStack(ModItems.TINY_ICON.get());
-	public final static List<Item> TAB_ITEM_LIST = List.of(ModItems.BABYFIER.get(),
-			// doesnt work
-			//			PotionUtils.setPotion(new ItemStack(Items.POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
-			//			PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
-			//			PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), ModEffects.BABYFICATION_POTION.get()).getItem(),
-			Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG, Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG,
-			Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG, Items.PHANTOM_SPAWN_EGG, Items.PIGLIN_BRUTE_SPAWN_EGG,
-			Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG, Items.SKELETON_SPAWN_EGG, Items.SPIDER_SPAWN_EGG,
-			Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG, Items.WARDEN_SPAWN_EGG, Items.WANDERING_TRADER_SPAWN_EGG,
-			Items.WITCH_SPAWN_EGG, Items.WITHER_SKELETON_SPAWN_EGG);
+	public final static ItemStack TINY_TAB_ICON = new ItemStack(ModItems.PACIFIER.get());
+	public final static List<ItemStack> TAB_ITEM_LIST = List.of(ModItems.THE_BABYFIER.get().getDefaultInstance(),
+			PotionUtils.setPotion(new ItemStack(Items.POTION), BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), ModEffects.BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), ModEffects.BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW), ModEffects.BABYFICATION_POTION.get()));
+	public final static List<Item> TAB_EGG_LIST = List.of(Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG,
+			Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG, Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG,
+			Items.PHANTOM_SPAWN_EGG, Items.PIGLIN_BRUTE_SPAWN_EGG, Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG,
+			Items.SKELETON_SPAWN_EGG, Items.SPIDER_SPAWN_EGG, Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG,
+			Items.WARDEN_SPAWN_EGG, Items.WANDERING_TRADER_SPAWN_EGG, Items.WITCH_SPAWN_EGG,
+			Items.WITHER_SKELETON_SPAWN_EGG);
 
 	public static void babyfyModel(Iterable<ModelPart> headParts, Iterable<ModelPart> bodyParts, float headY, float headZ, PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		babyfyModel(headParts, bodyParts, headY, headZ, 1.5F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed,
@@ -48,23 +53,5 @@ public class ModUtil {
 			modelPart.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		});
 		pPoseStack.popPose();
-	}
-
-	public static void scaleModelPart(ModelPart part, float scale) {
-		part.xScale = scale;
-		part.yScale = scale;
-		part.zScale = scale;
-	}
-
-	public static void scaleBodyPart(ModelPart part) {
-		scaleModelPart(part, 0.75f);
-	}
-
-	public static void scaleHeadPart(ModelPart part, boolean b) {
-		scaleModelPart(part, b ? 2.0f : 1.0f);
-	}
-
-	public static void scaleReset(ModelPart part) {
-		scaleModelPart(part, 1.0f);
 	}
 }

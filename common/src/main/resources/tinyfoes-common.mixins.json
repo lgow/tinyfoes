@@ -16,6 +16,7 @@
     "MixinMob",
     "MixinMonster",
     "MixinPatrollingMonster",
+    "MixinPhantom",
     "MixinPiglin",
     "MixinPlayer",
     "MixinRavager",

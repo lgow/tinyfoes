@@ -1,6 +1,9 @@
 package net.tinyfoes.forge;
 
 import dev.architectury.platform.forge.EventBuses;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,10 +14,26 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.registry.ModEffects;
+import net.tinyfoes.common.util.ModUtil;
 import net.tinyfoes.forge.recipe.ModBrewingRecipe;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(CommonTinyFoes.MODID)
 public class ForgeTinyFoes {
+	public static final CreativeModeTab TINY_TAB = new CreativeModeTab(CreativeModeTab.getGroupCountSafe(),
+			CommonTinyFoes.MODID + ".tiny_tab") {
+		@Override
+		public @NotNull ItemStack makeIcon() {
+			return ModUtil.TINY_TAB_ICON;
+		}
+
+		@Override
+		public void fillItemList(NonNullList<ItemStack> nonNullList) {
+			CommonTinyFoes.fillTabItems(nonNullList);
+			super.fillItemList(nonNullList);
+		}
+	};
+
 	public ForgeTinyFoes() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		EventBuses.registerModEventBus(CommonTinyFoes.MODID, modEventBus);
