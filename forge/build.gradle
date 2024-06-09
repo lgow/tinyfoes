@@ -14,8 +14,8 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
-        mixinConfig "tinyfoes-common.mixins.json"
-        mixinConfig "tinyfoes-forge.mixins.json"
+        mixinConfig "tinyapi-common.mixins.json"
+        mixinConfig "tinyapi-forge.mixins.json"
     }
 }
 

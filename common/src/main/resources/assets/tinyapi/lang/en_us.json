@@ -1,0 +1,15 @@
+{
+  "item.minecraft.potion.effect.babyfication": "Potion of Babyfication",
+  "item.minecraft.splash_potion.effect.babyfication": "Splash Potion of Babyfication",
+  "item.minecraft.lingering_potion.effect.babyfication": "Lingering Potion of Babyfication",
+  "item.minecraft.tipped_arrow.effect.babyfication": "Arrow of Babyfication",
+
+  "itemGroup.tinyapi.tiny_tab": "Tiny Tab",
+
+  "item.tinyapi.babyfier": "The Babyfier",
+  "item.tinyapi.pacifier": "Pacifier",
+
+  "effect.tinyapi.babyfication": "Babyfication",
+
+  "entity.tinyapi.babyfication_ray": "Babyfication Ray"
+}

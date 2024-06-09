@@ -3,31 +3,31 @@ loaderVersion = "[${forge_loader_version},)"
 issueTrackerURL = "https://discord.gg/Z8qMNugsZq"
 license = "All Rights Reserved"
 [[mods]]
-modId = "tinyfoes"
+modId = "tinyapi"
 version = "${version}"
 displayName = "Tiny Foes"
 authors = "Lgowz"
-displayURL = "https://curseforge.com/minecraft/mc-mods/tinyfoes"
+displayURL = "https://curseforge.com/minecraft/mc-mods/tinyapi"
 description = '''
 Tiny Foes adds the baby versions of most vanilla enemies!
 '''
-#logoFile = "assets/tinyfoes/icon.png"
+#logoFile = "assets/tinyapi/icon.png"
 
-[[dependencies.tinyfoes]]
+[[dependencies.tinyapi]]
 modId = "forge"
 mandatory = true
 versionRange = "[${forge_loader_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.tinyfoes]]
+[[dependencies.tinyapi]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.tinyfoes]]
+[[dependencies.tinyapi]]
 modId = "architectury"
 mandatory = true
 versionRange = "[${architectury_version},)"

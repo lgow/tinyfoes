@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "tinyfoes",
+  "id": "tinyapi",
   "version": "${version}",
   "name": "Tiny Foes",
   "description": "Tiny Foes adds the baby versions of most vanilla enemies",
@@ -8,18 +8,18 @@
     "Lgowz"
   ],
   "contact": {
-    "homepage": "https://curseforge.com/minecraft/mc-mods/tinyfoes",
+    "homepage": "https://curseforge.com/minecraft/mc-mods/tinyapi",
     "issues": "https://discord.gg/Z8qMNugsZq"
   },
   "license": "All Rights Reserved",
-  "icon": "assets/tinyfoes/icon.png",
+  "icon": "assets/tinyapi/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.tinyfoes.fabric.FabricTinyFoes"
+      "net.tinyapi.fabric.FabricTinyFoes"
     ],
     "client": [
-      "net.tinyfoes.fabric.FabricClientTinyFoes"
+      "net.tinyapi.fabric.FabricClientTinyFoes"
     ]
   },
   "depends": {
@@ -28,7 +28,7 @@
     "architectury": ">=${architectury_version}"
   },
   "mixins": [
-    "tinyfoes-fabric.mixins.json",
-    "tinyfoes-common.mixins.json"
+    "tinyapi-fabric.mixins.json",
+    "tinyapi-common.mixins.json"
   ]
 }
