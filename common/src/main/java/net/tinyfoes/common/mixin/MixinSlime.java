@@ -33,7 +33,7 @@ public abstract class MixinSlime extends Mob implements BabyfiableEntity {
 
 	@Inject(method = "getSize", at = @At("HEAD"), cancellable = true)
 	void isTiny(CallbackInfoReturnable<Integer> cir) {
-		if ($isBabyfied()) {
+		if (tinyfoes$$isBabyfied()) {
 			cir.setReturnValue(1);
 		}
 	}

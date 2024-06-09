@@ -15,12 +15,12 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
 	@Override
 	public void setBaby(boolean b) {
-		this.$setBaby(b);
+		this.tinyfoes$$setBaby(b);
 	}
 
 	@Override

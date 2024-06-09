@@ -15,17 +15,17 @@ public interface BabyfiableEntity {
 			UUID.fromString("B9766B57-9566-4402-BC1F-2EE2A276D836"), "Baby health boost", 0.5,
 			AttributeModifier.Operation.MULTIPLY_BASE);
 
-	default void $setBabyfied(boolean b) {
+	default void tinyfoes$$setBabyfied(boolean b) {
 	}
 
-	default void $setBaby(boolean b) {
+	default void tinyfoes$$setBaby(boolean b) {
 	}
 
-	default boolean $isBabyfied() {
+	default boolean tinyfoes$$isBabyfied() {
 		return false;
 	}
 
-	default boolean $isBaby() {
+	default boolean tinyfoes$$isBaby() {
 		return false;
 	}
 }

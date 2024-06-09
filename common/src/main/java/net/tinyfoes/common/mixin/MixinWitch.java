@@ -89,7 +89,7 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob, Baby
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
 	@Override
