@@ -11,6 +11,7 @@ displayURL = "https://curseforge.com/minecraft/mc-mods/tinyfoes"
 description = '''
 Tiny Foes adds the baby versions of most vanilla enemies!
 '''
+
 #logoFile = "assets/tinyfoes/icon.png"
 
 [[dependencies.tinyfoes]]
