@@ -106,15 +106,13 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Unique
 	public void tinyfoes$$setBaby(boolean bl) {
-		if (!BLACKLIST.contains(this.getType())) {
+		if (!BLACKLIST.contains(this.getType()) && !tinyfoes$$isBabyfied()) {
 			this.entityData.set(DATA_BABY_ID, bl);
 			if (!this.level.isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				if (!tinyfoes$$isBabyfied()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-					if (bl) {
-						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-					}
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
 			}
 		}
@@ -122,15 +120,13 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Override
 	public void tinyfoes$$setBabyfied(boolean bl) {
-		if (!BLACKLIST.contains(this.getType())) {
+		if (!BLACKLIST.contains(this.getType()) && !tinyfoes$$isBaby()) {
 			this.entityData.set(DATA_BABYFIED_ID, bl);
 			if (!this.level.isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				if (!tinyfoes$$isBaby()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-					if (bl) {
-						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-					}
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
 			}
 		}
