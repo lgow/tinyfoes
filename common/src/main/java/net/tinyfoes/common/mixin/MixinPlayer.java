@@ -62,7 +62,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Unique
 	public void tinyfoes$$setBaby(boolean bl) {
 		this.entityData.set(DATA_BABY_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
+		if (!this.level.isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!tinyfoes$$isBabyfied()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
@@ -76,7 +76,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Override
 	public void tinyfoes$$setBabyfied(boolean bl) {
 		this.entityData.set(DATA_BABYFIED_ID, bl);
-		if (this.level != null && !this.level.isClientSide) {
+		if (!this.level.isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
 			if (!tinyfoes$$isBaby()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);

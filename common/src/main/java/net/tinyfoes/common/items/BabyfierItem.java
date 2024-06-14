@@ -1,5 +1,6 @@
 package net.tinyfoes.common.items;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -14,7 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.tinyfoes.common.entity.projectile.BabificationRay;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
@@ -35,9 +38,9 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 			if (i < 5) {
 				if (!pLevel.isClientSide()) {
 					ageInversionMode = !ageInversionMode;
-					player.displayClientMessage(Component.literal(
-									(ageInversionMode ? "Invert Age Mode (permanent)" : "Apply Effect Mode (temporary)")),
-							true);
+					player.displayClientMessage(Component.translatable(
+									"item.tinyfoes.babyfier." + (ageInversionMode ? "age_inversion" : "babyfication_effect"))
+							.withStyle(ChatFormatting.YELLOW), true);
 				}
 			}
 			if (i > 20) {
@@ -76,5 +79,15 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 
 	public int getDefaultProjectileRange() {
 		return 30;
+	}
+
+	@Override
+	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+		list.add(Component.translatable(
+						"item.tinyfoes.babyfier." + (ageInversionMode ? "age_inversion" : "babyfication_effect"))
+				.withStyle(ChatFormatting.GRAY));
+		list.add(Component.literal(""));
+		list.add(Component.translatable("item.tinyfoes.babyfier.tooltip").withStyle(ChatFormatting.YELLOW));
+		super.appendHoverText(itemStack, level, list, tooltipFlag);
 	}
 }

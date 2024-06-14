@@ -8,6 +8,9 @@
 
   "item.tinyfoes.babyfier": "The Babyfier",
   "item.tinyfoes.pacifier": "Pacifier",
+  "item.tinyfoes.babyfier.age_inversion": "Age Inversion Mode",
+  "item.tinyfoes.babyfier.babyfication_effect": "Babyfication Effect Mode",
+  "item.tinyfoes.babyfier.tooltip": "[Tap right-click to switch modes]",
 
   "effect.tinyfoes.babyfication": "Babyfication",
 

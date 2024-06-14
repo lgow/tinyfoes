@@ -27,7 +27,7 @@ public abstract class MixinItemInHandLayer <T extends LivingEntity, M extends En
 
 	@Inject(method = "renderArmWithItem",
 			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V",
-					shift = At.Shift.AFTER), cancellable = true)
+					shift = At.Shift.AFTER))
 	public void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
 		if (this.getParentModel().young) {
 			poseStack.scale(2.0F, 2.0F, 2.0F);
