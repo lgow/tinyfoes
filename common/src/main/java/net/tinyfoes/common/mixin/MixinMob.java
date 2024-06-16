@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.tinyfoes.common.entity.BabyfiableEntity;
+import net.tinyfoes.common.entity.ModEntityTypeTags;
 import net.tinyfoes.common.registry.ModEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,8 +27,7 @@ import static net.minecraft.world.entity.EntityType.*;
 
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
-	@Unique private static final NonNullList<EntityType<? extends Mob>> BLACKLIST = NonNullList.of(null, ELDER_GUARDIAN,
-			GUARDIAN, VEX, SILVERFISH, ENDERMITE);
+
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinMob.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
@@ -106,7 +106,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Unique
 	public void tinyfoes$$setBaby(boolean bl) {
-		if (!BLACKLIST.contains(this.getType()) && !tinyfoes$$isBabyfied()) {
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST)) {
 			this.entityData.set(DATA_BABY_ID, bl);
 			if (!this.level.isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -120,7 +120,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Override
 	public void tinyfoes$$setBabyfied(boolean bl) {
-		if (!BLACKLIST.contains(this.getType()) && !tinyfoes$$isBaby()) {
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !tinyfoes$$isBaby()) {
 			this.entityData.set(DATA_BABYFIED_ID, bl);
 			if (!this.level.isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
