@@ -22,14 +22,8 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 @Mixin(PhantomModel.class)
 public abstract class MixinPhantomModel <T extends Entity> extends HierarchicalModel<T> {
-	@Shadow @Final private ModelPart root;
-	@Shadow @Final private ModelPart leftWingBase;
-	@Shadow @Final private ModelPart leftWingTip;
-	@Shadow @Final private ModelPart rightWingBase;
-	@Shadow @Final private ModelPart rightWingTip;
-	@Shadow @Final private ModelPart tailBase;
-	@Shadow @Final private ModelPart tailTip;
-	ModelPart body, head;
+	@Shadow @Final private ModelPart root, leftWingBase, leftWingTip, rightWingBase, rightWingTip, tailBase, tailTip;
+	@Unique ModelPart body, head;
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {

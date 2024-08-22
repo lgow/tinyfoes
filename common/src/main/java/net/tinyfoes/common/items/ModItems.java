@@ -23,9 +23,9 @@ public class ModItems {
 					() -> ModUtil.TINY_TAB_ICON));
 	public static final Registrar<Item> ITEM_REGISTRAR = MOD_ITEMS.getRegistrar();
 	//
-	public static final RegistrySupplier<Item> BABYFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("babyfier"),
-			() -> new BabyfierItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-	public static final RegistrySupplier<Item> TINY_ICON = ITEM_REGISTRAR.register(new TinyFoesResLoc("tiny_tab"),
+	public static final RegistrySupplier<Item> THE_BABYFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("babyfier"),
+			() -> new BabyfierItem());
+	public static final RegistrySupplier<Item> PACIFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("pacifier"),
 			() -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static void register() {

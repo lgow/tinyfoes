@@ -1,6 +1,5 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.tinyfoes.common.entity.BabyfiableEntity;
+import net.tinyfoes.common.entity.ModEntityTypeTags;
 import net.tinyfoes.common.registry.ModEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,12 +22,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.minecraft.world.entity.EntityType.*;
-
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
-	@Unique private static final NonNullList<EntityType<? extends Mob>> BLACKLIST = NonNullList.of(null, ELDER_GUARDIAN,
-			GUARDIAN, VEX, SILVERFISH, ENDERMITE);
+
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinMob.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
@@ -54,7 +51,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
 	public void readAdditionalSaveData(CompoundTag compoundTag, CallbackInfo ci) {
-		this.$setBabyfied(compoundTag.getBoolean("IsBabyfied"));
+		this.tinyfoes$$setBabyfied(compoundTag.getBoolean("IsBabyfied"));
 		this.setBaby(compoundTag.getBoolean("IsBaby"));
 	}
 
@@ -62,12 +59,12 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
 			if (this.level().isClientSide && this.tickCount > 20) {
-				if (!$isBaby()) {
-					if (!$isBabyfied()) {
+				if (!tinyfoes$$isBaby()) {
+					if (!tinyfoes$$isBabyfied()) {
 						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
 					}
 				}
-				else if (!$isBabyfied()) {
+				else if (!tinyfoes$$isBabyfied()) {
 					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP);
 				}
 			}
@@ -75,12 +72,12 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
 			if (this.tickCount > 20) {
-				if (!$isBabyfied()) {
-					if (!$isBaby()) {
+				if (!tinyfoes$$isBabyfied()) {
+					if (!tinyfoes$$isBaby()) {
 						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
 					}
 				}
-				else if (!$isBaby()) {
+				else if (!tinyfoes$$isBaby()) {
 					this.playSound(SoundEvents.PUFFER_FISH_BLOW_UP);
 				}
 			}
@@ -91,46 +88,42 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	@Inject(method = "aiStep", at = @At("HEAD"))
 	public void aiStep(CallbackInfo ci) {
 		if (!this.level().isClientSide) {
-			this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
 		}
 	}
 
-	public boolean $isBabyfied() {
+	public boolean tinyfoes$$isBabyfied() {
 		return this.getEntityData().get(DATA_BABYFIED_ID);
 	}
 
 	@Override
-	public boolean $isBaby() {
+	public boolean tinyfoes$$isBaby() {
 		return this.getEntityData().get(DATA_BABY_ID);
 	}
 
 	@Unique
-	public void $setBaby(boolean bl) {
-		if (!BLACKLIST.contains(this.getType())) {
+	public void tinyfoes$$setBaby(boolean bl) {
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST)) {
 			this.entityData.set(DATA_BABY_ID, bl);
-			if (this.level() != null && !this.level().isClientSide) {
+			if (!this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				if (!$isBabyfied()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-					if (bl) {
-						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-					}
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
 			}
 		}
 	}
 
 	@Override
-	public void $setBabyfied(boolean bl) {
-		if (!BLACKLIST.contains(this.getType())) {
+	public void tinyfoes$$setBabyfied(boolean bl) {
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !tinyfoes$$isBaby()) {
 			this.entityData.set(DATA_BABYFIED_ID, bl);
-			if (this.level() != null && !this.level().isClientSide) {
+			if (!this.level().isClientSide) {
 				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				if (!$isBaby()) {
-					attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
-					if (bl) {
-						attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
-					}
+				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+				if (bl) {
+					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
 				}
 			}
 		}

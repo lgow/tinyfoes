@@ -30,10 +30,4 @@ public abstract class MixinSnowGolemHeadLayer extends RenderLayer<SnowGolem, Sno
 			poseStack.scale(0.75f, 0.75f, 0.75f);
 		}
 	}
-	//	@Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/SnowGolem;FFFFFF)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 1))
-	//	public void renderStuckItem(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, SnowGolem snowGolem, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-	//		if(this.getParentModel().young){
-	//			poseStack.scale(2.0f, 2.0f,2.0f);
-	//		}
-	//	}
 }

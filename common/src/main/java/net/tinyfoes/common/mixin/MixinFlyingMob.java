@@ -15,12 +15,12 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
 	@Override
 	public void setBaby(boolean b) {
-		this.$setBaby(b);
+		this.tinyfoes$$setBaby(b);
 	}
 
 	@Override
@@ -29,10 +29,5 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 			this.xpReward = (int) ((double) this.xpReward * 2.5);
 		}
 		return super.getExperienceReward();
-	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return this.isBaby() ? 0.0 : -0.45;
 	}
 }

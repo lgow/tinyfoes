@@ -48,7 +48,7 @@ public class BabificationRay extends ThrowableProjectile {
 					mob.setBaby(!mob.isBaby());
 				}
 				else if (pResult.getEntity() instanceof BabyfiableEntity babyfiableEntity) {
-					babyfiableEntity.$setBaby(!babyfiableEntity.$isBaby());
+					babyfiableEntity.tinyfoes$$setBaby(!babyfiableEntity.tinyfoes$$isBaby());
 				}
 			}
 			else {

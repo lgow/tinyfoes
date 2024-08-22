@@ -15,6 +15,6 @@ public abstract class MixinAbstractGolem extends PathfinderMob implements Babyfi
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 }

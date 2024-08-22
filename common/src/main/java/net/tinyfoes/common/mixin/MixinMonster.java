@@ -28,12 +28,12 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
 	@Override
 	public void setBaby(boolean b) {
-		$setBaby(b);
+		tinyfoes$$setBaby(b);
 	}
 
 	@Override

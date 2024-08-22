@@ -6,11 +6,14 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.registry.ModEffects;
+import net.tinyfoes.common.util.ConfigValueHolder;
 import net.tinyfoes.forge.recipe.ModBrewingRecipe;
 
 @Mod(CommonTinyFoes.MODID)
@@ -21,6 +24,8 @@ public class ForgeTinyFoes {
 		CommonTinyFoes.init();
 		modEventBus.addListener(this::setup);
 		MinecraftForge.EVENT_BUS.register(this);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ForgeConfigs.SERVER_SPEC,
+				"tinyfoes-server.toml");
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {

@@ -20,6 +20,10 @@ public abstract class MixinZoglin extends Monster implements BabyfiableEntity {
 
 	@Override
 	public boolean isBaby() {
-		return this.getEntityData().get(DATA_BABY_ID) || $isBabyfied();
+		return this.getEntityData().get(DATA_BABY_ID) || tinyfoes$$isBabyfied();
+	}
+	@Override
+	public boolean tinyfoes$$isBaby() {
+		return this.getEntityData().get(DATA_BABY_ID);
 	}
 }

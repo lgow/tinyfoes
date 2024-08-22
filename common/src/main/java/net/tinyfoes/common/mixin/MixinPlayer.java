@@ -55,16 +55,16 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
 	void serverAiStep(CallbackInfo ci) {
 		if (!this.level().isClientSide) {
-			this.$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
 		}
 	}
 
 	@Unique
-	public void $setBaby(boolean bl) {
+	public void tinyfoes$$setBaby(boolean bl) {
 		this.entityData.set(DATA_BABY_ID, bl);
-		if (this.level() != null && !this.level().isClientSide) {
+		if (!this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!$isBabyfied()) {
+			if (!tinyfoes$$isBabyfied()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
 					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
@@ -74,11 +74,11 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	}
 
 	@Override
-	public void $setBabyfied(boolean bl) {
+	public void tinyfoes$$setBabyfied(boolean bl) {
 		this.entityData.set(DATA_BABYFIED_ID, bl);
-		if (this.level() != null && !this.level().isClientSide) {
+		if (!this.level().isClientSide) {
 			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!$isBaby()) {
+			if (!tinyfoes$$isBaby()) {
 				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
 					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
@@ -88,18 +88,18 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	}
 
 	@Override
-	public boolean $isBaby() {
+	public boolean tinyfoes$$isBaby() {
 		return this.entityData.get(DATA_BABY_ID);
 	}
 
 	@Override
-	public boolean $isBabyfied() {
+	public boolean tinyfoes$$isBabyfied() {
 		return this.entityData.get(DATA_BABYFIED_ID);
 	}
 
 	@Override
 	public boolean isBaby() {
-		return $isBaby() || $isBabyfied();
+		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
 	@Override
@@ -134,13 +134,13 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		if (DATA_BABY_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
 			if (this.level().isClientSide && this.tickCount > 20) {
-				if (!$isBaby()) {
-					if (!$isBabyfied()) {
+				if (!tinyfoes$$isBaby()) {
+					if (!tinyfoes$$isBabyfied()) {
 						this.level().playSound((Player) (Object) this, this.blockPosition(),
 								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
-				else if (!$isBabyfied()) {
+				else if (!tinyfoes$$isBabyfied()) {
 					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
 							SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
@@ -148,14 +148,14 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		}
 		if (DATA_BABYFIED_ID.equals(entityDataAccessor)) {
 			this.refreshDimensions();
-			if (this.tickCount > 20) {
-				if (!$isBabyfied()) {
-					if (!$isBaby()) {
+			if (this.level().isClientSide && this.tickCount > 20) {
+				if (!tinyfoes$$isBabyfied()) {
+					if (!tinyfoes$$isBaby()) {
 						this.level().playSound((Player) (Object) this, this.blockPosition(),
 								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
-				else if (!$isBaby()) {
+				else if (!tinyfoes$$isBaby()) {
 					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
 							SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
