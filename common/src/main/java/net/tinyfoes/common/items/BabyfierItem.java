@@ -39,7 +39,7 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 				if (!pLevel.isClientSide()) {
 					ageInversionMode = !ageInversionMode;
 					player.displayClientMessage(Component.translatable("item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
-							.withStyle(ChatFormatting.BLUE), true);
+							.withStyle(ChatFormatting.YELLOW), true);
 				}
 			}
 			if (i > 20) {

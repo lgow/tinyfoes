@@ -14,12 +14,12 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import net.tinyfoes.common.entity.ai.NearestBabyfiableHostileMobTargetGoal;
 import net.tinyfoes.common.registry.ModEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,7 +53,7 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob, Baby
 				if (livingEntity.getHealth() <= 4.0F) {
 					potion = Potions.HEALING;
 				}
-				else if (!livingEntity.isBaby()) {
+				else if (!livingEntity.isBaby() && TinyFoesConfigs.WITCH_GOAL.get()) {
 					potion = ModEffects.BABYFICATION_POTION.get();
 				}
 				else {
@@ -61,7 +61,7 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob, Baby
 				}
 				this.setTarget(null);
 			}
-			else if (livingEntity instanceof PathfinderMob) {
+			else if (livingEntity instanceof PathfinderMob && TinyFoesConfigs.WITCH_GOAL.get()) {
 				potion = ModEffects.BABYFICATION_POTION.get();
 				this.setTarget(null);
 			}

@@ -10,7 +10,7 @@
   "item.tinyfoes.pacifier": "Pacifier",
   "item.tinyfoes.babyfier.mode.age_inversion": "Mode: Age Inversion",
   "item.tinyfoes.babyfier.mode.temporary": "Mode: Temporary",
-  "item.tinyfoes.babyfier.tooltip.age_inversion": "Inverts the target's age permanently",
+  "item.tinyfoes.babyfier.tooltip.age_inversion": "Switches the target's age state (adult | baby)",
   "item.tinyfoes.babyfier.tooltip.temporary": "Applies the babyfication effect for brief period of time",
   "item.tinyfoes.babyfier.tooltip": "[Tap right-click while in-hand to switch modes]",
 
@@ -19,5 +19,7 @@
   "entity.tinyfoes.babyfication_ray": "Babyfication Ray",
 
   "command.babyfy.single" : "Babyfied %s",
-  "command.babyfy.multiple" : "Babyfied %s entities"
+  "command.babyfy.multiple" : "Babyfied %s entities",
+  "command.config.set" : "%s set to %s",
+  "command.config.reset": "reset all %s configs to default"
 }

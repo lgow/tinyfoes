@@ -14,9 +14,9 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.tinyfoes.common.CommonTinyFoes;
+import net.tinyfoes.common.commands.ModCommads;
 import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.registry.ModEffects;
-import net.tinyfoes.common.commands.ModCommads;
 import net.tinyfoes.forge.recipe.ModBrewingRecipe;
 
 @Mod(CommonTinyFoes.MODID)

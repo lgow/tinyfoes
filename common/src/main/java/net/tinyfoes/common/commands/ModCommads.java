@@ -24,18 +24,17 @@ import static net.tinyfoes.common.config.TinyFoesConfigs.*;
 
 public class ModCommads {
 	private static final List<ConfigValue<?>> serverList = List.of(BABY_MAX_HEALTH_MODIFIER, BABY_SPEED_MODIFIER,
-			 SPAWN_AS_BABY_ODDS, BABIES_DROP_LOOT);
-	private static final List<ConfigValue<?>> clientList = List.of(BABY_MAX_HEALTH_MODIFIER, BABY_SPEED_MODIFIER,
-			 SPAWN_AS_BABY_ODDS, BABIES_DROP_LOOT);
+			SPAWN_AS_BABY_ODDS, WITCH_GOAL);
+	private static final List<ConfigValue<?>> clientList = List.of(OVERSIZED_ITEMS, VILLAGER_HEAD_FIX);
 
 	public static void register(CommandDispatcher<CommandSourceStack> pDispatcher) {
 		pDispatcher.register(Commands.literal("tinyfoes").requires((r) -> r.hasPermission(3))//
 				.then(Commands.literal("server")//
-						.then(Commands.literal("babiesDropLoot")
+						.then(Commands.literal("witchBabyficationGoal")
 								.then(Commands.argument("value", BoolArgumentType.bool())//
-										.executes((r) -> setConfigBoolean(r.getSource(), BABIES_DROP_LOOT,
+										.executes((r) -> setConfigBoolean(r.getSource(), WITCH_GOAL,
 												BoolArgumentType.getBool(r, "value")))))//
-						.then(Commands.literal("babySpawnChance")//
+						.then(Commands.literal("spawnAsBabyOdds")//
 								.then(Commands.argument("value", DoubleArgumentType.doubleArg(0))//
 										.executes((r) -> setConfigDouble(r.getSource(), SPAWN_AS_BABY_ODDS,
 												DoubleArgumentType.getDouble(r, "value")))))//
@@ -96,13 +95,13 @@ public class ModCommads {
 
 	private static int setConfigDouble(CommandSourceStack source, ConfigValue<Double> s, double value) {
 		s.set(value);
-		source.sendSuccess(() -> Component.literal(s.getPath().get(1) + " set to " + value), true);
+		source.sendSuccess(() -> Component.translatable("command.config.set", s.getPath().get(1), value), true);
 		return 1;
 	}
 
 	private static int setConfigBoolean(CommandSourceStack source, ForgeConfigSpec.BooleanValue s, boolean value) {
 		s.set(value);
-		source.sendSuccess(() -> Component.literal(s.getPath().get(1) + " set to " + value), true);
+		source.sendSuccess(() -> Component.translatable("command.config.set", s.getPath().get(1), value), true);
 		return 1;
 	}
 
@@ -110,7 +109,8 @@ public class ModCommads {
 		for (ConfigValue configValue : configValueList) {
 			configValue.set(configValue.getDefault());
 		}
-		source.sendSuccess(() -> Component.literal("reset all configs to default"), true);
+		source.sendSuccess(() -> Component.translatable("command.config.reset",
+				configValueList == clientList ? "client" : "server"), true);
 		return 1;
 	}
 }

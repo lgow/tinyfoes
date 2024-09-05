@@ -34,7 +34,6 @@
     "defaultRequire": 1
   },
   "client": [
-    "client.MixinInventoryScreen",
     "client.MixinBlazeModel",
     "client.MixinCapeLayer",
     "client.MixinCarriedBlockLayer",
@@ -43,6 +42,7 @@
     "client.MixinEnderManModel",
     "client.MixinGhastModel",
     "client.MixinIllagerModel",
+    "client.MixinInventoryScreen",
     "client.MixinIronGolemFlowerLayer",
     "client.MixinIronGolemModel",
     "client.MixinItemInHandLayer",
