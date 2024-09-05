@@ -19,8 +19,4 @@ public abstract class MixinEnderMan extends Monster {
 		return this.isBaby() ? 1.33F : super.getStandingEyeHeight(pose, entityDimensions);
 	}
 
-	@Override
-	public void handleEntityEvent(byte b) {
-		super.handleEntityEvent(b);
-	}
 }

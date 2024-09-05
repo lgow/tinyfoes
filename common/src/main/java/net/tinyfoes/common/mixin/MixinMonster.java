@@ -9,6 +9,7 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,7 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 	@Nullable
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
-		this.setBaby(random.nextFloat() < 0.05F);
+		this.setBaby(random.nextFloat() < TinyFoesConfigs.SPAWN_AS_BABY_ODDS.get());
 		return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
 	}
 

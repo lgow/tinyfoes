@@ -9,6 +9,7 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.VillagerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Entity;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.util.ModUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,7 @@ public abstract class MixinVillagerModel <T extends Entity> extends Hierarchical
 
 	@Override
 	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		if (this.young) {
+		if (TinyFoesConfigs.VILLAGER_HEAD_FIX.get() && this.young) {
 			ModUtil.babyfyModel(headParts(), bodyParts(), 16F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
 					pRed, pGreen, pBlue, pAlpha);
 		}

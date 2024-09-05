@@ -14,26 +14,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AgeableMob.class)
 public abstract class MixinAgeableMob extends Mob implements BabyfiableEntity {
+	@Shadow public abstract void setAge(int i);
+
 	protected MixinAgeableMob(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
 	}
 
-	@Shadow
-	public abstract int getAge();
-
-	@Override
-	public boolean isBaby() {
-		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
-	}
-
 	@Inject(method = "isBaby", at = @At("RETURN"), cancellable = true)
-	public void getMyRidingOffset(CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(cir.getReturnValue() || tinyfoes$$isBabyfied());
+	public void isBaby(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(cir.getReturnValue()|| tinyfoes$$isBabyfied());
 	}
 
 	@Override
-	public boolean tinyfoes$$isBaby() {
-		return this.getAge() < 0;
+	public void setBaby(boolean bl) {
+		this.setAge(bl ? -24000 : 0);
+		tinyfoes$$setBaby(bl);
 	}
 }
 

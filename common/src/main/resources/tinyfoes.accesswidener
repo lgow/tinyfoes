@@ -1,8 +1,2 @@
 accessWidener   v2  named
-accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
 accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
-accessible field net/minecraft/world/entity/monster/Creeper DATA_IS_POWERED Lnet/minecraft/network/syncher/EntityDataAccessor;
-accessible field net/minecraft/world/entity/monster/Creeper swell I
-accessible method net/minecraft/world/entity/monster/Creeper spawnLingeringCloud ()V
-extendable method net/minecraft/world/entity/monster/Creeper explodeCreeper ()V
-accessible method net/minecraft/world/entity/Mob mobInteract (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;

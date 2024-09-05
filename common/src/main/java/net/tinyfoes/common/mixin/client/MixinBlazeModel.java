@@ -48,7 +48,8 @@ public abstract class MixinBlazeModel <T extends Entity> extends HierarchicalMod
 	@Override
 	public void setupAnim(T entity, float f, float g, float h, float i, float j) {
 		int l;
-		float k = h * (float) Math.PI * -0.1f;
+		float rotationSpeedModifier = this.young ? 1.5f : 1.0f; // Increase speed by 50% for babies
+		float k = h * (float) Math.PI * -0.1f * rotationSpeedModifier;
 		float layer1 = this.young ? 11 : 9;
 		float layer2 = this.young ? 8 : 7;
 		float layer3 = 5;
@@ -58,14 +59,14 @@ public abstract class MixinBlazeModel <T extends Entity> extends HierarchicalMod
 			this.upperBodyParts[l].z = Mth.sin(k) * layer1;
 			k += 1.5707964f;
 		}
-		k = 0.7853982f + h * (float) Math.PI * 0.03f;
+		k = 0.7853982f + h * (float) Math.PI * 0.03f * rotationSpeedModifier;
 		for (l = 4; l < 8; ++l) {
 			this.upperBodyParts[l].y = 2.0f + Mth.cos(((float) (l * 2) + h) * 0.25f);
 			this.upperBodyParts[l].x = Mth.cos(k) * layer2;
 			this.upperBodyParts[l].z = Mth.sin(k) * layer2;
 			k += 1.5707964f;
 		}
-		k = 0.47123894f + h * (float) Math.PI * -0.05f;
+		k = 0.47123894f + h * (float) Math.PI * -0.05f * rotationSpeedModifier;
 		for (l = 8; l < 12; ++l) {
 			this.upperBodyParts[l].y = 11.0f + Mth.cos(((float) l * 1.5f + h) * 0.5f);
 			this.upperBodyParts[l].x = Mth.cos(k) * layer3;

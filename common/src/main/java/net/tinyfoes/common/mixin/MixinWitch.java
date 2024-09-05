@@ -26,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Witch.class)
 public abstract class MixinWitch extends Raider implements RangedAttackMob, BabyfiableEntity {
-	@Unique private NearestBabyfiableHostileMobTargetGoal<Mob> tinyfoes$babyfyMobsGoal;
-
 	protected MixinWitch(EntityType<? extends Raider> entityType, Level level) {
 		super(entityType, level);
 	}
@@ -37,8 +35,9 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob, Baby
 
 	@Inject(method = "registerGoals", at = @At("TAIL"))
 	public void registerGoals(CallbackInfo ci) {
-		this.tinyfoes$babyfyMobsGoal = new NearestBabyfiableHostileMobTargetGoal<>(this, Mob.class);
-		this.targetSelector.addGoal(2, this.tinyfoes$babyfyMobsGoal);
+		NearestBabyfiableHostileMobTargetGoal<Mob> tinyfoes$babyfyMobsGoal = new NearestBabyfiableHostileMobTargetGoal<>(
+				this, Mob.class);
+		this.targetSelector.addGoal(2, tinyfoes$babyfyMobsGoal);
 	}
 
 	@Override

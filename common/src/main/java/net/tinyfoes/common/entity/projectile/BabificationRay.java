@@ -1,6 +1,7 @@
 package net.tinyfoes.common.entity.projectile;
 
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -41,8 +42,8 @@ public class BabificationRay extends ThrowableProjectile {
 				if (livingEntity.hasEffect(ModEffects.BABYFICATION.get())) {
 					livingEntity.removeEffect(ModEffects.BABYFICATION.get());
 				}
-				if (pResult.getEntity() instanceof Slime slime) {
-					slime.setSize(1, true);
+				else if (pResult.getEntity() instanceof Slime slime) {
+					slime.addEffect(new MobEffectInstance(ModEffects.BABYFICATION.get(),-1,0,false,false));
 				}
 				else if (pResult.getEntity() instanceof Mob mob) {
 					mob.setBaby(!mob.isBaby());

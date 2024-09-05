@@ -24,7 +24,7 @@ public class ModItems {
 	public static final Registrar<Item> ITEM_REGISTRAR = MOD_ITEMS.getRegistrar();
 	//
 	public static final RegistrySupplier<Item> THE_BABYFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("babyfier"),
-			() -> new BabyfierItem());
+			BabyfierItem::new);
 	public static final RegistrySupplier<Item> PACIFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("pacifier"),
 			() -> new Item(new Item.Properties().stacksTo(1)));
 

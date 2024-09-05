@@ -13,6 +13,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,7 +30,7 @@ public abstract class MixinItemInHandLayer <T extends LivingEntity, M extends En
 			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V",
 					shift = At.Shift.AFTER))
 	public void renderArmWithItem(LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext context, HumanoidArm humanoidArm, PoseStack poseStack, MultiBufferSource multiBufferSource, int i, CallbackInfo ci) {
-		if (this.getParentModel().young) {
+		if (TinyFoesConfigs.OVERSIZED_ITEMS.get() && this.getParentModel().young) {
 			poseStack.scale(2.0F, 2.0F, 2.0F);
 		}
 	}

@@ -16,11 +16,15 @@ import static net.tinyfoes.common.registry.ModEffects.BABYFICATION_POTION;
 
 public class ModUtil {
 	public final static ItemStack TINY_TAB_ICON = new ItemStack(ModItems.PACIFIER.get());
-	public final static List<Item> TAB_ITEM_LIST = List.of(ModItems.THE_BABYFIER.get(),
-Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG, Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG,
-			Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG, Items.IRON_GOLEM_SPAWN_EGG, Items.PHANTOM_SPAWN_EGG,
-			Items.PIGLIN_BRUTE_SPAWN_EGG, Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG, Items.SKELETON_SPAWN_EGG,
-			Items.SNOW_GOLEM_SPAWN_EGG, Items.SPIDER_SPAWN_EGG, Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG,
+	public final static List<ItemStack> TAB_ITEM_LIST = List.of(ModItems.THE_BABYFIER.get().getDefaultInstance(),
+			PotionUtils.setPotion(new ItemStack(Items.POTION), BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), ModEffects.BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), ModEffects.BABYFICATION_POTION.get()),
+			PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW), ModEffects.BABYFICATION_POTION.get()));
+	public final static List<Item> TAB_EGG_LIST = List.of(Items.BLAZE_SPAWN_EGG, Items.CREEPER_SPAWN_EGG,
+			Items.CAVE_SPIDER_SPAWN_EGG, Items.ENDERMAN_SPAWN_EGG, Items.EVOKER_SPAWN_EGG, Items.GHAST_SPAWN_EGG,
+			Items.PHANTOM_SPAWN_EGG, Items.PIGLIN_BRUTE_SPAWN_EGG, Items.PILLAGER_SPAWN_EGG, Items.RAVAGER_SPAWN_EGG,
+			Items.SKELETON_SPAWN_EGG, Items.SPIDER_SPAWN_EGG, Items.STRAY_SPAWN_EGG, Items.VINDICATOR_SPAWN_EGG,
 			Items.WARDEN_SPAWN_EGG, Items.WANDERING_TRADER_SPAWN_EGG, Items.WITCH_SPAWN_EGG,
 			Items.WITHER_SKELETON_SPAWN_EGG);
 

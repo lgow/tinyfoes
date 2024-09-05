@@ -12,10 +12,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.entity.BabyfiableEntity;
+import net.tinyfoes.common.entity.ModEntityTypeTags;
 import net.tinyfoes.common.registry.ModEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,12 +28,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.UUID;
+
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity {
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(
 			MixinPlayer.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinPlayer.class, EntityDataSerializers.BOOLEAN);
+	@Unique AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(
+			UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Baby speed boost",
+			TinyFoesConfigs.BABY_SPEED_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+	@Unique AttributeModifier HEALTH_MODIFIER_BABY = new AttributeModifier(
+			UUID.fromString("B9766B57-9566-4402-BC1F-2EE2A276D836"), "Baby health boost",
+			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
 
 	protected MixinPlayer(EntityType<? extends LivingEntity> entityType, Level level) {
 		super(entityType, level);
@@ -61,13 +72,16 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Unique
 	public void tinyfoes$$setBaby(boolean bl) {
-		this.entityData.set(DATA_BABY_ID, bl);
-		if (!this.level().isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!tinyfoes$$isBabyfied()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !this.tinyfoes$$isBabyfied()) {
+			this.entityData.set(DATA_BABY_ID, bl);
+			if (this.level() != null && !this.level().isClientSide) {
+				AttributeInstance speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				AttributeInstance maxHealthAttribute = this.getAttribute(Attributes.MAX_HEALTH);
+				maxHealthAttribute.removeModifier(HEALTH_MODIFIER_BABY);
+				speedAttribute.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					speedAttribute.addTransientModifier(SPEED_MODIFIER_BABY);
+					maxHealthAttribute.addTransientModifier(HEALTH_MODIFIER_BABY);
 				}
 			}
 		}
@@ -75,13 +89,16 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 
 	@Override
 	public void tinyfoes$$setBabyfied(boolean bl) {
-		this.entityData.set(DATA_BABYFIED_ID, bl);
-		if (!this.level().isClientSide) {
-			AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-			if (!tinyfoes$$isBaby()) {
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !tinyfoes$$isBaby()) {
+			this.entityData.set(DATA_BABYFIED_ID, bl);
+			if (this.level() != null && !this.level().isClientSide) {
+				AttributeInstance speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				AttributeInstance maxHealthAttribute = this.getAttribute(Attributes.MAX_HEALTH);
+				maxHealthAttribute.removeModifier(HEALTH_MODIFIER_BABY);
+				speedAttribute.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					speedAttribute.addTransientModifier(SPEED_MODIFIER_BABY);
+					maxHealthAttribute.addTransientModifier(HEALTH_MODIFIER_BABY);
 				}
 			}
 		}
@@ -117,6 +134,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	private void readAdditionalSaveData(CompoundTag pCompound, CallbackInfo ci) {
 		if (pCompound.contains("IsBaby")) {
 			this.entityData.set(DATA_BABY_ID, pCompound.getBoolean("IsBaby"));
+			this.tinyfoes$$setBaby(pCompound.getBoolean("IsBaby"));
 		}
 		if (pCompound.contains("IsBabyfied")) {
 			this.entityData.set(DATA_BABYFIED_ID, pCompound.getBoolean("IsBabyfied"));
@@ -141,8 +159,8 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 					}
 				}
 				else if (!tinyfoes$$isBabyfied()) {
-					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
-							SoundSource.PLAYERS, 1.0F, 1.0F);
+					this.level().playSound((Player) (Object) this, this.blockPosition(),
+							SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}
@@ -156,8 +174,8 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 					}
 				}
 				else if (!tinyfoes$$isBaby()) {
-					this.level().playSound((Player) (Object) this, this.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP,
-							SoundSource.PLAYERS, 1.0F, 1.0F);
+					this.level().playSound((Player) (Object) this, this.blockPosition(),
+							SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.PLAYERS, 1.0F, 1.0F);
 				}
 			}
 		}

@@ -9,9 +9,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.tinyfoes.common.config.TinyFoesConfigs;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import net.tinyfoes.common.entity.ModEntityTypeTags;
 import net.tinyfoes.common.registry.ModEffects;
@@ -22,13 +24,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
-
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinMob.class, EntityDataSerializers.BOOLEAN);
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
 			EntityDataSerializers.BOOLEAN);
+	@Unique AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(
+			UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Baby speed boost",
+			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+	@Unique AttributeModifier HEALTH_MODIFIER_BABY = new AttributeModifier(
+			UUID.fromString("B9766B57-9566-4402-BC1F-2EE2A276D836"), "Baby health boost",
+			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
 
 	protected MixinMob(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
@@ -103,13 +112,16 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 
 	@Unique
 	public void tinyfoes$$setBaby(boolean bl) {
-		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST)) {
+		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !this.tinyfoes$$isBabyfied()) {
 			this.entityData.set(DATA_BABY_ID, bl);
-			if (!this.level().isClientSide) {
-				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (this.level() != null && !this.level().isClientSide) {
+				AttributeInstance speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				AttributeInstance maxHealthAttribute = this.getAttribute(Attributes.MAX_HEALTH);
+				maxHealthAttribute.removeModifier(HEALTH_MODIFIER_BABY);
+				speedAttribute.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					speedAttribute.addTransientModifier(SPEED_MODIFIER_BABY);
+					maxHealthAttribute.addTransientModifier(HEALTH_MODIFIER_BABY);
 				}
 			}
 		}
@@ -119,11 +131,14 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	public void tinyfoes$$setBabyfied(boolean bl) {
 		if (!this.getType().is(ModEntityTypeTags.BABYFICATION_BLACKLIST) && !tinyfoes$$isBaby()) {
 			this.entityData.set(DATA_BABYFIED_ID, bl);
-			if (!this.level().isClientSide) {
-				AttributeInstance attributeInstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-				attributeInstance.removeModifier(SPEED_MODIFIER_BABY);
+			if (this.level() != null && !this.level().isClientSide) {
+				AttributeInstance speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+				AttributeInstance maxHealthAttribute = this.getAttribute(Attributes.MAX_HEALTH);
+				maxHealthAttribute.removeModifier(HEALTH_MODIFIER_BABY);
+				speedAttribute.removeModifier(SPEED_MODIFIER_BABY);
 				if (bl) {
-					attributeInstance.addTransientModifier(SPEED_MODIFIER_BABY);
+					speedAttribute.addTransientModifier(SPEED_MODIFIER_BABY);
+					maxHealthAttribute.addTransientModifier(HEALTH_MODIFIER_BABY);
 				}
 			}
 		}

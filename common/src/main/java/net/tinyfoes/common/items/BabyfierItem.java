@@ -13,8 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.tinyfoes.common.CommonTinyFoes;
-import net.tinyfoes.common.config.CommonConfigs;
 import net.tinyfoes.common.entity.projectile.BabificationRay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,9 +38,8 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 			if (i < 5) {
 				if (!pLevel.isClientSide()) {
 					ageInversionMode = !ageInversionMode;
-					player.displayClientMessage(Component.translatable(
-									"item.tinyfoes.babyfier." + (ageInversionMode ? "age_inversion" : "babyfication_effect"))
-							.withStyle(ChatFormatting.YELLOW), true);
+					player.displayClientMessage(Component.translatable("item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
+							.withStyle(ChatFormatting.BLUE), true);
 				}
 			}
 			if (i > 20) {
@@ -57,11 +54,6 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 				pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE,
 						SoundSource.PLAYERS, 1.0F, 1.0F / (pLevel.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
 				player.awardStat(Stats.ITEM_USED.get(this));
-				CommonTinyFoes.LOGGER.warn(
-						CommonConfigs.Server.BABIES_DROP_LOOT.get() + "," + CommonConfigs.Server.BABY_HEALTH_MODIFIER.get() + ","
-								+ CommonConfigs.Server.BABY_SPEED_MODIFIER.get() + ","
-								+ CommonConfigs.Server.BABY_ATTACK_MODIFIER.get() + ","
-								+ CommonConfigs.Server.BABY_XP_MODIFIER.get());
 			}
 		}
 	}
@@ -90,8 +82,9 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 
 	@Override
 	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-		list.add(Component.translatable(
-						"item.tinyfoes.babyfier." + (ageInversionMode ? "age_inversion" : "babyfication_effect"))
+		list.add(Component.translatable("item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
+				.withStyle(ChatFormatting.BLUE));
+		list.add(Component.translatable("item.tinyfoes.babyfier.tooltip." + (ageInversionMode ? "age_inversion" : "temporary"))
 				.withStyle(ChatFormatting.GRAY));
 		list.add(Component.literal(""));
 		list.add(Component.translatable("item.tinyfoes.babyfier.tooltip").withStyle(ChatFormatting.YELLOW));
