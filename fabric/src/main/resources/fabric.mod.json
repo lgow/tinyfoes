@@ -25,7 +25,8 @@
   "depends": {
     "fabric": "*",
     "minecraft": ">=${minecraft_version}",
-    "architectury": ">=${architectury_version}"
+    "architectury": ">=${architectury_version}",
+    "forgeconfigapiport" : ">=${fcap_version}"
   },
   "mixins": [
     "tinyfoes-fabric.mixins.json",

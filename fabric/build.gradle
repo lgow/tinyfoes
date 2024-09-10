@@ -40,10 +40,12 @@ processResources {
     inputs.property "version", project.version
     inputs.property("minecraft_version", rootProject.minecraft_version)
     inputs.property("architectury_version", rootProject.architectury_version)
+    inputs.property("fcap_version", rootProject.fcap_version)
     filesMatching("fabric.mod.json") {
         expand "version": project.version
         expand "minecraft_version": rootProject.minecraft_version
         expand "architectury_version": rootProject.architectury_version
+        expand "fcap_version": rootProject.fcap_version
     }
 }
 
