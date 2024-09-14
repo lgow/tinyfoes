@@ -39,9 +39,6 @@ processResources {
     inputs.property("minecraft_version", rootProject.minecraft_version)
     inputs.property("architectury_version", rootProject.architectury_version)
     inputs.property("forge_loader_version", rootProject.forge_loader_version)
-    inputs.property("java_version", rootProject.java_version)
-    inputs.property("pack_format", rootProject.pack_format)
-
 
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
@@ -49,9 +46,7 @@ processResources {
         expand "minecraft_version": rootProject.minecraft_version
         expand "architectury_version": rootProject.architectury_version
     }
-    filesMatching("pack.mcmeta"){
-        expand "pack_format": rootProject.pack_format
-    }
+
 }
 
 shadowJar {

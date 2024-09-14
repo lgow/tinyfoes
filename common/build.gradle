@@ -21,6 +21,7 @@ dependencies {
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-common:${rootProject.fcap_version}"
 }
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
