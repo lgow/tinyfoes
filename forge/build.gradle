@@ -15,7 +15,6 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "tinyfoes-common.mixins.json"
-        mixinConfig "tinyfoes-forge.mixins.json"
     }
 }
 
@@ -40,11 +39,18 @@ processResources {
     inputs.property("minecraft_version", rootProject.minecraft_version)
     inputs.property("architectury_version", rootProject.architectury_version)
     inputs.property("forge_loader_version", rootProject.forge_loader_version)
+    inputs.property("java_version", rootProject.java_version)
+    inputs.property("pack_format", rootProject.pack_format)
+
+
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
         expand "forge_loader_version": rootProject.forge_loader_version
         expand "minecraft_version": rootProject.minecraft_version
         expand "architectury_version": rootProject.architectury_version
+    }
+    filesMatching("pack.mcmeta"){
+        expand "pack_format": rootProject.pack_format
     }
 }
 
@@ -71,19 +77,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
     }
 }

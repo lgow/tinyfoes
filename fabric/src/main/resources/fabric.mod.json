@@ -29,7 +29,6 @@
     "forgeconfigapiport" : ">=${fcap_version}"
   },
   "mixins": [
-    "tinyfoes-fabric.mixins.json",
     "tinyfoes-common.mixins.json"
   ]
 }
