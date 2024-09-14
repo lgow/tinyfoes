@@ -1,11 +1,11 @@
-package net.tinyfoes.forge;
+package net.tinyfoes.neoforge;
 
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 import net.tinyfoes.common.CommonExpectPlatformTinyFoes;
 
 import java.nio.file.Path;
 
-public class ForgeExpectPlatformImplTinyFoes {
+public class NeoForgeExpectPlatformImplTinyFoes {
 	/**
 	 * This is our actual method to {@link CommonExpectPlatformTinyFoes#getConfigDirectory()}.
 	 */

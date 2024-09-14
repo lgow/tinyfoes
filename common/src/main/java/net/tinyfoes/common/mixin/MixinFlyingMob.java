@@ -1,6 +1,5 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
@@ -26,18 +25,10 @@ public abstract class MixinFlyingMob extends Mob implements BabyfiableEntity {
 		this.tinyfoes$$setBaby(b);
 	}
 
-	@Override
-	public int getExperienceReward() {
-		if (isBaby()) {
-			this.xpReward = (int) ((double) this.xpReward * 2.5);
-		}
-		return super.getExperienceReward();
-	}
-
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
 		this.setBaby(random.nextFloat() < TinyFoesConfigs.SPAWN_AS_BABY_ODDS.get());
-		return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+		return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
 	}
 }

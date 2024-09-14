@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.tinyfoes.common.CommonClientTinyFoes;
 import net.tinyfoes.common.client.model.BabificationRayModel;
-import net.tinyfoes.common.util.TinyFoesResLoc;
+import net.tinyfoes.common.util.ModUtil;
 
 public class BabyficationRayRenderer extends EntityRenderer<ThrowableProjectile> {
 	private final BabificationRayModel model;
@@ -30,13 +30,13 @@ public class BabyficationRayRenderer extends EntityRenderer<ThrowableProjectile>
 		pPoseStack.scale(0.5F, 0.5F, 0.5F);
 		this.model.setupAnim(pEntity, 0, 0.0F, 0.0F, pEntity.getYRot(), pEntity.getXRot());
 		VertexConsumer vertex = pBuffer.getBuffer(RenderType.eyes(this.getTextureLocation(pEntity)));
-		this.model.renderToBuffer(pPoseStack, vertex, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		this.model.renderToBuffer(pPoseStack, vertex, pPackedLight, OverlayTexture.NO_OVERLAY);
 		pPoseStack.popPose();
 		super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(ThrowableProjectile entity) {
-		return new TinyFoesResLoc("textures/projectiles/babyfication_ray.png");
+		return ModUtil.location("textures/projectiles/babyfication_ray.png");
 	}
 }

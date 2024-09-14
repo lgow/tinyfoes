@@ -18,22 +18,23 @@ public abstract class MixinCreeperModel <T extends Entity> extends HierarchicalM
 	@Mutable @Shadow @Final private ModelPart head, leftHindLeg, rightHindLeg, leftFrontLeg, rightFrontLeg, root;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 14F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 14F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 			pPoseStack.pushPose();
 			pPoseStack.scale(0.5F, 0.5F, 0.5F);
 			pPoseStack.translate(0.0F, 1.5F, 0.0F);
 			this.frontLegs().forEach((modelPart) -> {
-				modelPart.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+				modelPart.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 			});
 			pPoseStack.popPose();
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
+
+
 
 	@Unique
 	protected Iterable<ModelPart> headParts() {

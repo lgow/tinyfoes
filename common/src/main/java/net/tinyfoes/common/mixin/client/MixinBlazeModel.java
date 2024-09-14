@@ -25,13 +25,12 @@ public abstract class MixinBlazeModel <T extends Entity> extends HierarchicalMod
 	@Shadow @Final private ModelPart[] upperBodyParts;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 15F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 15F, 0F, poseStack, vertexConsumer, i, j);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(poseStack, vertexConsumer, i, j, k);
 		}
 	}
 

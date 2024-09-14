@@ -22,13 +22,12 @@ public abstract class MixinIllagerModel <T extends AbstractIllager> extends Hier
 	@Shadow @Final private ModelPart rightArm;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 16F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 16F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
 

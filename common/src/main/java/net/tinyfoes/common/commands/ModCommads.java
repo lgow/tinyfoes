@@ -12,8 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Slime;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import net.tinyfoes.common.entity.BabyfiableEntity;
 import net.tinyfoes.common.registry.ModEffects;
 
@@ -23,9 +22,9 @@ import java.util.List;
 import static net.tinyfoes.common.config.TinyFoesConfigs.*;
 
 public class ModCommads {
-	private static final List<ConfigValue<?>> serverList = List.of(BABY_MAX_HEALTH_MODIFIER, BABY_SPEED_MODIFIER,
+	private static final List<ModConfigSpec.ConfigValue<?>> serverList = List.of(BABY_MAX_HEALTH_MODIFIER, BABY_SPEED_MODIFIER,
 			SPAWN_AS_BABY_ODDS, WITCH_GOAL);
-	private static final List<ConfigValue<?>> clientList = List.of(OVERSIZED_ITEMS, VILLAGER_HEAD_FIX);
+	private static final List<ModConfigSpec.ConfigValue<?>> clientList = List.of(OVERSIZED_ITEMS, VILLAGER_HEAD_FIX);
 
 	public static void register(CommandDispatcher<CommandSourceStack> pDispatcher) {
 		pDispatcher.register(Commands.literal("tinyfoes").requires((r) -> r.hasPermission(3))//
@@ -69,11 +68,11 @@ public class ModCommads {
 
 	private static int babyfyEntity(CommandSourceStack source, Collection<? extends Entity> entities, boolean b) {
 		for (Entity entity : entities) {
-			if (entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(ModEffects.BABYFICATION.get())) {
-				livingEntity.removeEffect(ModEffects.BABYFICATION.get());
+			if (entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(ModEffects.BABYFICATION)) {
+				livingEntity.removeEffect(ModEffects.BABYFICATION);
 			}
 			else if (entity instanceof Slime slime) {
-				slime.addEffect(new MobEffectInstance(ModEffects.BABYFICATION.get(), 0, -1, false, false));
+				slime.addEffect(new MobEffectInstance(ModEffects.BABYFICATION, 0, -1, false, false));
 			}
 			else if (entity instanceof Mob mob) {
 				mob.setBaby(b);
@@ -93,20 +92,20 @@ public class ModCommads {
 		return 0;
 	}
 
-	private static int setConfigDouble(CommandSourceStack source, ConfigValue<Double> s, double value) {
+	private static int setConfigDouble(CommandSourceStack source, ModConfigSpec.ConfigValue<Double> s, double value) {
 		s.set(value);
 		source.sendSuccess(() -> Component.translatable("command.config.set", s.getPath().get(1), value), true);
 		return 1;
 	}
 
-	private static int setConfigBoolean(CommandSourceStack source, ForgeConfigSpec.BooleanValue s, boolean value) {
+	private static int setConfigBoolean(CommandSourceStack source, ModConfigSpec.BooleanValue s, boolean value) {
 		s.set(value);
 		source.sendSuccess(() -> Component.translatable("command.config.set", s.getPath().get(1), value), true);
 		return 1;
 	}
 
-	private static int resetAll(CommandSourceStack source, List<ConfigValue<?>> configValueList) {
-		for (ConfigValue configValue : configValueList) {
+	private static int resetAll(CommandSourceStack source, List<ModConfigSpec.ConfigValue<?>> configValueList) {
+		for (ModConfigSpec.ConfigValue configValue : configValueList) {
 			configValue.set(configValue.getDefault());
 		}
 		source.sendSuccess(() -> Component.translatable("command.config.reset",

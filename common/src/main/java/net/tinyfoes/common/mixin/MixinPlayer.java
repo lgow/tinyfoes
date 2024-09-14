@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,8 +29,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.UUID;
-
 @Mixin(Player.class)
 public abstract class MixinPlayer extends LivingEntity implements BabyfiableEntity {
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(
@@ -37,36 +36,33 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
 			MixinPlayer.class, EntityDataSerializers.BOOLEAN);
 	@Unique AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(
-			UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Baby speed boost",
-			TinyFoesConfigs.BABY_SPEED_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+			ResourceLocation.withDefaultNamespace("baby_speed"), TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(),
+			AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	@Unique AttributeModifier HEALTH_MODIFIER_BABY = new AttributeModifier(
-			UUID.fromString("B9766B57-9566-4402-BC1F-2EE2A276D836"), "Baby health boost",
-			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+			ResourceLocation.withDefaultNamespace("baby_health"), TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(),
+			AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
 	protected MixinPlayer(EntityType<? extends LivingEntity> entityType, Level level) {
 		super(entityType, level);
 	}
 
 	@Shadow
-	public abstract int getPortalWaitTime();
-
-	@Shadow
 	public abstract void playSound(SoundEvent soundEvent, float f, float g);
 
-	@Inject(method = "getDimensions", at = @At("RETURN"), cancellable = true)
-	public void getDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
+	@Inject(method = "getDefaultDimensions", at = @At("RETURN"), cancellable = true)
+	public void getDefaultDimensions(Pose pose, CallbackInfoReturnable<EntityDimensions> cir) {
 		cir.setReturnValue(cir.getReturnValue().scale(this.getScale()));
 	}
 
-	@Inject(method = "getStandingEyeHeight", at = @At("RETURN"), cancellable = true)
-	public void getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions, CallbackInfoReturnable<Float> cir) {
-		cir.setReturnValue(cir.getReturnValue() * this.getScale());
+	@Override
+	public double getEyeY() {
+		return super.getEyeY() * this.getScale();
 	}
 
 	@Inject(method = "serverAiStep", at = @At("HEAD"))
 	void serverAiStep(CallbackInfo ci) {
 		if (!this.level().isClientSide) {
-			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
 		}
 	}
 
@@ -119,15 +115,11 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 		return tinyfoes$$isBaby() || tinyfoes$$isBabyfied();
 	}
 
-	@Override
-	public double getMyRidingOffset() {
-		return isBaby() ? 0.0F : -0.35;
-	}
 
 	@Inject(method = "defineSynchedData", at = @At("HEAD"))
-	private void defineSynchedData(CallbackInfo ci) {
-		this.entityData.define(DATA_BABY_ID, false);
-		this.entityData.define(DATA_BABYFIED_ID, false);
+	private void defineSynchedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+		builder.define(DATA_BABY_ID, false);
+		builder.define(DATA_BABYFIED_ID, false);
 	}
 
 	@Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
@@ -155,7 +147,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 				if (!tinyfoes$$isBaby()) {
 					if (!tinyfoes$$isBabyfied()) {
 						this.level().playSound((Player) (Object) this, this.blockPosition(),
-								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
+								SoundEvents.ARMOR_EQUIP_TURTLE.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 				else if (!tinyfoes$$isBabyfied()) {
@@ -170,7 +162,7 @@ public abstract class MixinPlayer extends LivingEntity implements BabyfiableEnti
 				if (!tinyfoes$$isBabyfied()) {
 					if (!tinyfoes$$isBaby()) {
 						this.level().playSound((Player) (Object) this, this.blockPosition(),
-								SoundEvents.ARMOR_EQUIP_TURTLE, SoundSource.PLAYERS, 1.0F, 1.0F);
+								SoundEvents.ARMOR_EQUIP_TURTLE.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
 					}
 				}
 				else if (!tinyfoes$$isBaby()) {

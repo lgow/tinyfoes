@@ -1,0 +1,69 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    maven {
+        name = 'NeoForged'
+        url = 'https://maven.neoforged.net/releases'
+    }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
+    modImplementation "dev.architectury:architectury-neoforge:$rootProject.architectury_api_version"
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
+}
+
+processResources {
+    expand(project.properties)
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", rootProject.minecraft_version
+    inputs.property "architectury_api_version", rootProject.architectury_api_version
+    inputs.property "neoforge_version", rootProject.neoforge_version
+    inputs.property "java_version", rootProject.java_version
+    inputs.property "license", rootProject.license
+    inputs.property "archives_base_name", rootProject.archives_base_name
+    inputs.property "display_name", rootProject.display_name
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand "version": project.version
+        expand "minecraft_version": rootProject.minecraft_version
+        expand "architectury_api_version": rootProject.architectury_api_version
+        expand "neoforge_version": rootProject.neoforge_version
+        expand "java_version": rootProject.java_version
+        expand "license": rootProject.license
+        expand "archives_base_name": rootProject.archives_base_name
+        expand "display_name": rootProject.display_name
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}

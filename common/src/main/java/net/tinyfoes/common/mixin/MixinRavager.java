@@ -12,8 +12,5 @@ public abstract class MixinRavager extends Raider {
 		super(entityType, level);
 	}
 
-	@Override
-	public double getPassengersRidingOffset() {
-		return isBaby() ? 0.888462 : 2.1;
-	}
+
 }

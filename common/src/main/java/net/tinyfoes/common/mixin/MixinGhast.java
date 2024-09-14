@@ -1,9 +1,7 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +13,7 @@ public abstract class MixinGhast extends FlyingMob {
 	}
 
 	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		return isBaby() ? 1.3f : 2.6f;
+	public double getEyeY() {
+		return isBaby() ? 1.3F : 2.6;
 	}
 }

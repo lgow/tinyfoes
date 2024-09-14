@@ -26,13 +26,12 @@ public abstract class MixinPhantomModel <T extends Entity> extends HierarchicalM
 	@Unique ModelPart body, head;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay,int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 0f, 0F, 0, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 0f, 0F, 0, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
 

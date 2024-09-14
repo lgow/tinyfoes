@@ -28,13 +28,12 @@ public abstract class MixinIronGolemModel <T extends Entity> extends Hierarchica
 	public abstract ModelPart root();
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 19F, 1F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 19F, 1F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
 

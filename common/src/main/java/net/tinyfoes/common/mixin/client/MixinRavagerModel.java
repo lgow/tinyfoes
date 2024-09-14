@@ -22,13 +22,12 @@ public abstract class MixinRavagerModel <T extends Entity> extends HierarchicalM
 	@Mutable @Shadow @Final private ModelPart root, head, mouth, rightHindLeg, leftHindLeg, rightFrontLeg, leftFrontLeg, neck;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int k) {
 		if (this.young) {
-			ModUtil.babyfyModel(headParts(), bodyParts(), 0F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
-					pRed, pGreen, pBlue, pAlpha);
+			ModUtil.babyfyModel(headParts(), bodyParts(), 0F, 0F, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
 

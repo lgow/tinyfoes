@@ -44,8 +44,8 @@ public abstract class MixinSlime extends Mob implements BabyfiableEntity {
 	}
 
 	@Inject(method = "defineSynchedData", at = @At("TAIL"))
-	protected void defineSynchedData(CallbackInfo ci) {
-		this.getEntityData().define(DATA_SIZE_HOLDER, 1);
+	protected void defineSynchedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+		builder.define(DATA_SIZE_HOLDER, 1);
 	}
 
 	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))

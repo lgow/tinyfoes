@@ -10,7 +10,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.util.ModUtil;
-import net.tinyfoes.common.util.TinyFoesResLoc;
 
 public class ModItems {
 	public static final DeferredRegister<Item> MOD_ITEMS = DeferredRegister.create(CommonTinyFoes.MODID,
@@ -22,9 +21,9 @@ public class ModItems {
 					() -> ModUtil.TINY_TAB_ICON));
 	public static final Registrar<Item> ITEM_REGISTRAR = MOD_ITEMS.getRegistrar();
 	//
-	public static final RegistrySupplier<Item> THE_BABYFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("babyfier"),
+	public static final RegistrySupplier<Item> THE_BABYFIER = ITEM_REGISTRAR.register(ModUtil.location("babyfier"),
 			BabyfierItem::new);
-	public static final RegistrySupplier<Item> PACIFIER = ITEM_REGISTRAR.register(new TinyFoesResLoc("pacifier"),
+	public static final RegistrySupplier<Item> PACIFIER = ITEM_REGISTRAR.register(ModUtil.location("pacifier"),
 			() -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static void register() {

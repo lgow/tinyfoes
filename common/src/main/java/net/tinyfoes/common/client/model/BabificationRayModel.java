@@ -24,9 +24,10 @@ public class BabificationRayModel extends EntityModel<ThrowableProjectile> {
 		return LayerDefinition.create(meshdefinition, 16, 8);
 	}
 
+
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		blob.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int i, int j, int k) {
+		blob.render(poseStack, vertexConsumer, i, j);
 	}
 
 	@Override

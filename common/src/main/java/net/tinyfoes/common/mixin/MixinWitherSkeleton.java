@@ -1,8 +1,6 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.level.Level;
@@ -14,8 +12,7 @@ public abstract class MixinWitherSkeleton extends Monster {
 		super(entityType, level);
 	}
 
-	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		return this.isBaby() ? 1.1F : super.getStandingEyeHeight(pose, entityDimensions);
+	public double getEyeY() {
+		return isBaby() ? super.getEyeY() * 1.1 : super.getEyeY();
 	}
 }

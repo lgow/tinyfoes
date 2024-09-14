@@ -1,6 +1,5 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -22,9 +21,9 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData, @Nullable CompoundTag compoundTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverLevelAccessor, DifficultyInstance difficultyInstance, MobSpawnType mobSpawnType, @Nullable SpawnGroupData spawnGroupData) {
 		this.setBaby(random.nextFloat() < TinyFoesConfigs.SPAWN_AS_BABY_ODDS.get());
-		return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData, compoundTag);
+		return super.finalizeSpawn(serverLevelAccessor, difficultyInstance, mobSpawnType, spawnGroupData);
 	}
 
 	@Override
@@ -38,16 +37,11 @@ public abstract class MixinMonster extends PathfinderMob implements BabyfiableEn
 	}
 
 	@Override
-	public int getExperienceReward() {
+	protected int getBaseExperienceReward() {
 		if (isBaby()) {
 			this.xpReward = (int) ((double) this.xpReward * 2.5);
 		}
-		return super.getExperienceReward();
-	}
-
-	@Override
-	public double getMyRidingOffset() {
-		return this.isBaby() ? 0.0 : -0.45;
+		return super.getBaseExperienceReward();
 	}
 }
 

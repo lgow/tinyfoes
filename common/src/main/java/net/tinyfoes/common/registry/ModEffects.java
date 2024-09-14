@@ -9,7 +9,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
 import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.effect.Babyfication;
-import net.tinyfoes.common.util.TinyFoesResLoc;
+import net.tinyfoes.common.util.ModUtil;
 
 import java.util.function.Supplier;
 
@@ -23,12 +23,12 @@ public class ModEffects {
 
 	static {
 		BABYFICATION = registerEffect("babyfication", Babyfication::new);
-		BABYFICATION_POTION = POTIONS.register(new TinyFoesResLoc("babyfication"),
-				() -> new Potion(new MobEffectInstance(ModEffects.BABYFICATION.get(), 1200)));
+		BABYFICATION_POTION = POTIONS.register(ModUtil.location("babyfication"),
+				() -> new Potion(new MobEffectInstance(ModEffects.BABYFICATION, 1200)));
 	}
 
 	private static RegistrySupplier<MobEffect> registerEffect(String name, Supplier<MobEffect> effect) {
-		return MOB_EFFECTS.register(new TinyFoesResLoc(name), effect);
+		return MOB_EFFECTS.register(ModUtil.location(name), effect);
 	}
 
 	public static void register() {

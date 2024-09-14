@@ -13,8 +13,5 @@ public abstract class MixinSkeletonHorse extends AbstractHorse {
 		super(entityType, level);
 	}
 
-	@Override
-	public double getPassengersRidingOffset() {
-		return super.getPassengersRidingOffset();
-	}
+
 }

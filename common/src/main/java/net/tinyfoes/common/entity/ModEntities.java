@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.tinyfoes.common.CommonTinyFoes;
 import net.tinyfoes.common.entity.projectile.BabificationRay;
-import net.tinyfoes.common.util.TinyFoesResLoc;
+import net.tinyfoes.common.util.ModUtil;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ public class ModEntities {
 					.updateInterval(20).sized(0.5F, 0.5F).build("babyfication_ray"));
 
 	public static <T extends EntityType<?>> RegistrySupplier<T> create(final String path, final Supplier<T> type) {
-		return ENTITY_TYPES.register(new TinyFoesResLoc(path), type);
+		return ENTITY_TYPES.register(ModUtil.location(path), type);
 	}
 
 	public static void register() {

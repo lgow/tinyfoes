@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,8 +25,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.UUID;
-
 @Mixin(Mob.class)
 public abstract class MixinMob extends LivingEntity implements BabyfiableEntity {
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABYFIED_ID = SynchedEntityData.defineId(
@@ -33,11 +32,11 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	@Unique private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(MixinMob.class,
 			EntityDataSerializers.BOOLEAN);
 	@Unique AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(
-			UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836"), "Baby speed boost",
-			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+			ResourceLocation.withDefaultNamespace("baby_speed"), TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(),
+			AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	@Unique AttributeModifier HEALTH_MODIFIER_BABY = new AttributeModifier(
-			UUID.fromString("B9766B57-9566-4402-BC1F-2EE2A276D836"), "Baby health boost",
-			TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(), AttributeModifier.Operation.MULTIPLY_BASE);
+			ResourceLocation.withDefaultNamespace("baby_health"), TinyFoesConfigs.BABY_MAX_HEALTH_MODIFIER.get(),
+			AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
 	protected MixinMob(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
@@ -47,9 +46,9 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	public abstract void setBaby(boolean bl);
 
 	@Inject(method = "defineSynchedData", at = @At("TAIL"))
-	public void defineSynchedData(CallbackInfo ci) {
-		this.getEntityData().define(DATA_BABYFIED_ID, false);
-		this.getEntityData().define(DATA_BABY_ID, false);
+	public void defineSynchedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+		builder.define(DATA_BABYFIED_ID, false);
+		builder.define(DATA_BABY_ID, false);
 	}
 
 	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
@@ -70,7 +69,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 			if (this.level().isClientSide && this.tickCount > 20) {
 				if (!tinyfoes$$isBaby()) {
 					if (!tinyfoes$$isBabyfied()) {
-						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
+						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE.value());
 					}
 				}
 				else if (!tinyfoes$$isBabyfied()) {
@@ -83,7 +82,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 			if (this.tickCount > 20) {
 				if (!tinyfoes$$isBabyfied()) {
 					if (!tinyfoes$$isBaby()) {
-						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE);
+						this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE.value());
 					}
 				}
 				else if (!tinyfoes$$isBaby()) {
@@ -97,7 +96,7 @@ public abstract class MixinMob extends LivingEntity implements BabyfiableEntity 
 	@Inject(method = "aiStep", at = @At("HEAD"))
 	public void aiStep(CallbackInfo ci) {
 		if (!this.level().isClientSide) {
-			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION.get()));
+			this.tinyfoes$$setBabyfied(this.hasEffect(ModEffects.BABYFICATION));
 		}
 	}
 

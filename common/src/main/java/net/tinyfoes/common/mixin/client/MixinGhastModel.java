@@ -24,13 +24,13 @@ public abstract class MixinGhastModel <T extends Entity> extends HierarchicalMod
 	@Shadow @Final private ModelPart[] tentacles;
 
 	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int k) {
 		if (this.young) {
 			ModUtil.babyfyModel(headParts(), bodyParts(), 0.5F, 0.4F, 24F, 0F, 2.3F, pPoseStack, pBuffer, pPackedLight,
-					pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+					pPackedOverlay);
 		}
 		else {
-			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+			super.renderToBuffer(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		}
 	}
 

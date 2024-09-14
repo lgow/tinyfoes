@@ -1,11 +1,11 @@
 modLoader = "javafml"
-loaderVersion = "[${forge_loader_version},)"
+loaderVersion = "[4,)"
 issueTrackerURL = "https://discord.gg/Z8qMNugsZq"
 license = "All Rights Reserved"
 [[mods]]
-modId = "tinyfoes"
+modId = "${archives_base_name}"
 version = "${version}"
-displayName = "Tiny Foes"
+displayName = "${display_name}"
 authors = "Lgowz"
 displayURL = "https://curseforge.com/minecraft/mc-mods/tinyfoes"
 description = '''
@@ -14,22 +14,25 @@ Tiny Foes adds the baby versions of most vanilla enemies!
 #logoFile = "assets/tinyfoes/icon.png"
 
 [[dependencies.tinyfoes]]
-modId = "forge"
-mandatory = true
-versionRange = "[${forge_loader_version},)"
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_range},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.tinyfoes]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.tinyfoes]]
 modId = "architectury"
-mandatory = true
-versionRange = "[${architectury_version},)"
+type = "required"
+versionRange = "[${architectury_api_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "tinyfoes-neoforge.mixins.json"

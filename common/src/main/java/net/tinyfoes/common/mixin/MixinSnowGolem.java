@@ -1,8 +1,6 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
@@ -15,7 +13,7 @@ public class MixinSnowGolem extends AbstractGolem {
 	}
 
 	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		return isBaby() ? 0.760526F : 1.7f;
+	public double getEyeY() {
+		return isBaby() ? 0.760526F : 1.7;
 	}
 }

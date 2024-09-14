@@ -1,5 +1,6 @@
 package net.tinyfoes.common.entity.projectile;
 
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +19,7 @@ public class BabificationRay extends ThrowableProjectile {
 
 	public BabificationRay(EntityType<BabificationRay> pEntityType, Level pLevel) {
 		super(pEntityType, pLevel);
+		this.setNoGravity(true);
 	}
 
 	public BabificationRay(LivingEntity pShooter, Level pLevel, boolean shouldInvertAge) {
@@ -38,11 +40,11 @@ public class BabificationRay extends ThrowableProjectile {
 	protected void onHitEntity(EntityHitResult pResult) {
 		if (!this.level().isClientSide && pResult.getEntity() instanceof LivingEntity livingEntity) {
 			if (shouldInvertAge) {
-				if (livingEntity.hasEffect(ModEffects.BABYFICATION.get())) {
-					livingEntity.removeEffect(ModEffects.BABYFICATION.get());
+				if (livingEntity.hasEffect(ModEffects.BABYFICATION)) {
+					livingEntity.removeEffect(ModEffects.BABYFICATION);
 				}
 				else if (pResult.getEntity() instanceof Slime slime) {
-					slime.addEffect(new MobEffectInstance(ModEffects.BABYFICATION.get(),-1,0,false,false));
+					slime.addEffect(new MobEffectInstance(ModEffects.BABYFICATION,-1,0,false,false));
 				}
 				else if (pResult.getEntity() instanceof Mob mob) {
 					mob.setBaby(!mob.isBaby());
@@ -52,18 +54,14 @@ public class BabificationRay extends ThrowableProjectile {
 				}
 			}
 			else {
-				livingEntity.addEffect(new MobEffectInstance(ModEffects.BABYFICATION.get(), 260));
+				livingEntity.addEffect(new MobEffectInstance(ModEffects.BABYFICATION, 260));
 			}
 		}
 		super.onHitEntity(pResult);
 	}
 
-	@Override
-	protected float getGravity() {
-		return 0.0F;
-	}
 
 	@Override
-	protected void defineSynchedData() {
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 	}
 }

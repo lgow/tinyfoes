@@ -13,8 +13,4 @@ public abstract class MixinPatrollingMonster extends Monster {
 		super(entityType, level);
 	}
 
-	@Override
-	public double getMyRidingOffset() {
-		return isBaby() ? -0.2 : -0.6;
-	}
 }

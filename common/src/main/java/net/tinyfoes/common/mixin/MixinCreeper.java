@@ -1,8 +1,6 @@
 package net.tinyfoes.common.mixin;
 
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
@@ -15,7 +13,7 @@ public abstract class MixinCreeper extends Monster {
 	}
 
 	@Override
-	public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
-		return this.isBaby() ? 0.8F : super.getStandingEyeHeight(pose, entityDimensions);
+	public double getEyeY() {
+		return isBaby() ? 0.8F : super.getEyeY();
 	}
 }

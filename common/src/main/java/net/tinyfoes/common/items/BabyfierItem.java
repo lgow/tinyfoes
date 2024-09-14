@@ -3,6 +3,7 @@ package net.tinyfoes.common.items;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -10,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,11 +22,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
+public class BabyfierItem extends ProjectileWeaponItem {
 	private boolean ageInversionMode;
 
 	public BabyfierItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+	}
+
+	public static float getPowerForTime(int i) {
+		float f = (float) i / 20.0F;
+		f = (f * f + f * 2.0F) / 3.0F;
+		if (f > 1.0F) {
+			f = 1.0F;
+		}
+		return f;
 	}
 
 	@Override
@@ -32,28 +43,29 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 		return ItemStack::isEmpty;
 	}
 
-	public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
-		if (pEntityLiving instanceof Player player) {
-			int i = this.getUseDuration(pStack) - pTimeLeft;
-			if (i < 5) {
-				if (!pLevel.isClientSide()) {
-					ageInversionMode = !ageInversionMode;
-					player.displayClientMessage(Component.translatable("item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
-							.withStyle(ChatFormatting.YELLOW), true);
+	public void releaseUsing(ItemStack itemStack, Level level, LivingEntity livingEntity, int i) {
+		if (livingEntity instanceof Player player) {
+			ItemStack itemStack2 = player.getProjectile(itemStack);
+			if (!itemStack2.isEmpty()) {
+				int j = this.getUseDuration(itemStack, livingEntity) - i;
+				if (j < 5) {
+					if (!level.isClientSide()) {
+						ageInversionMode = !ageInversionMode;
+						player.displayClientMessage(Component.translatable(
+										"item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
+								.withStyle(ChatFormatting.YELLOW), true);
+					}
 				}
-			}
-			if (i > 20) {
-				if (!pLevel.isClientSide) {
-					BabificationRay blob = new BabificationRay(pEntityLiving, pLevel, ageInversionMode);
-					blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
-					pLevel.addFreshEntity(blob);
-					pStack.hurtAndBreak(1, player, (player1) -> {
-						player1.broadcastBreakEvent(player.getUsedItemHand());
-					});
+				else {
+					if (level instanceof ServerLevel) {
+						BabificationRay blob = new BabificationRay(livingEntity, level, ageInversionMode);
+						blob.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+						level.addFreshEntity(blob);
+					}
+					level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE,
+							SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
+					player.awardStat(Stats.ITEM_USED.get(this));
 				}
-				pLevel.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE,
-						SoundSource.PLAYERS, 1.0F, 1.0F / (pLevel.getRandom().nextFloat() * 0.4F + 1.2F) + 0.5F);
-				player.awardStat(Stats.ITEM_USED.get(this));
 			}
 		}
 	}
@@ -81,13 +93,19 @@ public class BabyfierItem extends ProjectileWeaponItem implements Vanishable {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-		list.add(Component.translatable("item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
+	protected void shootProjectile(LivingEntity livingEntity, Projectile projectile, int i, float f, float g, float h, @Nullable LivingEntity livingEntity2) {
+	}
+
+	@Override
+	public void appendHoverText(ItemStack itemStack, TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+		list.add(Component.translatable(
+						"item.tinyfoes.babyfier.mode." + (ageInversionMode ? "age_inversion" : "temporary"))
 				.withStyle(ChatFormatting.BLUE));
-		list.add(Component.translatable("item.tinyfoes.babyfier.tooltip." + (ageInversionMode ? "age_inversion" : "temporary"))
+		list.add(Component.translatable(
+						"item.tinyfoes.babyfier.tooltip." + (ageInversionMode ? "age_inversion" : "temporary"))
 				.withStyle(ChatFormatting.GRAY));
 		list.add(Component.literal(""));
 		list.add(Component.translatable("item.tinyfoes.babyfier.tooltip").withStyle(ChatFormatting.YELLOW));
-		super.appendHoverText(itemStack, level, list, tooltipFlag);
+		super.appendHoverText(itemStack, tooltipContext, list, tooltipFlag);
 	}
 }
