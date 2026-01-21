@@ -16,6 +16,17 @@ loom {
 
         mixinConfig "tinyfoes-common.mixins.json"
     }
+    runs {
+        client {
+            // your existing properties...
+
+            vmArg "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
+            vmArg "--add-opens=java.base/java.lang=ALL-UNNAMED"
+            vmArg "--add-opens=java.base/java.io=ALL-UNNAMED"
+        }
+        // server { same vmArg lines if you run server in dev }
+    }
+
 }
 
 configurations {
@@ -27,7 +38,7 @@ configurations {
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forgeloader_version}"
     modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -36,17 +47,31 @@ dependencies {
 processResources {
     expand(project.properties)
     inputs.property "version", project.version
-    inputs.property("minecraft_version", rootProject.minecraft_version)
-    inputs.property("architectury_version", rootProject.architectury_version)
-    inputs.property("forge_loader_version", rootProject.forge_loader_version)
-
-    filesMatching("META-INF/mods.toml") {
+    inputs.property "archives_base_name", rootProject.archives_base_name
+    inputs.property "display_name", rootProject.display_name
+    inputs.property "description", rootProject.description
+    inputs.property "authors", rootProject.authors
+    inputs.property "license", rootProject.license
+    inputs.property "home_page", rootProject.home_page
+    inputs.property "issue_tracker", rootProject.issue_tracker
+    inputs.property "minecraft_version", rootProject.minecraft_version
+    inputs.property "forgeloader_version", rootProject.forgeloader_version
+    inputs.property "architectury_version", rootProject.architectury_version
+    inputs.property "forgeconfigapiport_version", rootProject.forgeconfigapiport_version
+    filesMatching(["META-INF/mods.toml", "fabric.mod.json"]) {
         expand "version": project.version
-        expand "forge_loader_version": rootProject.forge_loader_version
+        expand "archives_base_name": rootProject.archives_base_name
+        expand "display_name": rootProject.display_name
+        expand "description": rootProject.description
+        expand "authors": rootProject.authors
+        expand "license": rootProject.license
+        expand "home_page": rootProject.home_page
+        expand "issue_tracker": rootProject.issue_tracker
         expand "minecraft_version": rootProject.minecraft_version
+        expand "forgeloader_version": rootProject.forgeloader_version
         expand "architectury_version": rootProject.architectury_version
+        expand "forgeconfigapiport_version": rootProject.forgeconfigapiport_version
     }
-
 }
 
 shadowJar {

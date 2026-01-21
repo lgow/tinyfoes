@@ -6,20 +6,10 @@ loom {
     accessWidenerPath = file("src/main/resources/tinyfoes.accesswidener")
 }
 
-repositories {
-    maven {
-        name = "Fuzs Mod Resources"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-    }
-}
-
 dependencies {
-    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
-    // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    // Remove the next line if you don't want to depend on the API
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabricloader_version}"
     modApi "dev.architectury:architectury:${rootProject.architectury_version}"
-    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-common:${rootProject.fcap_version}"
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-common:${rootProject.forgeconfigapiport_version}"
 }
 
 publishing {
@@ -27,17 +17,17 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             pom {
-                name = "Tiny Foes"
-                description = "Adds baby variants to Minecraft"
+                name = rootProject.display_name
+                description = rootProject.description
                 licenses {
                     license {
-                        name = 'All Rights Reserved'
+                        name = rootProject.license
                     }
                 }
                 developers {
                     developer {
                         id = 'lgow'
-                        name = 'Lgow'
+                        name = rootProject.authors
                     }
                 }
                 scm {

@@ -10,6 +10,16 @@ architectury {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+    runs {
+        client {
+            // your existing properties...
+
+            vmArg "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED"
+            vmArg "--add-opens=java.base/java.lang=ALL-UNNAMED"
+            vmArg "--add-opens=java.base/java.io=ALL-UNNAMED"
+        }
+        // server { same vmArg lines if you run server in dev }
+    }
 }
 
 configurations {
@@ -19,18 +29,12 @@ configurations {
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
 }
-repositories {
-    maven {
-        name = "Fuzs Mod Resources"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-    }
-}
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabricloader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}+${rootProject.minecraft_version}"
     modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
-    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${rootProject.fcap_version}"
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${rootProject.forgeconfigapiport_version}"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
@@ -38,14 +42,30 @@ dependencies {
 processResources {
     expand(project.properties)
     inputs.property "version", project.version
-    inputs.property("minecraft_version", rootProject.minecraft_version)
-    inputs.property("architectury_version", rootProject.architectury_version)
-    inputs.property("fcap_version", rootProject.fcap_version)
-    filesMatching("fabric.mod.json") {
+    inputs.property "archives_base_name", rootProject.archives_base_name
+    inputs.property "display_name", rootProject.display_name
+    inputs.property "description", rootProject.description
+    inputs.property "authors", rootProject.authors
+    inputs.property "license", rootProject.license
+    inputs.property "home_page", rootProject.home_page
+    inputs.property "issue_tracker", rootProject.issue_tracker
+    inputs.property "minecraft_version", rootProject.minecraft_version
+    inputs.property "fabricloader_version", rootProject.fabricloader_version
+    inputs.property "architectury_version", rootProject.architectury_version
+    inputs.property "forgeconfigapiport_version", rootProject.forgeconfigapiport_version
+    filesMatching(["META-INF/mods.toml", "fabric.mod.json"]) {
         expand "version": project.version
+        expand "archives_base_name": rootProject.archives_base_name
+        expand "display_name": rootProject.display_name
+        expand "description": rootProject.description
+        expand "authors": rootProject.authors
+        expand "license": rootProject.license
+        expand "home_page": rootProject.home_page
+        expand "issue_tracker": rootProject.issue_tracker
         expand "minecraft_version": rootProject.minecraft_version
+        expand "fabricloader_version": rootProject.fabricloader_version
         expand "architectury_version": rootProject.architectury_version
-        expand "fcap_version": rootProject.fcap_version
+        expand "forgeconfigapiport_version": rootProject.forgeconfigapiport_version
     }
 }
 

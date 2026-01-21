@@ -1,29 +1,27 @@
 modLoader = "javafml"
-loaderVersion = "[${forge_loader_version},)"
-issueTrackerURL = "https://discord.gg/Z8qMNugsZq"
-license = "All Rights Reserved"
+loaderVersion = "[#,)"
+issueTrackerURL = "${issue_tracker}"
+license = "${license}"
 [[mods]]
-modId = "tinyfoes"
+modId = "${archives_base_name}"
 version = "${version}"
-displayName = "Tiny Foes"
-authors = "Lgowz"
-displayURL = "https://curseforge.com/minecraft/mc-mods/tinyfoes"
-description = '''
-Tiny Foes adds the baby versions of most vanilla enemies!
-'''
-#logoFile = "assets/tinyfoes/icon.png"
-
-[[dependencies.tinyfoes]]
-modId = "forge"
-mandatory = true
-versionRange = "[${forge_loader_version},)"
-ordering = "NONE"
-side = "BOTH"
+displayName = "${display_name}"
+authors = "${authors}"
+displayURL = "${home_page}"
+description = "${description}"
+logoFile = "assets/${archives_base_name}/icon.png"
 
 [[dependencies.tinyfoes]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.tinyfoes]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forgeloader_version},)"
 ordering = "NONE"
 side = "BOTH"
 
